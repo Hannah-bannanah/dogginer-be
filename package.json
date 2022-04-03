@@ -1,0 +1,19 @@
+{
+  "name": "dogginer-be",
+  "version": "1.0.0",
+  "description": "BE de la aplicacion de dogginer",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:Hannah-bannanah/dogginer-be.git"
+  },
+  "author": "hannah-bannanah",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Hannah-bannanah/dogginer-be/issues"
+  },
+  "homepage": "https://github.com/Hannah-bannanah/dogginer-be#readme"
+}
