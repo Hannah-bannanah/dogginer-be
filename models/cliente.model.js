@@ -12,7 +12,9 @@ const clienteSchemaDetails = {
   email: { type: String, unique: true, required: true, trim: true },
   password: { type: String, required: true },
 };
-const clienteSchema = new Schema(clienteSchemaDetails);
+const clienteSchema = new Schema(clienteSchemaDetails, {
+  strictQuery: false
+});
 
 //create model
 const clienteModel = mongoose.model(COLLECTION_NAME, clienteSchema);

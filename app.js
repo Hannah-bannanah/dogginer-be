@@ -15,8 +15,8 @@ const app = express();
 app.use(express.json()); //parser de json
 app.use(express.urlencoded({ extended: true })); //parser de objetos url.
 
-//define routers
-app.use('/adiestrador', adiestradorRouter);
+// define routers
+app.use('/adiestradores', adiestradorRouter);
 
 mongoose
   .connect(DBCONNECTION)
@@ -24,4 +24,4 @@ mongoose
     console.log('DB connected!');
     app.listen(3000);
   })
-  .catch(err => console.log(err));
+  .catch((err) => console.log(err));
