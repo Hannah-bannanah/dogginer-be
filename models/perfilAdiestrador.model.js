@@ -15,7 +15,9 @@ const perfilSchemaDetails = {
   },
 };
 
-const perfilSchema = new Schema(perfilSchemaDetails);
+const perfilSchema = new Schema(perfilSchemaDetails, {
+  strictQuery: false
+});
 
 //create model
 const perfilModel = mongoose.model(COLLECTION_NAME, perfilSchema);

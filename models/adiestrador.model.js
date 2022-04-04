@@ -11,16 +11,15 @@ const adiestradorSchemaDetails = {
   password: { type: String, required: true },
   perfilId: {
     type: Schema.Types.ObjectId,
-    ref: 'Perfil',
-  },
+    ref: 'Perfil'
+  }
 };
 
-const adiestradorSchema = new Schema(adiestradorSchemaDetails);
+const adiestradorSchema = new Schema(adiestradorSchemaDetails, {
+  strictQuery: false
+});
 
 //create model
-const adiestradorModel = mongoose.model(
-  COLLECTION_NAME,
-  adiestradorSchema
-);
+const adiestradorModel = mongoose.model(COLLECTION_NAME, adiestradorSchema);
 
 module.exports = adiestradorModel;

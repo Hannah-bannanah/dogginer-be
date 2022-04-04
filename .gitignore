@@ -1,6 +1,10 @@
 ### Sensitive files ###
 util/db.config.js
 
+### Config files and directories
+.prettierrc.json
+.vscode/*
+
 # Created by https://www.toptal.com/developers/gitignore/api/node,vs
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,vs
 
