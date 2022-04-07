@@ -26,10 +26,12 @@ app.use(
 // define routers
 app.use('/adiestradores', adiestradorRouter);
 
+app.listen(3000);
+
 mongoose
   .connect(DBCONNECTION)
   .then(() => {
     console.log('DB connected!');
     app.listen(3000);
   })
-  .catch((err) => console.log(err));
+  .catch(err => console.log(err));

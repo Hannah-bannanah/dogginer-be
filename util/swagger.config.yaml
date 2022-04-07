@@ -1,0 +1,6 @@
+components:
+  schemas:
+    Adiestrador:
+      email:
+        type: string
+        description: 'el email'

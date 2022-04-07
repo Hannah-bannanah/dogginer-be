@@ -11,7 +11,7 @@
  *           description: la direccion de email del cliente
  *         password:
  *           type: string
- *           description: la password de usuario del adiestrador
+ *           description: la password de usuario del cliente
  *       required:
  *        - email
  *        - password
