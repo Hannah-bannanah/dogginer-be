@@ -1,27 +1,42 @@
 //import third party modules
 const express = require('express');
 const mongoose = require('mongoose');
+const path = require('path');
 
 //import internal modules
 const { DBCONNECTION } = require('./util/db.config');
+const { SWAGGERSPEC } = require('./util/swagger.config');
+
+// const SWAGGERSPEC = require('./util/swagger.config.json');
 
 //import routes
 const adiestradorRouter = require('./routes/adiestrador.route');
 
+// swagger
+const swaggerUI = require('swagger-ui-express');
+const swaggerJsDoc = require('swagger-jsdoc');
+
 //create app
 const app = express();
 
-// app.use(router);
+// middleware
 app.use(express.json()); //parser de json
 app.use(express.urlencoded({ extended: true })); //parser de objetos url.
+app.use(
+  '/swagger',
+  swaggerUI.serve,
+  swaggerUI.setup(swaggerJsDoc(SWAGGERSPEC))
+);
 
 // define routers
 app.use('/adiestradores', adiestradorRouter);
 
-mongoose
-  .connect(DBCONNECTION)
-  .then(() => {
-    console.log('DB connected!');
-    app.listen(3000);
-  })
-  .catch((err) => console.log(err));
+app.listen(3000);
+
+// mongoose
+//   .connect(DBCONNECTION)
+//   .then(() => {
+//     console.log('DB connected!');
+//     app.listen(3000);
+//   })
+//   .catch(err => console.log(err));

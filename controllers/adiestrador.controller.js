@@ -19,14 +19,16 @@ exports.findById = async (req, res, next) => {
 exports.createAdiestrador = async (req, res, next) => {
   const reqData = {
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
   };
 
   const adiestrador = await adiestradorService.create(reqData);
-  res.status(200).send(adiestrador);
+  res.status(201).send(adiestrador);
 };
 
 exports.deleteById = async (req, res, next) => {
-  const result = await adiestradorService.deleteById(req.params.idAdiestrador);
+  const result = await adiestradorService.deleteById(
+    req.params.idAdiestrador
+  );
   res.status(200).send(result);
 };
