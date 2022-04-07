@@ -4,6 +4,7 @@
  *   schemas:
  *     Cliente:
  *       type: object
+ *       description: Un cliente
  *       properties:
  *         email:
  *           type: string

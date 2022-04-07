@@ -1,20 +1,15 @@
 //import third party modules
 const express = require('express');
 const mongoose = require('mongoose');
-const path = require('path');
+const swaggerUI = require('swagger-ui-express');
+const swaggerJsDoc = require('swagger-jsdoc');
 
 //import internal modules
 const { DBCONNECTION } = require('./util/db.config');
 const { SWAGGERSPEC } = require('./util/swagger.config');
 
-// const SWAGGERSPEC = require('./util/swagger.config.json');
-
 //import routes
 const adiestradorRouter = require('./routes/adiestrador.route');
-
-// swagger
-const swaggerUI = require('swagger-ui-express');
-const swaggerJsDoc = require('swagger-jsdoc');
 
 //create app
 const app = express();
@@ -33,10 +28,10 @@ app.use('/adiestradores', adiestradorRouter);
 
 app.listen(3000);
 
-// mongoose
-//   .connect(DBCONNECTION)
-//   .then(() => {
-//     console.log('DB connected!');
-//     app.listen(3000);
-//   })
-//   .catch(err => console.log(err));
+mongoose
+  .connect(DBCONNECTION)
+  .then(() => {
+    console.log('DB connected!');
+    app.listen(3000);
+  })
+  .catch(err => console.log(err));

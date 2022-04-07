@@ -6,6 +6,32 @@ const adiestradorController = require('../controllers/adiestrador.controller');
 //initialize router
 const router = express.Router();
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Adiestrador:
+ *       type: object
+ *       description: Un adiestrador
+ *       properties:
+ *         email:
+ *           type: string
+ *           description: la direccion de email del adiestrador
+ *         password:
+ *           type: string
+ *           description: la password de usuario del adiestrador
+ *         profileId:
+ *           type: integer
+ *           description: el id del perfil publico del adiestrador
+ *       required:
+ *        - email
+ *        - password
+ *       example:
+ *         email: "hannah@bannanah.com"
+ *         password: "secreta"
+ *         profileId: 1
+ */
+
 // define routes
 /**
  * @swagger
@@ -78,7 +104,8 @@ router.post('', (req, res, next) => {
  *  get:
  *    summary: obtener todos los adiestradores
  *    responses:
- *      200: success
+ *      200:
+ *        description: success
  */
 router.get('', (req, res, next) => {
   adiestradorController.findAll(req, res, next);
@@ -148,6 +175,21 @@ router.delete('/:idAdiestrador', (req, res, next) => {
  *              password:
  *                type: string
  *                description: la password del adiestrador
+ *    responses:
+ *      204:
+ *        description: "adiestrador actualizado con exito"
+ *      404:
+ *        description: "adiestrador no encontrado"
+ *      422:
+ *        description: "información inválida"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                errorMessage:
+ *                  description: error
+ *                  type: string
  */
 
 module.exports = router;
