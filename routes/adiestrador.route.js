@@ -58,6 +58,26 @@ const router = express.Router();
  *         profileId: 1
  */
 
+// get all
+/**
+ * @swagger
+ * /adiestradores:
+ *  get:
+ *    summary: obtener lista de adiestradores
+ *    responses:
+ *      200:
+ *        description: "success"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: "#/components/schemas/Adiestrador"
+ */
+router.get('', (req, res, next) => {
+  adiestradorController.findAll(req, res, next);
+});
+
 // create one
 /**
  * @swagger
@@ -107,33 +127,27 @@ router.post('', (req, res, next) => {
   adiestradorController.createAdiestrador(req, res, next);
 });
 
-// get all
 /**
  * @swagger
- * /adiestradores:
+ * /adiestradores/{idAdiestrador}:
  *  get:
- *    summary: obtener todos los adiestradores
+ *    summary: buscar un adiestrador por id
+ *    parameters:
+ *      - in: path
+ *        name: "idAdiestrador"
+ *        description: el id del adiestrador
+ *        schema:
+ *          type: string
+ *        required: true
  *    responses:
  *      200:
- *        description: success
- */
-router.get('', (req, res, next) => {
-  adiestradorController.findAll(req, res, next);
-});
-
-/**
- * @swagger
- * /adiestradores/:idAdiestrador:
- *   get:
- *     summary: buscar un adiestrador por id
- *     responses:
- *       200:
- *         description: "success"
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               $ref: "#/components/schemas/Adiestrador"
+ *        description: "success"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: "#/components/schemas/Adiestrador"
+ *
  */
 // find by id
 router.get('/:idAdiestrador', (req, res, next) => {
@@ -148,19 +162,26 @@ router.get('/:idAdiestrador', (req, res, next) => {
 // delete by id
 /**
  * @swagger
- * /adiestradores/:idAdiestrador:
- *   delete:
- *     summary: eliminar un adiestrador
- *     responses:
- *       200:
- *         description: "adiestrador eliminado con exito"
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               $ref: "#/components/schemas/Adiestrador"
- *       404:
- *         description: "adiestrador no existe"
+ * /adiestradores/{idAdiestrador}:
+ *  delete:
+ *    summary: eliminar un adiestrador
+ *    parameters:
+ *      - in: path
+ *        name: "idAdiestrador"
+ *        description: el id del adiestrador
+ *        schema:
+ *          type: string
+ *        required: true
+ *    responses:
+ *      200:
+ *        description: "adiestrador eliminado con exito"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: "#/components/schemas/Adiestrador"
+ *      400:
+ *        description: "idAdiestrador invalido"
  */
 router.delete('/:idAdiestrador', (req, res, next) => {
   adiestradorController.deleteById(req, res, next);
@@ -168,10 +189,17 @@ router.delete('/:idAdiestrador', (req, res, next) => {
 
 /**
  * @swagger
- * /adiestradores/:idAdiestrador:
+ * /adiestradores/{idAdiestrador}:
  *  patch:
  *    summary: actualizar un adiestrador
  *    description: El adiestrador se actualizará con los campos incluidos en el responseBody
+ *    parameters:
+ *      - in: path
+ *        name: "idAdiestrador"
+ *        description: el id del adiestrador
+ *        schema:
+ *          type: string
+ *        required: true
  *    requestBody:
  *      required: true
  *      content:

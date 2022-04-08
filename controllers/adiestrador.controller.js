@@ -10,10 +10,14 @@ exports.findAll = async (req, res, next) => {
 };
 
 exports.findById = async (req, res, next) => {
-  const adiestrador = await adiestradorService.findById(
-    req.params.idAdiestrador
-  );
-  res.status(200).send(adiestrador);
+  try {
+    const adiestrador = await adiestradorService.findById(
+      req.params.idAdiestrador
+    );
+    res.status(200).send(adiestrador);
+  } catch (err) {
+    next(err);
+  }
 };
 
 // exports.findByEmail = async (req, res, next) => {
@@ -29,20 +33,15 @@ exports.createAdiestrador = async (req, res, next) => {
     const resultado = await adiestradorService.create(reqData);
     res.status(201).send({ _id: resultado._id });
   } catch (err) {
-    if (err.code === 11000) {
-      err.httpStatus = 400;
-      err.message = 'Entrada duplicada';
-    } else if (err instanceof mongoose.Error.ValidationError) {
-      err.httpStatus = 422;
-      err.message = 'Informacion invalida';
-    }
     next(err);
   }
 };
 
 exports.deleteById = async (req, res, next) => {
-  const result = await adiestradorService.deleteById(
-    req.params.idAdiestrador
-  );
-  res.status(200).send(result);
+  try {
+    await adiestradorService.deleteById(req.params.idAdiestrador);
+    res.status(200).send({});
+  } catch (err) {
+    next(err);
+  }
 };
