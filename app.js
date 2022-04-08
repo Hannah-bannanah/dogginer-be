@@ -26,8 +26,6 @@ app.use(
 // define routers
 app.use('/adiestradores', adiestradorRouter);
 
-app.listen(3000);
-
 mongoose
   .connect(DBCONNECTION)
   .then(() => {
