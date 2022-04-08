@@ -82,6 +82,16 @@ const router = express.Router();
  *                id:
  *                  description: idAdiestrador
  *                  type: string
+ *      400:
+ *        description: "Entrada duplicada"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                errorMessage:
+ *                  description: error
+ *                  type: string
  *      422:
  *        description: "información inválida"
  *        content:

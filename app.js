@@ -26,6 +26,12 @@ app.use(
 // define routers
 app.use('/adiestradores', adiestradorRouter);
 
+// error handling
+app.use((error, req, res, next) => {
+  const httpStatus = error.httpStatus || 500;
+  res.status(httpStatus).send({ errorMessage: error.message });
+});
+
 mongoose
   .connect(DBCONNECTION)
   .then(() => {

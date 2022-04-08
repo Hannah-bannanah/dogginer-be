@@ -17,7 +17,7 @@ exports.findAll = async () => {
  * @param {*} idAdiestrador el id de adiestrador
  * @returns el documento del adiestrador buscado, null si no existe
  */
-exports.findById = async (idAdiestrador) => {
+exports.findById = async idAdiestrador => {
   try {
     const adiestrador = await Adiestrador.findById(idAdiestrador);
     return adiestrador;
@@ -33,22 +33,13 @@ exports.findById = async (idAdiestrador) => {
  * @param {*} reqData los datos del adiestrador
  * @returns true si el documento se ha creado con exito, false si no
  */
-exports.create = async (reqData) => {
+exports.create = async reqData => {
   const adiestrador = new Adiestrador({ ...reqData }); // mongoose valida la estructura del objeto
-  // let exito = false;
-  try {
-    await adiestrador.save();
-    // console.log('adiestrador creado');
-    // exito = true;
-    return adiestrador;
-  } catch (err) {
-    console.log(err);
-  }
-
-  return {};
+  await adiestrador.save();
+  return adiestrador;
 };
 
-exports.deleteById = async (idAdiestrador) => {
+exports.deleteById = async idAdiestrador => {
   // const resultado = Adiestrador.find({ _id: idAdiestrador });
   let resultado;
   try {
