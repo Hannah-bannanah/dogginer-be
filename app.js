@@ -10,6 +10,7 @@ const { SWAGGERSPEC } = require('./util/swagger.config');
 
 //import routes
 const adiestradorRouter = require('./routes/adiestrador.route');
+const { errorHandler } = require('./middleware/error.handler');
 
 //create app
 const app = express();
@@ -27,10 +28,7 @@ app.use(
 app.use('/adiestradores', adiestradorRouter);
 
 // error handling
-app.use((error, req, res, next) => {
-  const httpStatus = error.httpStatus || 500;
-  res.status(httpStatus).send({ errorMessage: error.message });
-});
+app.use(errorHandler);
 
 mongoose
   .connect(DBCONNECTION)

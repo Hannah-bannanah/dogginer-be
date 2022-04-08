@@ -1,4 +1,5 @@
 //import 3rd party modules
+const mongoose = require('mongoose');
 
 //import internal modules
 const Adiestrador = require('../models/adiestrador.model');
@@ -15,17 +16,13 @@ exports.findAll = async () => {
 /**
  * Busca un adiestrador por id
  * @param {*} idAdiestrador el id de adiestrador
- * @returns el documento del adiestrador buscado, null si no existe
+ * @returns el documento del adiestrador buscado, un objeto vacio si no existe
  */
 exports.findById = async idAdiestrador => {
-  try {
-    const adiestrador = await Adiestrador.findById(idAdiestrador);
-    return adiestrador;
-  } catch (err) {
-    console.log(err);
-  }
+  if (!mongoose.Types.ObjectId.isValid(idAdiestrador)) return {};
 
-  return {};
+  const adiestrador = await Adiestrador.findById(idAdiestrador);
+  return adiestrador ? adiestrador : {};
 };
 
 /**
@@ -40,13 +37,7 @@ exports.create = async reqData => {
 };
 
 exports.deleteById = async idAdiestrador => {
-  // const resultado = Adiestrador.find({ _id: idAdiestrador });
-  let resultado;
-  try {
-    resultado = await Adiestrador.deleteOne({ _id: idAdiestrador });
-  } catch (err) {
-    console.log(err);
-    resultado = null;
-  }
-  return resultado;
+  if (mongoose.Types.ObjectId.isValid(idAdiestrador))
+    await Adiestrador.deleteOne({ _id: idAdiestrador });
+  return;
 };
