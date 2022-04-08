@@ -5,6 +5,29 @@ util/db.config.js
 .prettierrc.json
 .vscode/*
 
+# Folder view configuration files
+.DS_Store
+Desktop.ini
+
+# Thumbnail cache files
+._*
+Thumbs.db
+
+# Files that might appear on external disks
+.Spotlight-V100
+.Trashes
+
+# Compiled Python files
+*.pyc
+
+# Compiled C++ files
+*.out
+
+# Application specific files
+venv
+node_modules
+.sass-cache
+
 # Created by https://www.toptal.com/developers/gitignore/api/node,vs
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,vs
 
