@@ -9,7 +9,7 @@ const COLLECTION_NAME = 'Adiestrador';
 const adiestradorSchemaDetails = {
   email: { type: String, unique: true, required: true, trim: true },
   password: { type: String, required: true },
-  perfilId: {
+  idPerfil: {
     type: Schema.Types.ObjectId,
     ref: 'Perfil',
     unique: true,

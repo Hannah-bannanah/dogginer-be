@@ -1,10 +1,15 @@
 //import 3rd party modules
 const express = require('express');
+
 //import internal modules
 const adiestradorController = require('../controllers/adiestrador.controller');
+const perfilAdiestradorRoute = require('./perfilAdiestrador.route');
 
 //initialize router
 const router = express.Router();
+
+// nested routes
+router.use('/:idAdiestrador/perfil', perfilAdiestradorRoute);
 
 /**
  * @swagger
@@ -33,30 +38,6 @@ const router = express.Router();
  */
 
 // define routes
-/**
- * @swagger
- * components:
- *   schemas:
- *     Adiestrador:
- *       type: object
- *       properties:
- *         email:
- *           type: string
- *           description: la direccion de email del adiestrador
- *         password:
- *           type: string
- *           description: la password de usuario del adiestrador
- *         profileId:
- *           type: integer
- *           description: el id del perfil publico del adiestrador
- *       required:
- *        - email
- *        - password
- *       example:
- *         email: "hannah@bannanah.com"
- *         password: "secreta"
- *         profileId: 1
- */
 
 // get all
 /**
@@ -113,7 +94,7 @@ router.get('', (req, res, next) => {
  *                  description: error
  *                  type: string
  *      422:
- *        description: "información inválida"
+ *        description: "Información inválida"
  *        content:
  *          application/json:
  *            schema:
@@ -124,7 +105,7 @@ router.get('', (req, res, next) => {
  *                  type: string
  */
 router.post('', (req, res, next) => {
-  adiestradorController.createAdiestrador(req, res, next);
+  adiestradorController.create(req, res, next);
 });
 
 /**
@@ -154,11 +135,6 @@ router.get('/:idAdiestrador', (req, res, next) => {
   adiestradorController.findById(req, res, next);
 });
 
-// // find by email
-// router.get('/buscar/email/:email', (req, res, next) => {
-//   adiestradorController.findByEmail(req, res, next);
-// });
-
 // delete by id
 /**
  * @swagger
@@ -173,13 +149,8 @@ router.get('/:idAdiestrador', (req, res, next) => {
  *          type: string
  *        required: true
  *    responses:
- *      200:
+ *      204:
  *        description: "adiestrador eliminado con exito"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              $ref: "#/components/schemas/Adiestrador"
  */
 router.delete('/:idAdiestrador', (req, res, next) => {
   adiestradorController.deleteById(req, res, next);
@@ -213,9 +184,22 @@ router.delete('/:idAdiestrador', (req, res, next) => {
  *                description: la password del adiestrador
  *    responses:
  *      200:
- *        description: "adiestrador actualizado con exito"
+ *        description: "Adiestrador actualizado con exito"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/Adiestrador'
  *      404:
- *        description: "adiestrador no encontrado"
+ *        description: "Adiestrador no encontrado"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                error:
+ *                  description: error
+ *                  type: string
  *      422:
  *        description: "información inválida"
  *        content:
@@ -223,12 +207,38 @@ router.delete('/:idAdiestrador', (req, res, next) => {
  *            schema:
  *              type: object
  *              properties:
- *                errorMessage:
+ *                error:
  *                  description: error
  *                  type: string
  */
 router.patch('/:idAdiestrador', (req, res, next) => {
   adiestradorController.update(req, res, next);
+});
+
+/**
+ * @swagger
+ * /adiestradores/{idAdiestrador}/clientes:
+ *  get:
+ *    summary: obtener la lista de clientes del adiestrador
+ *    parameters:
+ *      - in: path
+ *        name: "idAdiestrador"
+ *        description: el id del adiestrador
+ *        schema:
+ *          type: string
+ *        required: true
+ *    responses:
+ *      200:
+ *        description: "success"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: "#/components/schemas/Cliente"
+ */
+router.get(':/idAdiestrador/clientes', (req, res, next) => {
+  console.log(req.params.idAdiestrador);
 });
 
 module.exports = router;

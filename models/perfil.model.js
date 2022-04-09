@@ -13,10 +13,17 @@ const perfilSchemaDetails = {
     required: true,
     unique: true,
   },
+  precio: {
+    type: Number,
+  },
+  contacto: {
+    type: String,
+    required: true,
+  },
 };
 
 const perfilSchema = new Schema(perfilSchemaDetails, {
-  strictQuery: false
+  strictQuery: false,
 });
 
 //create model
