@@ -34,7 +34,7 @@ router.use('/:idAdiestrador/perfil', perfilAdiestradorRoute);
  *       example:
  *         email: "hannah@bannanah.com"
  *         password: "secreta"
- *         profileId: 1
+ *         idPerfil: 1
  */
 
 // define routes
@@ -73,7 +73,7 @@ router.get('', (req, res, next) => {
  *            type: object
  *            $ref: '#/components/schemas/Adiestrador'
  *    responses:
- *      201:
+ *      200:
  *        description: "adiestrador creado con exito"
  *        content:
  *          application/json:
@@ -90,7 +90,7 @@ router.get('', (req, res, next) => {
  *            schema:
  *              type: object
  *              properties:
- *                errorMessage:
+ *                error:
  *                  description: error
  *                  type: string
  *      422:
@@ -100,7 +100,7 @@ router.get('', (req, res, next) => {
  *            schema:
  *              type: object
  *              properties:
- *                errorMessage:
+ *                error:
  *                  description: error
  *                  type: string
  */

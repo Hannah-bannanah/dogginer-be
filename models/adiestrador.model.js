@@ -12,7 +12,6 @@ const adiestradorSchemaDetails = {
   idPerfil: {
     type: Schema.Types.ObjectId,
     ref: 'Perfil',
-    unique: true,
   },
 };
 

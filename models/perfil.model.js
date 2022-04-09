@@ -7,7 +7,7 @@ const Schema = mongoose.Schema;
 const COLLECTION_NAME = 'Perfil';
 
 const perfilSchemaDetails = {
-  adiestradorId: {
+  idAdiestrador: {
     type: Schema.Types.ObjectId,
     ref: 'Adiestrador',
     required: true,

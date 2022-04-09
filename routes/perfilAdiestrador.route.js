@@ -3,7 +3,6 @@ const express = require('express');
 
 //import internal modules
 const adiestradorController = require('../controllers/adiestrador.controller');
-
 //initialize router
 const router = express.Router({ mergeParams: true });
 
@@ -39,7 +38,6 @@ const router = express.Router({ mergeParams: true });
  *                  type: string
  */
 router.get('', (req, res, next) => {
-  console.log(req.params);
   adiestradorController.getPerfil(req, res, next);
 });
 
@@ -48,6 +46,13 @@ router.get('', (req, res, next) => {
  * /adiestradores/{idAdiestrador}/perfil:
  *  post:
  *    summary: crear un perfil de adiestrador
+ *    parameters:
+ *      - in: path
+ *        name: "idAdiestrador"
+ *        description: el id del adiestrador
+ *        schema:
+ *          type: string
+ *        required: true
  *    requestBody:
  *      required: true
  *      content:
@@ -56,7 +61,7 @@ router.get('', (req, res, next) => {
  *            type: object
  *            $ref: "#/components/schemas/Perfil"
  *    responses:
- *      201:
+ *      200:
  *        description: "Perfil creado con exito"
  *        content:
  *          application/json:
@@ -73,7 +78,7 @@ router.get('', (req, res, next) => {
  *            schema:
  *              type: object
  *              properties:
- *                errorMessage:
+ *                error:
  *                  description: error
  *                  type: string
  *      422:
@@ -83,12 +88,12 @@ router.get('', (req, res, next) => {
  *            schema:
  *              type: object
  *              properties:
- *                errorMessage:
+ *                error:
  *                  description: error
  *                  type: string
  */
 router.post('', (req, res, next) => {
-  console.log(req.params);
+  adiestradorController.createPerfil(req, res, next);
 });
 
 /**
