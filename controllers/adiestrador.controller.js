@@ -94,3 +94,20 @@ exports.createPerfil = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.deletePerfil = async (req, res, next) => {
+  const adiestrador = await adiestradorService.findById(
+    req.params.idAdiestrador
+  );
+  if (adiestrador.idPerfil) {
+    try {
+      await perfilService.deleteById(
+        adiestrador.idPerfil,
+        adiestrador
+      );
+      res.status(204).send();
+    } catch (err) {
+      next(err);
+    }
+  }
+};

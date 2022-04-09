@@ -55,9 +55,7 @@ router.use('/:idAdiestrador/perfil', perfilAdiestradorRoute);
  *              items:
  *                $ref: "#/components/schemas/Adiestrador"
  */
-router.get('', (req, res, next) => {
-  adiestradorController.findAll(req, res, next);
-});
+router.get('', adiestradorController.findAll);
 
 // create one
 /**
@@ -104,9 +102,10 @@ router.get('', (req, res, next) => {
  *                  description: error
  *                  type: string
  */
-router.post('', (req, res, next) => {
-  adiestradorController.create(req, res, next);
-});
+router.post('', adiestradorController.create);
+// router.post('', (req, res, next) => {
+//   adiestradorController.create(req, res, next);
+// });
 
 /**
  * @swagger
@@ -131,9 +130,7 @@ router.post('', (req, res, next) => {
  *
  */
 // find by id
-router.get('/:idAdiestrador', (req, res, next) => {
-  adiestradorController.findById(req, res, next);
-});
+router.get('/:idAdiestrador', adiestradorController.findById);
 
 // delete by id
 /**
@@ -152,9 +149,7 @@ router.get('/:idAdiestrador', (req, res, next) => {
  *      204:
  *        description: "adiestrador eliminado con exito"
  */
-router.delete('/:idAdiestrador', (req, res, next) => {
-  adiestradorController.deleteById(req, res, next);
-});
+router.delete('/:idAdiestrador', adiestradorController.deleteById);
 
 /**
  * @swagger
@@ -211,34 +206,6 @@ router.delete('/:idAdiestrador', (req, res, next) => {
  *                  description: error
  *                  type: string
  */
-router.patch('/:idAdiestrador', (req, res, next) => {
-  adiestradorController.update(req, res, next);
-});
-
-/**
- * @swagger
- * /adiestradores/{idAdiestrador}/clientes:
- *  get:
- *    summary: obtener la lista de clientes del adiestrador
- *    parameters:
- *      - in: path
- *        name: "idAdiestrador"
- *        description: el id del adiestrador
- *        schema:
- *          type: string
- *        required: true
- *    responses:
- *      200:
- *        description: "success"
- *        content:
- *          application/json:
- *            schema:
- *              type: array
- *              items:
- *                $ref: "#/components/schemas/Cliente"
- */
-router.get(':/idAdiestrador/clientes', (req, res, next) => {
-  console.log(req.params.idAdiestrador);
-});
+router.patch('/:idAdiestrador', adiestradorController.update);
 
 module.exports = router;
