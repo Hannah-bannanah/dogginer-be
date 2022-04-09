@@ -21,9 +21,6 @@ exports.findById = async (req, res, next) => {
   }
 };
 
-// exports.findByEmail = async (req, res, next) => {
-//   res.status(200).send(req.params.email);
-// };
 exports.create = async (req, res, next) => {
   const reqData = {
     email: req.body.email,
@@ -31,8 +28,8 @@ exports.create = async (req, res, next) => {
   };
 
   try {
-    const resultado = await adiestradorService.create(reqData);
-    res.status(201).send({ _id: resultado._id });
+    const adiestrador = await adiestradorService.create(reqData);
+    res.status(200).send({ _id: adiestrador._id });
   } catch (err) {
     next(err);
   }
@@ -78,5 +75,22 @@ exports.getPerfil = async (req, res, next) => {
     } catch (err) {
       next(err);
     }
+  }
+};
+
+exports.createPerfil = async (req, res, next) => {
+  if (req.params.idAdiestrador != req.body.idAdiestrador) {
+    const error = new Error('Informacion invalida');
+    error.httpStatus = 422;
+    return next(error);
+  }
+  const adiestrador = await adiestradorService.findById(
+    req.params.idAdiestrador
+  );
+  try {
+    const perfil = await perfilService.create(req.body, adiestrador);
+    res.status(200).send({ id: perfil._id });
+  } catch (err) {
+    next(err);
   }
 };

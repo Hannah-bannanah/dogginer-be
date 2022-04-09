@@ -30,9 +30,11 @@ exports.findById = async idPerfil => {
  * @param {Object} reqData los datos del perfil
  * @returns el objeto perfil creado
  */
-exports.create = async reqData => {
+exports.create = async (reqData, adiestrador) => {
   const perfil = new Perfil({ ...reqData }); // mongoose valida la estructura del objeto
   await perfil.save();
+  adiestrador.idPerfil = perfil._id;
+  await adiestrador.save();
   return perfil;
 };
 
