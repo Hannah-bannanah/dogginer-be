@@ -45,3 +45,15 @@ exports.deleteById = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.update = async (req, res, next) => {
+  try {
+    const resultado = await adiestradorService.update(
+      req.params.idAdiestrador,
+      req.body
+    );
+    res.status(200).send(resultado);
+  } catch (err) {
+    next(err);
+  }
+};

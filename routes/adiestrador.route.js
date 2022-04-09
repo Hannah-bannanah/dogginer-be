@@ -180,8 +180,6 @@ router.get('/:idAdiestrador', (req, res, next) => {
  *            schema:
  *              type: object
  *              $ref: "#/components/schemas/Adiestrador"
- *      400:
- *        description: "idAdiestrador invalido"
  */
 router.delete('/:idAdiestrador', (req, res, next) => {
   adiestradorController.deleteById(req, res, next);
@@ -214,7 +212,7 @@ router.delete('/:idAdiestrador', (req, res, next) => {
  *                type: string
  *                description: la password del adiestrador
  *    responses:
- *      204:
+ *      200:
  *        description: "adiestrador actualizado con exito"
  *      404:
  *        description: "adiestrador no encontrado"
@@ -229,5 +227,8 @@ router.delete('/:idAdiestrador', (req, res, next) => {
  *                  description: error
  *                  type: string
  */
+router.patch('/:idAdiestrador', (req, res, next) => {
+  adiestradorController.update(req, res, next);
+});
 
 module.exports = router;
