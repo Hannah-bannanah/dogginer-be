@@ -28,7 +28,7 @@ exports.findById = async idAdiestrador => {
 /**
  * Crea un nuevo adiestrador en la bbdd
  * @param {*} reqData los datos del adiestrador
- * @returns true si el documento se ha creado con exito, false si no
+ * @returns el objeto adiestrador creado
  */
 exports.create = async reqData => {
   const adiestrador = new Adiestrador({ ...reqData }); // mongoose valida la estructura del objeto
@@ -36,8 +36,31 @@ exports.create = async reqData => {
   return adiestrador;
 };
 
+/**
+ * Busca un adiestrador por id y lo elimina de la bbdd
+ * @param {*} idAdiestrador
+ * @returns un objeto vacio
+ */
 exports.deleteById = async idAdiestrador => {
   if (mongoose.Types.ObjectId.isValid(idAdiestrador))
     await Adiestrador.deleteOne({ _id: idAdiestrador });
-  return;
+  return {};
+};
+
+/**
+ * Busca un adiestrador y actualiza su informacion
+ * @param {*} idAdiestrador el id del adiestrador
+ * @param {*} newData los datos a actualizar
+ * @returns el documento del adiestrador actualizado en la bbdd
+ * @throws error si el idAdiestrador no existe
+ */
+exports.update = async (idAdiestrador, newData) => {
+  const adiestradorExistente = await this.findById(idAdiestrador);
+  if (!adiestradorExistente._id) {
+    const error = new Error('Adiestrador no encontrado');
+    error.httpStatus = 404;
+    throw error;
+  }
+  await Adiestrador.findByIdAndUpdate(idAdiestrador, newData);
+  return await this.findById(idAdiestrador);
 };
