@@ -15,7 +15,7 @@ exports.findAll = async () => {
 
 /**
  * Busca un adiestrador por id
- * @param {*} idAdiestrador el id de adiestrador
+ * @param {String} idAdiestrador el id de adiestrador
  * @returns el documento del adiestrador buscado, un objeto vacio si no existe
  */
 exports.findById = async idAdiestrador => {
@@ -27,7 +27,7 @@ exports.findById = async idAdiestrador => {
 
 /**
  * Crea un nuevo adiestrador en la bbdd
- * @param {*} reqData los datos del adiestrador
+ * @param {Object} reqData los datos del adiestrador
  * @returns el objeto adiestrador creado
  */
 exports.create = async reqData => {
@@ -38,7 +38,7 @@ exports.create = async reqData => {
 
 /**
  * Busca un adiestrador por id y lo elimina de la bbdd
- * @param {*} idAdiestrador
+ * @param {Object} idAdiestrador
  * @returns un objeto vacio
  */
 exports.deleteById = async idAdiestrador => {
@@ -49,8 +49,8 @@ exports.deleteById = async idAdiestrador => {
 
 /**
  * Busca un adiestrador y actualiza su informacion
- * @param {*} idAdiestrador el id del adiestrador
- * @param {*} newData los datos a actualizar
+ * @param {String} idAdiestrador el id del adiestrador
+ * @param {Object} newData los datos a actualizar
  * @returns el documento del adiestrador actualizado en la bbdd
  * @throws error si el idAdiestrador no existe
  */
