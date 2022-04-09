@@ -43,9 +43,12 @@ exports.create = async (reqData, adiestrador) => {
  * @param {String} idPerfil
  * @returns un objeto vacio
  */
-exports.deleteById = async idPerfil => {
-  if (mongoose.Types.ObjectId.isValid(idPerfil))
+exports.deleteById = async (idPerfil, adiestrador) => {
+  if (mongoose.Types.ObjectId.isValid(idPerfil)) {
     await Perfil.deleteOne({ _id: idPerfil });
+    adiestrador.idPerfil = undefined;
+    await adiestrador.save();
+  }
   return {};
 };
 

@@ -37,9 +37,7 @@ const router = express.Router({ mergeParams: true });
  *                  description: error
  *                  type: string
  */
-router.get('', (req, res, next) => {
-  adiestradorController.getPerfil(req, res, next);
-});
+router.get('', adiestradorController.getPerfil);
 
 /**
  * @swagger
@@ -92,9 +90,7 @@ router.get('', (req, res, next) => {
  *                  description: error
  *                  type: string
  */
-router.post('', (req, res, next) => {
-  adiestradorController.createPerfil(req, res, next);
-});
+router.post('', adiestradorController.createPerfil);
 
 /**
  * @swagger
@@ -112,9 +108,7 @@ router.post('', (req, res, next) => {
  *      204:
  *        description: "Pefil eliminado con exito"
  */
-router.delete('', (req, res, next) => {
-  console.log(req.params);
-});
+router.delete('', adiestradorController.deletePerfil);
 
 /**
  * @swagger
