@@ -24,7 +24,10 @@ const adiestradorSchema = new Schema(adiestradorSchemaDetails, {
 });
 
 adiestradorSchema.pre('save', async function () {
-  if (this.isNew) {
+  const duplicado = await adiestradorModel.findOne({
+    email: this.email,
+  });
+  if (this.isNew && !duplicado) {
     const perfil = new Perfil({
       idAdiestrador: this._id,
     });
