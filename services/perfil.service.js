@@ -26,19 +26,6 @@ exports.findById = async idPerfil => {
 };
 
 /**
- * Crea un nuevo perfil en la bbdd
- * @param {Object} reqData los datos del perfil
- * @returns el objeto perfil creado
- */
-exports.create = async (reqData, adiestrador) => {
-  const perfil = new Perfil({ ...reqData }); // mongoose valida la estructura del objeto
-  await perfil.save();
-  adiestrador.idPerfil = perfil._id;
-  await adiestrador.save();
-  return perfil;
-};
-
-/**
  * Busca un perfil por id y lo elimina de la bbdd
  * @param {String} idPerfil
  * @returns un objeto vacio
