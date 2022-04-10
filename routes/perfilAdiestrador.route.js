@@ -42,77 +42,6 @@ router.get('', adiestradorController.getPerfil);
 /**
  * @swagger
  * /adiestradores/{idAdiestrador}/perfil:
- *  post:
- *    summary: crear un perfil de adiestrador
- *    parameters:
- *      - in: path
- *        name: "idAdiestrador"
- *        description: el id del adiestrador
- *        schema:
- *          type: string
- *        required: true
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            type: object
- *            $ref: "#/components/schemas/Perfil"
- *    responses:
- *      200:
- *        description: "Perfil creado con exito"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                id:
- *                  description: idPerfil
- *                  type: string
- *      400:
- *        description: "El adiestrador ya tiene perfil"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                error:
- *                  description: error
- *                  type: string
- *      422:
- *        description: "Información inválida"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                error:
- *                  description: error
- *                  type: string
- */
-router.post('', adiestradorController.createPerfil);
-
-/**
- * @swagger
- * /adiestradores/{idAdiestrador}/perfil:
- *  delete:
- *    summary: eliminar el perfil publico de adiestrador
- *    parameters:
- *      - in: path
- *        name: "idAdiestrador"
- *        description: el id del adiestrador
- *        schema:
- *          type: string
- *        required: true
- *    responses:
- *      204:
- *        description: "Pefil eliminado con exito"
- */
-router.delete('', adiestradorController.deletePerfil);
-
-/**
- * @swagger
- * /adiestradores/{idAdiestrador}/perfil:
  *  patch:
  *    summary: actualizar el perfil publico del adiestrador
  *    parameters:
@@ -157,8 +86,6 @@ router.delete('', adiestradorController.deletePerfil);
  *                  description: error
  *                  type: string
  */
-router.patch('', (req, res, next) => {
-  console.log(req.params);
-});
+router.patch('', adiestradorController.updatePerfil);
 
 module.exports = router;

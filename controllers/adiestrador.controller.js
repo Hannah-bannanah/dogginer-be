@@ -46,11 +46,11 @@ exports.deleteById = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
   try {
-    const resultado = await adiestradorService.update(
+    const adiestradorActualizado = await adiestradorService.update(
       req.params.idAdiestrador,
       req.body
     );
-    res.status(200).send(resultado);
+    res.status(200).send(adiestradorActualizado);
   } catch (err) {
     next(err);
   }
@@ -78,36 +78,17 @@ exports.getPerfil = async (req, res, next) => {
   }
 };
 
-exports.createPerfil = async (req, res, next) => {
-  if (req.params.idAdiestrador != req.body.idAdiestrador) {
-    const error = new Error('Informacion invalida');
-    error.httpStatus = 422;
-    return next(error);
-  }
+exports.updatePerfil = async (req, res, next) => {
   const adiestrador = await adiestradorService.findById(
     req.params.idAdiestrador
   );
   try {
-    const perfil = await perfilService.create(req.body, adiestrador);
-    res.status(200).send({ id: perfil._id });
+    const perfilActualizado = await perfilService.update(
+      adiestrador.idPerfil,
+      req.body
+    );
+    res.status(200).send(perfilActualizado);
   } catch (err) {
     next(err);
-  }
-};
-
-exports.deletePerfil = async (req, res, next) => {
-  const adiestrador = await adiestradorService.findById(
-    req.params.idAdiestrador
-  );
-  if (adiestrador.idPerfil) {
-    try {
-      await perfilService.deleteById(
-        adiestrador.idPerfil,
-        adiestrador
-      );
-      res.status(204).send();
-    } catch (err) {
-      next(err);
-    }
   }
 };

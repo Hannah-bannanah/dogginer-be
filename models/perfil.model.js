@@ -12,13 +12,13 @@ const perfilSchemaDetails = {
     ref: 'Adiestrador',
     required: true,
     unique: true,
+    immutable: true,
   },
   precio: {
     type: Number,
   },
   contacto: {
     type: String,
-    required: true,
   },
 };
 

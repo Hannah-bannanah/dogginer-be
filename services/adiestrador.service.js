@@ -44,8 +44,8 @@ exports.create = async reqData => {
  */
 exports.deleteById = async idAdiestrador => {
   if (mongoose.Types.ObjectId.isValid(idAdiestrador)) {
-    await Adiestrador.deleteOne({ _id: idAdiestrador });
     await Perfil.deleteOne({ idAdiestrador: idAdiestrador });
+    await Adiestrador.deleteOne({ _id: idAdiestrador });
   }
   return {};
 };
