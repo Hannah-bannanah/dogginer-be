@@ -26,20 +26,6 @@ exports.findById = async idPerfil => {
 };
 
 /**
- * Busca un perfil por id y lo elimina de la bbdd
- * @param {String} idPerfil
- * @returns un objeto vacio
- */
-exports.deleteById = async (idPerfil, adiestrador) => {
-  if (mongoose.Types.ObjectId.isValid(idPerfil)) {
-    await Perfil.deleteOne({ _id: idPerfil });
-    adiestrador.idPerfil = undefined;
-    await adiestrador.save();
-  }
-  return {};
-};
-
-/**
  * Busca un perfil y actualiza su informacion
  * @param {String} idPerfil el id del perfil
  * @param {Object} newData los datos a actualizar

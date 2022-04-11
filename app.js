@@ -10,6 +10,8 @@ const { SWAGGERSPEC } = require('./util/swagger.config');
 
 //import routes
 const adiestradorRouter = require('./routes/adiestrador.route');
+const clienteRouter = require('./routes/cliente.route');
+
 const { errorHandler } = require('./middleware/error.handler');
 
 //create app
@@ -26,6 +28,7 @@ app.use(
 
 // define routers
 app.use('/adiestradores', adiestradorRouter);
+app.use('/clientes', clienteRouter);
 
 // error handling
 app.use(errorHandler);
