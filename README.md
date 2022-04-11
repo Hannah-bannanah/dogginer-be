@@ -6,7 +6,7 @@ Backend de la aplicación de dogginer
 
 <ol>
 <li>Clonar este repositorio</li>
-<li>Modificar el archivo db.plantilla.config.js:
+<li>Copiar el archivo db.plantilla.config.js:
 <ol>
 <li>Reemplazar '&lt;user&gt;' y '&lt;password&gt;' por los credenciales de acceso a la bbdd</li>
 <li>Renombrar archivo a 'db.config.js'</li>
