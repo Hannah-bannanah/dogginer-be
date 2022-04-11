@@ -103,15 +103,13 @@ router.get('', adiestradorController.findAll);
  *                  type: string
  */
 router.post('', adiestradorController.create);
-// router.post('', (req, res, next) => {
-//   adiestradorController.create(req, res, next);
-// });
 
 /**
  * @swagger
  * /adiestradores/{idAdiestrador}:
  *  get:
  *    summary: buscar un adiestrador por id
+ *    description: Devuelve el adiestrador, o un objeto vacio si no se ha encontrado
  *    parameters:
  *      - in: path
  *        name: "idAdiestrador"
