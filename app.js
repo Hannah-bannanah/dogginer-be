@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
+const cors = require('cors');
 
 //import internal modules
 const { DBCONNECTION } = require('./util/db.config');
@@ -26,6 +27,11 @@ app.use(
   swaggerUI.serve,
   swaggerUI.setup(swaggerJsDoc(SWAGGERSPEC))
 );
+app.use(
+  cors({
+    origin: '*',
+  })
+);
 
 // define routers
 app.use('/adiestradores', adiestradorRouter);
@@ -39,6 +45,6 @@ mongoose
   .connect(DBCONNECTION)
   .then(() => {
     console.log('DB connected!');
-    app.listen(3000);
+    app.listen(3001);
   })
   .catch(err => console.log(err));
