@@ -74,3 +74,14 @@ exports.update = async (idCliente, newData) => {
   await Cliente.findByIdAndUpdate(idCliente, newData);
   return await this.findById(idCliente);
 };
+
+/**
+ * Elimina un evento del la lista de eventos de todos los clientes
+ * @param {String} idEvento
+ */
+exports.removeEvento = async idEvento => {
+  await Cliente.updateMany(
+    {},
+    { $pull: { eventos: { _id: idEvento } } }
+  );
+};

@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 
 // import internal modules
 const adiestradorService = require('../services/adiestrador.service');
-const perfilService = require('../services/perfil.service');
 
 exports.findAll = async (req, res, next) => {
   const adiestradores = await adiestradorService.findAll();
