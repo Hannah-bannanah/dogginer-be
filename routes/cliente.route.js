@@ -15,18 +15,24 @@ const router = express.Router();
  *       type: object
  *       description: Un cliente
  *       properties:
- *         email:
+ *         userId:
+ *          type: string
+ *          description: el id de usuario
+ *         nombre:
  *           type: string
- *           description: la direccion de email del cliente
- *         password:
- *           type: string
- *           description: la password de usuario del cliente
+ *           description: El nombre del adiestrador
+ *         eventos:
+ *           type: array
+ *           items:
+ *            type: object
+ *            $ref: '#/components/schemas/Evento'
  *       required:
- *        - email
- *        - password
+ *        - userId
+ *        - nombre
  *       example:
- *         email: "hannah@bannanah.com"
- *         password: "secreta"
+ *         userId: "6249701119292623c38f0c11"
+ *         nombre: "Jane Doe"
+ *
  */
 
 // get all

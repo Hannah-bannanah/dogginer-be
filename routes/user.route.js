@@ -2,7 +2,7 @@
 const express = require('express');
 
 //import internal modules
-const adiestradorController = require('../controllers/adiestrador.controller');
+const userController = require('../controllers/user.controller');
 
 //initialize router
 const router = express.Router();
@@ -11,40 +11,35 @@ const router = express.Router();
  * @swagger
  * components:
  *   schemas:
- *     Adiestrador:
+ *     User:
  *       type: object
- *       description: Un adiestrador
+ *       description: Un usuario
  *       properties:
- *         userId:
- *          type: string
- *          description: el id de usuario
- *         nombre:
+ *         email:
  *           type: string
- *           description: El nombre del adiestrador
- *         bio:
+ *           description: la direccion de email del user
+ *         password:
  *           type: string
- *           description: la bio del adiestrador
- *         eventos:
- *           type: array
- *           items:
- *            type: object
- *            $ref: '#/components/schemas/Evento'
+ *           description: la password de usuario del user
+ *         role:
+ *           type: string
+ *           description: '"CLIENTE", "ADIESTRADOR", "GOD"'
  *       required:
- *        - userId
- *        - nombre
+ *        - email
+ *        - password
+ *        - role
  *       example:
- *         userId: "6249701119292623c38f0c11"
- *         nombre: "John Doe"
+ *         email: "hannah@bannanah.com"
+ *         password: "secreta"
+ *         role: "GOD"
  */
-
-// define routes
 
 // get all
 /**
  * @swagger
- * /adiestradores:
+ * /users:
  *  get:
- *    summary: obtener lista de adiestradores
+ *    summary: obtener lista de users
  *    responses:
  *      200:
  *        description: "success"
@@ -53,41 +48,33 @@ const router = express.Router();
  *            schema:
  *              type: array
  *              items:
- *                $ref: "#/components/schemas/Adiestrador"
+ *                $ref: "#/components/schemas/User"
  */
-router.get('', adiestradorController.findAll);
+router.get('', userController.findAll);
 
 // create one
 /**
  * @swagger
- * /adiestradores:
+ * /users:
  *  post:
- *    summary: crear un nuevo adiestrador
+ *    summary: crear un nuevo user
  *    requestBody:
  *      required: true
  *      content:
  *        application/json:
  *          schema:
  *            type: object
- *            properties:
- *              user:
- *                description: datos de la cuenta de usuario
- *                type: object
- *                $ref: '#/components/schemas/User'
- *              adiestrador:
- *                description: datos del adiestrador
- *                type: object
- *                $ref: '#/components/schemas/Adiestrador'
+ *            $ref: '#/components/schemas/User'
  *    responses:
  *      200:
- *        description: "adiestrador creado con exito"
+ *        description: "user creado con exito"
  *        content:
  *          application/json:
  *            schema:
  *              type: object
  *              properties:
  *                id:
- *                  description: idAdiestrador
+ *                  description: userId
  *                  type: string
  *      400:
  *        description: "Entrada duplicada"
@@ -110,18 +97,18 @@ router.get('', adiestradorController.findAll);
  *                  description: error
  *                  type: string
  */
-router.post('', adiestradorController.create);
+router.post('', userController.create);
 
 /**
  * @swagger
- * /adiestradores/{idAdiestrador}:
+ * /users/{userId}:
  *  get:
- *    summary: buscar un adiestrador por id
- *    description: Devuelve el adiestrador, o un objeto vacio si no se ha encontrado
+ *    summary: buscar un user por id
+ *    description: Devuelve el user, o un objeto vacio si no se ha encontrado
  *    parameters:
  *      - in: path
- *        name: "idAdiestrador"
- *        description: el id del adiestrador
+ *        name: "userId"
+ *        description: el id del user
  *        schema:
  *          type: string
  *        required: true
@@ -132,41 +119,41 @@ router.post('', adiestradorController.create);
  *          application/json:
  *            schema:
  *              type: object
- *              $ref: "#/components/schemas/Adiestrador"
+ *              $ref: "#/components/schemas/User"
  *
  */
 // find by id
-router.get('/:idAdiestrador', adiestradorController.findById);
+router.get('/:userId', userController.findById);
 
 // delete by id
 /**
  * @swagger
- * /adiestradores/{idAdiestrador}:
+ * /users/{userId}:
  *  delete:
- *    summary: eliminar un adiestrador
+ *    summary: eliminar un user
  *    parameters:
  *      - in: path
- *        name: "idAdiestrador"
- *        description: el id del adiestrador
+ *        name: "userId"
+ *        description: el id del user
  *        schema:
  *          type: string
  *        required: true
  *    responses:
  *      204:
- *        description: "adiestrador eliminado con exito"
+ *        description: "user eliminado con exito"
  */
-router.delete('/:idAdiestrador', adiestradorController.deleteById);
+router.delete('/:userId', userController.deleteById);
 
 /**
  * @swagger
- * /adiestradores/{idAdiestrador}:
+ * /users/{userId}:
  *  patch:
- *    summary: actualizar un adiestrador
- *    description: El adiestrador se actualizará con los campos incluidos en el responseBody
+ *    summary: actualizar un user
+ *    description: El user se actualizará con los campos incluidos en el responseBody
  *    parameters:
  *      - in: path
- *        name: "idAdiestrador"
- *        description: el id del adiestrador
+ *        name: "userId"
+ *        description: el id del user
  *        schema:
  *          type: string
  *        required: true
@@ -176,23 +163,17 @@ router.delete('/:idAdiestrador', adiestradorController.deleteById);
  *        application/json:
  *          schema:
  *            type: object
- *            properties:
- *              email:
- *                type: string
- *                description: el email del adiestrador
- *              password:
- *                type: string
- *                description: la password del adiestrador
+ *            $ref: '#/components/schemas/User'
  *    responses:
  *      200:
- *        description: "Adiestrador actualizado con exito"
+ *        description: "User actualizado con exito"
  *        content:
  *          application/json:
  *            schema:
  *              type: object
- *              $ref: '#/components/schemas/Adiestrador'
+ *              $ref: '#/components/schemas/User'
  *      404:
- *        description: "Adiestrador no encontrado"
+ *        description: "User no encontrado"
  *        content:
  *          application/json:
  *            schema:
@@ -212,6 +193,6 @@ router.delete('/:idAdiestrador', adiestradorController.deleteById);
  *                  description: error
  *                  type: string
  */
-router.patch('/:idAdiestrador', adiestradorController.update);
+router.patch('/:userId', userController.update);
 
 module.exports = router;

@@ -22,10 +22,8 @@ exports.findById = async (req, res, next) => {
 };
 
 exports.create = async (req, res, next) => {
-  const reqData = {
-    email: req.body.email,
-    password: req.body.password,
-  };
+  const userData = { ...req.user };
+  const adiestradorData = { ...req.adiestrador };
 
   try {
     const adiestrador = await adiestradorService.create(reqData);

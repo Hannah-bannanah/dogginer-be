@@ -9,11 +9,25 @@ const Schema = mongoose.Schema;
 const COLLECTION_NAME = 'Cliente';
 
 const clienteSchemaDetails = {
-  email: { type: String, unique: true, required: true, trim: true },
-  password: { type: String, required: true },
+  nombre: { type: String, required: true },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+    immutable: true,
+    unique: true,
+  },
+  eventos: [
+    {
+      idEvento: {
+        type: Schema.Types.ObjectId,
+        ref: 'Evento',
+      },
+    },
+  ],
 };
 const clienteSchema = new Schema(clienteSchemaDetails, {
-  strictQuery: false
+  strictQuery: false,
 });
 
 //create model

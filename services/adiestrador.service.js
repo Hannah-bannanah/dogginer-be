@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 
 //import internal modules
 const Adiestrador = require('../models/adiestrador.model');
-const Perfil = require('../models/perfil.model');
 
 /**
  * Recoge la lista de todos los adiestradores de la bbdd

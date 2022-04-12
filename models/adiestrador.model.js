@@ -2,21 +2,40 @@
 const mongoose = require('mongoose');
 
 //import internal modules
-const Perfil = require('../models/perfil.model');
 
-//create schema
+//create schema ,.
 const Schema = mongoose.Schema;
 
 const COLLECTION_NAME = 'Adiestrador';
 
 const adiestradorSchemaDetails = {
-  email: { type: String, unique: true, required: true, trim: true },
-  password: { type: String, required: true },
-  idPerfil: {
+  userId: {
     type: Schema.Types.ObjectId,
-    ref: 'Perfil',
+    ref: 'User',
+    required: true,
     immutable: true,
+    unique: true,
   },
+  nombre: { type: String, required: true },
+  bio: String,
+  eventos: [
+    {
+      idEvento: {
+        type: Schema.Types.ObjectId,
+        ref: 'Evento',
+      },
+    },
+  ],
+  rating: [
+    {
+      idCliente: {
+        type: Schema.Types.ObjectId,
+        ref: 'Cliente',
+        required: true,
+      },
+      score: { type: Number, required: true },
+    },
+  ],
 };
 
 const adiestradorSchema = new Schema(adiestradorSchemaDetails, {
@@ -24,10 +43,7 @@ const adiestradorSchema = new Schema(adiestradorSchemaDetails, {
 });
 
 adiestradorSchema.pre('save', async function () {
-  const duplicado = await adiestradorModel.findOne({
-    email: this.email,
-  });
-  if (this.isNew && !duplicado) {
+  if (this.isNew) {
     const perfil = new Perfil({
       idAdiestrador: this._id,
     });
