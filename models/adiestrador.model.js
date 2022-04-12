@@ -42,16 +42,6 @@ const adiestradorSchema = new Schema(adiestradorSchemaDetails, {
   strictQuery: false,
 });
 
-adiestradorSchema.pre('save', async function () {
-  if (this.isNew) {
-    const perfil = new Perfil({
-      idAdiestrador: this._id,
-    });
-    await perfil.save();
-    this.idPerfil = perfil._id;
-  }
-});
-
 //create model
 const adiestradorModel = mongoose.model(
   COLLECTION_NAME,

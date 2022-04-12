@@ -10,10 +10,8 @@ exports.findAll = async (req, res, next) => {
 };
 
 exports.findById = async (req, res, next) => {
-  console.log(req.params);
   try {
     const user = await userService.findById(req.params.userId);
-    console.log(user);
     res.status(200).send(user);
   } catch (err) {
     next(err);

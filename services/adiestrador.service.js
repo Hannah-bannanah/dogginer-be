@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 
 //import internal modules
 const Adiestrador = require('../models/adiestrador.model');
+const userService = require('../services/user.service');
+const { AUTHORITIES } = require('../util/authorities.config');
 
 /**
  * Recoge la lista de todos los adiestradores de la bbdd
@@ -29,9 +31,17 @@ exports.findById = async idAdiestrador => {
  * Crea un nuevo adiestrador en la bbdd
  * @param {Object} reqData los datos del adiestrador
  * @returns el objeto adiestrador creado
+ * @throws error si el userId no tiene asignado el rol de adiestrador
  */
-exports.create = async reqData => {
-  const adiestrador = new Adiestrador({ ...reqData }); // mongoose valida la estructura del objeto
+exports.create = async adiestradorData => {
+  const user = await userService.findById(adiestradorData.userId);
+  if (!user || user.role !== AUTHORITIES.ADIESTRADOR) {
+    const error = new Error();
+    error.httpStatus = 422;
+    error.message = 'Informacion invalida';
+    throw error;
+  }
+  const adiestrador = new Adiestrador({ ...adiestradorData }); // mongoose valida la estructura del objeto
   await adiestrador.save();
   return adiestrador;
 };
@@ -43,7 +53,6 @@ exports.create = async reqData => {
  */
 exports.deleteById = async idAdiestrador => {
   if (mongoose.Types.ObjectId.isValid(idAdiestrador)) {
-    await Perfil.deleteOne({ idAdiestrador: idAdiestrador });
     await Adiestrador.deleteOne({ _id: idAdiestrador });
   }
   return {};

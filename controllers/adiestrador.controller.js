@@ -22,11 +22,8 @@ exports.findById = async (req, res, next) => {
 };
 
 exports.create = async (req, res, next) => {
-  const userData = { ...req.user };
-  const adiestradorData = { ...req.adiestrador };
-
   try {
-    const adiestrador = await adiestradorService.create(reqData);
+    const adiestrador = await adiestradorService.create(req.body);
     res.status(200).send({ _id: adiestrador._id });
   } catch (err) {
     next(err);
