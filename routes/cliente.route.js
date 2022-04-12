@@ -20,7 +20,7 @@ const router = express.Router();
  *          description: el id de usuario
  *         nombre:
  *           type: string
- *           description: El nombre del adiestrador
+ *           description: El nombre del cliente
  *         eventos:
  *           type: array
  *           items:
@@ -164,13 +164,7 @@ router.delete('/:idCliente', clienteController.deleteById);
  *        application/json:
  *          schema:
  *            type: object
- *            properties:
- *              email:
- *                type: string
- *                description: el email del cliente
- *              password:
- *                type: string
- *                description: la password del cliente
+ *            $ref: '#/components/schemas/Cliente'
  *    responses:
  *      200:
  *        description: "Cliente actualizado con exito"

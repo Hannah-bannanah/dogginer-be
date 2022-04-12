@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 
 //import internal modules
 const Cliente = require('../models/cliente.model');
+const userService = require('../services/user.service');
+const { AUTHORITIES } = require('../util/authorities.config');
 
 /**
  * Recoge la lista de todos los clientes de la bbdd
@@ -31,6 +33,13 @@ exports.findById = async idCliente => {
  * @returns el objeto cliente creado
  */
 exports.create = async clienteData => {
+  const user = await userService.findById(clienteData.userId);
+  if (!user || user.role !== AUTHORITIES.CLIENTE) {
+    const error = new Error();
+    error.httpStatus = 422;
+    error.message = 'Informacion invalida';
+    throw error;
+  }
   const cliente = new Cliente({ ...clienteData }); // mongoose valida la estructura del objeto
   await cliente.save();
   return cliente;

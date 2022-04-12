@@ -69,15 +69,7 @@ router.get('', adiestradorController.findAll);
  *        application/json:
  *          schema:
  *            type: object
- *            properties:
- *              user:
- *                description: datos de la cuenta de usuario
- *                type: object
- *                $ref: '#/components/schemas/User'
- *              adiestrador:
- *                description: datos del adiestrador
- *                type: object
- *                $ref: '#/components/schemas/Adiestrador'
+ *            $ref: '#/components/schemas/Adiestrador'
  *    responses:
  *      200:
  *        description: "adiestrador creado con exito"
@@ -176,13 +168,7 @@ router.delete('/:idAdiestrador', adiestradorController.deleteById);
  *        application/json:
  *          schema:
  *            type: object
- *            properties:
- *              email:
- *                type: string
- *                description: el email del adiestrador
- *              password:
- *                type: string
- *                description: la password del adiestrador
+ *            $ref: "#/components/schemas/Adiestrador"
  *    responses:
  *      200:
  *        description: "Adiestrador actualizado con exito"
