@@ -10,9 +10,9 @@ const { DBCONNECTION } = require('./util/db.config');
 const { SWAGGERSPEC } = require('./util/swagger.config');
 
 //import routes
-const adiestradorRouter = require('./routes/adiestrador.route');
+const userRouter = require('./routes/user.route');
 const clienteRouter = require('./routes/cliente.route');
-const perfilRouter = require('./routes/perfil.route');
+const adiestradorRouter = require('./routes/adiestrador.route');
 
 const { errorHandler } = require('./middleware/error.handler');
 
@@ -34,9 +34,9 @@ app.use(
 );
 
 // define routers
-app.use('/adiestradores', adiestradorRouter);
+app.use('/users', userRouter);
 app.use('/clientes', clienteRouter);
-app.use('/perfiles', perfilRouter);
+app.use('/adiestradores', adiestradorRouter);
 
 // error handling
 app.use(errorHandler);
@@ -45,6 +45,6 @@ mongoose
   .connect(DBCONNECTION)
   .then(() => {
     console.log('DB connected!');
-    app.listen(3001);
+    app.listen(3000);
   })
   .catch(err => console.log(err));

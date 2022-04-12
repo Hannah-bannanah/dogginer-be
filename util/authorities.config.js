@@ -1,0 +1,7 @@
+const AUTHORITIES = {
+  GOD: 'GOD',
+  ADIESTRADOR: 'ADIESTRADOR',
+  CLIENTE: 'CLIENTE',
+};
+
+module.exports = { AUTHORITIES };
