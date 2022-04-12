@@ -75,3 +75,14 @@ exports.update = async (idAdiestrador, newData) => {
   await Adiestrador.findByIdAndUpdate(idAdiestrador, newData);
   return await this.findById(idAdiestrador);
 };
+
+/**
+ * Elimina un evento del la lista de eventos de su adiestrador
+ * @param {Object} evento
+ */
+exports.removeEvento = async evento => {
+  await Adiestrador.findOneAndUpdate(
+    { _id: evento.idAdiestrador },
+    { $pull: { eventos: { _id: evento._id } } }
+  );
+};
