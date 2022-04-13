@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 //import internal modules
 const Cliente = require('../models/cliente.model');
 const userService = require('../services/user.service');
-const { AUTHORITIES } = require('../util/authorities.config');
+const { AUTHORITIES } = require('../util/auth.config');
 
 /**
  * Recoge la lista de todos los clientes de la bbdd
@@ -20,7 +20,7 @@ exports.findAll = async () => {
  * @param {String} idCliente el id de cliente
  * @returns el documento del cliente buscado, un objeto vacio si no existe
  */
-exports.findById = async idCliente => {
+exports.findById = async (idCliente) => {
   if (!mongoose.Types.ObjectId.isValid(idCliente)) return {};
 
   const cliente = await Cliente.findById(idCliente);
@@ -32,7 +32,7 @@ exports.findById = async idCliente => {
  * @param {Object} clienteData los datos del cliente
  * @returns el objeto cliente creado
  */
-exports.create = async clienteData => {
+exports.create = async (clienteData) => {
   const user = await userService.findById(clienteData.userId);
   if (!user || user.role !== AUTHORITIES.CLIENTE) {
     const error = new Error();
@@ -50,7 +50,7 @@ exports.create = async clienteData => {
  * @param {Object} idCliente
  * @returns un objeto vacio
  */
-exports.deleteById = async idCliente => {
+exports.deleteById = async (idCliente) => {
   if (mongoose.Types.ObjectId.isValid(idCliente)) {
     await Cliente.deleteOne({ _id: idCliente });
   }
@@ -79,9 +79,6 @@ exports.update = async (idCliente, newData) => {
  * Elimina un evento del la lista de eventos de todos los clientes
  * @param {String} idEvento
  */
-exports.removeEvento = async idEvento => {
-  await Cliente.updateMany(
-    {},
-    { $pull: { eventos: { _id: idEvento } } }
-  );
+exports.removeEvento = async (idEvento) => {
+  await Cliente.updateMany({}, { $pull: { eventos: { _id: idEvento } } });
 };
