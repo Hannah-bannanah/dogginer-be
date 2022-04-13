@@ -31,6 +31,9 @@ const SWAGGERSPEC = {
         },
         ElementNotFoundError: {
           content: responseContentSchema
+        },
+        UnauthorizedError: {
+          description: 'El token de acceso no es valido o no existe'
         }
       }
     }

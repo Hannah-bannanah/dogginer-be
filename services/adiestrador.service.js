@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 //import internal modules
 const Adiestrador = require('../models/adiestrador.model');
 const userService = require('../services/user.service');
-const { AUTHORITIES } = require('../util/authorities.config');
+const { AUTHORITIES } = require('../util/auth.config');
 
 /**
  * Recoge la lista de todos los adiestradores de la bbdd
@@ -20,7 +20,7 @@ exports.findAll = async () => {
  * @param {String} idAdiestrador el id de adiestrador
  * @returns el documento del adiestrador buscado, un objeto vacio si no existe
  */
-exports.findById = async idAdiestrador => {
+exports.findById = async (idAdiestrador) => {
   if (!mongoose.Types.ObjectId.isValid(idAdiestrador)) return {};
 
   const adiestrador = await Adiestrador.findById(idAdiestrador);
@@ -33,7 +33,7 @@ exports.findById = async idAdiestrador => {
  * @returns el objeto adiestrador creado
  * @throws error si el userId no tiene asignado el rol de adiestrador
  */
-exports.create = async adiestradorData => {
+exports.create = async (adiestradorData) => {
   const user = await userService.findById(adiestradorData.userId);
   if (!user || user.role !== AUTHORITIES.ADIESTRADOR) {
     const error = new Error();
@@ -51,7 +51,7 @@ exports.create = async adiestradorData => {
  * @param {Object} idAdiestrador
  * @returns un objeto vacio
  */
-exports.deleteById = async idAdiestrador => {
+exports.deleteById = async (idAdiestrador) => {
   if (mongoose.Types.ObjectId.isValid(idAdiestrador)) {
     await Adiestrador.deleteOne({ _id: idAdiestrador });
   }
@@ -80,7 +80,7 @@ exports.update = async (idAdiestrador, newData) => {
  * Elimina un evento del la lista de eventos de su adiestrador
  * @param {Object} evento
  */
-exports.removeEvento = async evento => {
+exports.removeEvento = async (evento) => {
   await Adiestrador.findOneAndUpdate(
     { _id: evento.idAdiestrador },
     { $pull: { eventos: { _id: evento._id } } }

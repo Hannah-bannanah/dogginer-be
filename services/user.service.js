@@ -26,6 +26,16 @@ exports.findById = async userId => {
 };
 
 /**
+ * Busca un user por email
+ * @param {String} email el email del user
+ * @returns el documento del user buscado o un objeto vacio si no existe
+ */
+exports.findByEmail = async email => {
+  const user = await User.findOne({ email: email });
+  return user ? user : {};
+};
+
+/**
  * Crea un nuevo user en la bbdd
  * @param {Object} userData los datos del user
  * @returns el objeto user creado
