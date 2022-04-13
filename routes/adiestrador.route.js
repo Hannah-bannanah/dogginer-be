@@ -3,6 +3,7 @@ const express = require('express');
 
 //import internal modules
 const adiestradorController = require('../controllers/adiestrador.controller');
+const { isAuthenticated } = require('../middleware/auth');
 
 //initialize router
 const router = express.Router();
@@ -131,7 +132,11 @@ router.get('/:idAdiestrador', adiestradorController.findById);
  *      204:
  *        description: "adiestrador eliminado con exito"
  */
-router.delete('/:idAdiestrador', adiestradorController.deleteById);
+router.delete(
+  '/:idAdiestrador',
+  isAuthenticated,
+  adiestradorController.deleteById
+);
 
 /**
  * @swagger
@@ -174,6 +179,6 @@ router.delete('/:idAdiestrador', adiestradorController.deleteById);
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'
  */
-router.patch('/:idAdiestrador', adiestradorController.update);
+router.patch('/:idAdiestrador', isAuthenticated, adiestradorController.update);
 
 module.exports = router;

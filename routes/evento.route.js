@@ -3,6 +3,7 @@ const express = require('express');
 
 //import internal modules
 const eventoController = require('../controllers/evento.controller');
+const { isAuthenticated } = require('../middleware/auth');
 
 //initialize router
 const router = express.Router();
@@ -97,6 +98,7 @@ router.get('', eventoController.findAll);
  *        $ref: "#/components/responses/DuplicateEntryError"
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'
+ */
 router.post('', eventoController.create);
 
 /**
@@ -142,7 +144,7 @@ router.get('/:idEvento', eventoController.findById);
  *      204:
  *        description: "evento eliminado con exito"
  */
-router.delete('/:idEvento', eventoController.deleteById);
+router.delete('/:idEvento', isAuthenticated, eventoController.deleteById);
 
 /**
  * @swagger
@@ -185,6 +187,6 @@ router.delete('/:idEvento', eventoController.deleteById);
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'
  */
-router.patch('/:idEvento', eventoController.update);
+router.patch('/:idEvento', isAuthenticated, eventoController.update);
 
 module.exports = router;

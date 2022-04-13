@@ -3,6 +3,7 @@ const express = require('express');
 
 //import internal modules
 const clienteController = require('../controllers/cliente.controller');
+const { isAuthenticated } = require('../middleware/auth');
 
 //initialize router
 const router = express.Router();
@@ -51,7 +52,7 @@ const router = express.Router();
  *              items:
  *                $ref: "#/components/schemas/Cliente"
  */
-router.get('', clienteController.findAll);
+router.get('', isAuthenticated, clienteController.findAll);
 
 // create one
 /**
@@ -108,7 +109,7 @@ router.post('', clienteController.create);
  *
  */
 // find by id
-router.get('/:idCliente', clienteController.findById);
+router.get('/:idCliente', isAuthenticated, clienteController.findById);
 
 // delete by id
 /**
@@ -127,7 +128,7 @@ router.get('/:idCliente', clienteController.findById);
  *      204:
  *        description: "cliente eliminado con exito"
  */
-router.delete('/:idCliente', clienteController.deleteById);
+router.delete('/:idCliente', isAuthenticated, clienteController.deleteById);
 
 /**
  * @swagger
@@ -170,6 +171,6 @@ router.delete('/:idCliente', clienteController.deleteById);
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'
  */
-router.patch('/:idCliente', clienteController.update);
+router.patch('/:idCliente', isAuthenticated, clienteController.update);
 
 module.exports = router;
