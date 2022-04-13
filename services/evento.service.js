@@ -1,8 +1,7 @@
-//import 3rd party modules
-const req = require('express/lib/request');
+// import 3rd party modules
 const mongoose = require('mongoose');
 
-//import internal modules
+// import internal modules
 const Evento = require('../models/evento.model');
 const adiestradorService = require('../services/adiestrador.service');
 const clienteService = require('../services/cliente.service');
@@ -20,11 +19,11 @@ exports.findAll = async () => {
  * @param {String} idEvento el id de evento
  * @returns el documento del evento buscado, un objeto vacio si no existe
  */
-exports.findById = async idEvento => {
+exports.findById = async (idEvento) => {
   if (!mongoose.Types.ObjectId.isValid(idEvento)) return {};
 
   const evento = await Evento.findById(idEvento);
-  return evento ? evento : {};
+  return evento || {};
 };
 
 /**
@@ -33,7 +32,7 @@ exports.findById = async idEvento => {
  * @returns el objeto evento creado
  * @throws error si el idAdiestrador no existe
  */
-exports.create = async eventoData => {
+exports.create = async (eventoData) => {
   const adiestrador = await adiestradorService.findById(
     eventoData.idAdiestrador
   );
@@ -54,7 +53,7 @@ exports.create = async eventoData => {
  * @param {Object} idEvento
  * @returns un objeto vacio
  */
-exports.deleteById = async idEvento => {
+exports.deleteById = async (idEvento) => {
   const evento = await this.findById(idEvento);
   if (!evento._id) return {};
   await Evento.deleteOne({ _id: idEvento });
@@ -80,7 +79,7 @@ exports.update = async (idEvento, newData) => {
   }
   await Evento.findByIdAndUpdate(idEvento, {
     ...newData,
-    idAdiestrador: undefined, // de momento, ignoramos cambios en el adiestrador
+    idAdiestrador: undefined // de momento, ignoramos cambios en el adiestrador
   });
   return await this.findById(idEvento);
 };

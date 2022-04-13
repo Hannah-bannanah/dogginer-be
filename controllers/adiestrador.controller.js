@@ -1,5 +1,4 @@
 // import 3rd party modules
-const mongoose = require('mongoose');
 
 // import internal modules
 const adiestradorService = require('../services/adiestrador.service');
@@ -45,43 +44,6 @@ exports.update = async (req, res, next) => {
       req.body
     );
     res.status(200).send(adiestradorActualizado);
-  } catch (err) {
-    next(err);
-  }
-};
-
-exports.getPerfil = async (req, res, next) => {
-  const adiestrador = await adiestradorService.findById(
-    req.params.idAdiestrador
-  );
-  if (!adiestrador.idPerfil) {
-    const error = new Error();
-    error.httpStatus = 404;
-    error.message =
-      'El adiestrador no existe o no dispone de perfil publico';
-    next(error);
-  } else {
-    try {
-      const perfil = await perfilService.findById(
-        adiestrador.idPerfil
-      );
-      res.status(200).send(perfil);
-    } catch (err) {
-      next(err);
-    }
-  }
-};
-
-exports.updatePerfil = async (req, res, next) => {
-  const adiestrador = await adiestradorService.findById(
-    req.params.idAdiestrador
-  );
-  try {
-    const perfilActualizado = await perfilService.update(
-      adiestrador.idPerfil,
-      req.body
-    );
-    res.status(200).send(perfilActualizado);
   } catch (err) {
     next(err);
   }

@@ -1,7 +1,7 @@
-//import 3rd party modules
+// import 3rd party modules
 const mongoose = require('mongoose');
 
-//import internal modules
+// import internal modules
 const User = require('../models/user.model');
 
 /**
@@ -18,11 +18,12 @@ exports.findAll = async () => {
  * @param {String} userId el id de user
  * @returns el documento del user buscado, un objeto vacio si no existe
  */
-exports.findById = async userId => {
+exports.findById = async (userId) => {
   let user = {};
-  if (mongoose.Types.ObjectId.isValid(userId))
+  if (mongoose.Types.ObjectId.isValid(userId)) {
     user = await User.findById(userId);
-  return user ? user : {};
+  }
+  return user || {};
 };
 
 /**
@@ -30,9 +31,9 @@ exports.findById = async userId => {
  * @param {String} email el email del user
  * @returns el documento del user buscado o un objeto vacio si no existe
  */
-exports.findByEmail = async email => {
+exports.findByEmail = async (email) => {
   const user = await User.findOne({ email: email });
-  return user ? user : {};
+  return user || {};
 };
 
 /**
@@ -40,7 +41,7 @@ exports.findByEmail = async email => {
  * @param {Object} userData los datos del user
  * @returns el objeto user creado
  */
-exports.create = async userData => {
+exports.create = async (userData) => {
   const user = new User({ ...userData }); // mongoose valida la estructura del objeto
   await user.save();
   return user;
@@ -51,7 +52,7 @@ exports.create = async userData => {
  * @param {String} userId
  * @returns un objeto vacio
  */
-exports.deleteById = async userId => {
+exports.deleteById = async (userId) => {
   if (mongoose.Types.ObjectId.isValid(userId)) {
     await User.deleteOne({ _id: userId });
   }

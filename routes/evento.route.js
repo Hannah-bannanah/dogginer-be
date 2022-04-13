@@ -1,11 +1,11 @@
-//import 3rd party modules
+// import 3rd party modules
 const express = require('express');
 
-//import internal modules
+// import internal modules
 const eventoController = require('../controllers/evento.controller');
 const { isAuthenticated } = require('../middleware/auth');
 
-//initialize router
+// initialize router
 const router = express.Router();
 
 /**

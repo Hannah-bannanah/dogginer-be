@@ -1,9 +1,9 @@
-//import 3rd party modules
+// import 3rd party modules
 const mongoose = require('mongoose');
 
-//import internal modules
+// import internal modules
 
-//create schema
+// create schema
 const Schema = mongoose.Schema;
 
 const COLLECTION_NAME = 'Evento';
@@ -12,20 +12,20 @@ const eventoSchemaDetails = {
   idAdiestrador: {
     type: Schema.Types.ObjectId,
     ref: 'Adiestrador',
-    required: true,
+    required: true
   },
   nombre: { type: String, required: true },
   descripcion: String,
   fecha: Date,
   maxAforo: Number,
   privado: Boolean,
-  terminado: Boolean,
+  terminado: Boolean
 };
 const eventoSchema = new Schema(eventoSchemaDetails, {
-  strictQuery: false,
+  strictQuery: false
 });
 
-//create model
+// create model
 const eventoModel = mongoose.model(COLLECTION_NAME, eventoSchema);
 
 module.exports = eventoModel;

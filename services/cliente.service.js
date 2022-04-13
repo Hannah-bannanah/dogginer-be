@@ -1,7 +1,7 @@
-//import 3rd party modules
+// import 3rd party modules
 const mongoose = require('mongoose');
 
-//import internal modules
+// import internal modules
 const Cliente = require('../models/cliente.model');
 const userService = require('../services/user.service');
 const { AUTHORITIES } = require('../util/auth.config');
@@ -24,7 +24,7 @@ exports.findById = async (idCliente) => {
   if (!mongoose.Types.ObjectId.isValid(idCliente)) return {};
 
   const cliente = await Cliente.findById(idCliente);
-  return cliente ? cliente : {};
+  return cliente || {};
 };
 
 /**

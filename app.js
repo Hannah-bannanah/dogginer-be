@@ -1,15 +1,15 @@
-//import third party modules
+// import third party modules
 const express = require('express');
 const mongoose = require('mongoose');
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 const cors = require('cors');
 
-//import internal modules
+// import internal modules
 const { DBCONNECTION } = require('./util/db.config');
 const { SWAGGERSPEC } = require('./util/swagger.config');
 
-//import routes
+// import routes
 const userRouter = require('./routes/user.route');
 const clienteRouter = require('./routes/cliente.route');
 const adiestradorRouter = require('./routes/adiestrador.route');
@@ -17,12 +17,12 @@ const eventoRouter = require('./routes/evento.route');
 
 const { errorHandler } = require('./middleware/error.handler');
 
-//create app
+// create app
 const app = express();
 
 // middleware
-app.use(express.json()); //parser de json
-app.use(express.urlencoded({ extended: true })); //parser de objetos url.
+app.use(express.json()); // parser de json
+app.use(express.urlencoded({ extended: true })); // parser de objetos url.
 app.use(
   '/swagger',
   swaggerUI.serve,
@@ -30,7 +30,7 @@ app.use(
 );
 app.use(
   cors({
-    origin: '*',
+    origin: '*'
   })
 );
 
@@ -49,4 +49,4 @@ mongoose
     console.log('DB connected!');
     app.listen(3000);
   })
-  .catch(err => console.log(err));
+  .catch((err) => console.log(err));

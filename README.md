@@ -12,6 +12,12 @@ Backend de la aplicación de dogginer
 <li>Renombrar archivo a 'db.config.js'</li>
 </ol>
 </li>
+<li>Copiar el archivo auth.plantilla.config.js:
+<ol>
+<li>Reemplazar el valor de la constante <code>JWT_PASSPHRASE</code> por la frase correcta</li>
+<li>Renombrar archivo a 'auth.config.js'</li>
+</ol>
+</li>
 <li>En la terminal, ejecutar <code>npm install</code></li>
 <li>En la terminal, ejecutar <code>npm run dev</code></li>
 </ol>
