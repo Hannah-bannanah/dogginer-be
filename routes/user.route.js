@@ -121,6 +121,43 @@ router.post('', userController.create);
  */
 router.post('/login', userController.generateToken);
 
+// create one
+/**
+ * @swagger
+ * /users/login:
+ *  post:
+ *    summary: generar token de login
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: '#/components/schemas/User'
+ *    responses:
+ *      200:
+ *        description: "login procesado con exito"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                token:
+ *                  description: crsf token
+ *                  type: string
+ *      401:
+ *        description: "Authentication failed"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                error:
+ *                  description: error
+ *                  type: string
+ */
+router.post('/login', userController.generateToken);
+
 /**
  * @swagger
  * /users/{userId}:
