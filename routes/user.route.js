@@ -3,6 +3,7 @@ const express = require('express');
 
 //import internal modules
 const userController = require('../controllers/user.controller');
+const { isAuthenticated } = require('../middleware/auth');
 
 //initialize router
 const router = express.Router();
@@ -50,7 +51,7 @@ const router = express.Router();
  *              items:
  *                $ref: "#/components/schemas/User"
  */
-router.get('', userController.findAll);
+router.get('', isAuthenticated, userController.findAll);
 
 // create one
 /**
@@ -144,7 +145,7 @@ router.post('/login', userController.generateToken);
  *
  */
 // find by id
-router.get('/:userId', userController.findById);
+router.get('/:userId', isAuthenticated, userController.findById);
 
 // delete by id
 /**
@@ -152,6 +153,8 @@ router.get('/:userId', userController.findById);
  * /users/{userId}:
  *  delete:
  *    summary: eliminar un user
+ *    security:
+ *      - bearerAuth: []
  *    parameters:
  *      - in: path
  *        name: "userId"
@@ -162,8 +165,10 @@ router.get('/:userId', userController.findById);
  *    responses:
  *      204:
  *        description: "user eliminado con exito"
+ *      401:
+ *        $ref: "#/components/responses/UnauthorizedError"
  */
-router.delete('/:userId', userController.deleteById);
+router.delete('/:userId', isAuthenticated, userController.deleteById);
 
 /**
  * @swagger
@@ -206,6 +211,6 @@ router.delete('/:userId', userController.deleteById);
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'
  */
-router.patch('/:userId', userController.update);
+router.patch('/:userId', isAuthenticated, userController.update);
 
 module.exports = router;
