@@ -77,25 +77,9 @@ router.get('', userController.findAll);
  *                  description: userId
  *                  type: string
  *      400:
- *        description: "Entrada duplicada"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                error:
- *                  description: error
- *                  type: string
+ *        $ref: "#/components/responses/DuplicateEntryError"
  *      422:
- *        description: "Información inválida"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                error:
- *                  description: error
- *                  type: string
+ *        $ref: '#/components/responses/InvalidEntryError'
  */
 router.post('', userController.create);
 
@@ -183,15 +167,7 @@ router.delete('/:userId', userController.deleteById);
  *                  description: error
  *                  type: string
  *      422:
- *        description: "información inválida"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                error:
- *                  description: error
- *                  type: string
+ *        $ref: '#/components/responses/InvalidEntryError'
  */
 router.patch('/:userId', userController.update);
 

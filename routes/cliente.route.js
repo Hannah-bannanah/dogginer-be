@@ -78,25 +78,9 @@ router.get('', clienteController.findAll);
  *                  description: idCliente
  *                  type: string
  *      400:
- *        description: "Entrada duplicada"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                error:
- *                  description: error
- *                  type: string
+ *        $ref: "#/components/responses/DuplicateEntryError"
  *      422:
- *        description: "Información inválida"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                error:
- *                  description: error
- *                  type: string
+ *        $ref: '#/components/responses/InvalidEntryError'
  */
 router.post('', clienteController.create);
 
@@ -184,15 +168,7 @@ router.delete('/:idCliente', clienteController.deleteById);
  *                  description: error
  *                  type: string
  *      422:
- *        description: "información inválida"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                error:
- *                  description: error
- *                  type: string
+ *        $ref: '#/components/responses/InvalidEntryError'
  */
 router.patch('/:idCliente', clienteController.update);
 

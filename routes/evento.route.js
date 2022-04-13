@@ -94,26 +94,9 @@ router.get('', eventoController.findAll);
  *                  description: idEvento
  *                  type: string
  *      400:
- *        description: "Entrada duplicada"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                error:
- *                  description: error
- *                  type: string
+ *        $ref: "#/components/responses/DuplicateEntryError"
  *      422:
- *        description: "Información inválida"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                error:
- *                  description: error
- *                  type: string
- */
+ *        $ref: '#/components/responses/InvalidEntryError'
 router.post('', eventoController.create);
 
 /**
@@ -200,15 +183,7 @@ router.delete('/:idEvento', eventoController.deleteById);
  *                  description: error
  *                  type: string
  *      422:
- *        description: "información inválida"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                error:
- *                  description: error
- *                  type: string
+ *        $ref: '#/components/responses/InvalidEntryError'
  */
 router.patch('/:idEvento', eventoController.update);
 
