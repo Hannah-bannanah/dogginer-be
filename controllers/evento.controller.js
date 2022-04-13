@@ -1,5 +1,4 @@
 // import 3rd party modules
-const mongoose = require('mongoose');
 
 // import internal modules
 const eventoService = require('../services/evento.service');

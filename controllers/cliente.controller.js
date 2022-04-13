@@ -1,5 +1,4 @@
 // import 3rd party modules
-const mongoose = require('mongoose');
 
 // import internal modules
 const clienteService = require('../services/cliente.service');
@@ -11,9 +10,7 @@ exports.findAll = async (req, res, next) => {
 
 exports.findById = async (req, res, next) => {
   try {
-    const cliente = await clienteService.findById(
-      req.params.idCliente
-    );
+    const cliente = await clienteService.findById(req.params.idCliente);
     res.status(200).send(cliente);
   } catch (err) {
     next(err);

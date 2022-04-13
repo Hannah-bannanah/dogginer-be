@@ -1,9 +1,9 @@
-//import 3rd party modules
+// import 3rd party modules
 const mongoose = require('mongoose');
 
-//import internal modules
+// import internal modules
 
-//create schema ,.
+// create schema ,.
 const Schema = mongoose.Schema;
 
 const COLLECTION_NAME = 'Adiestrador';
@@ -14,7 +14,7 @@ const adiestradorSchemaDetails = {
     ref: 'User',
     required: true,
     immutable: true,
-    unique: true,
+    unique: true
   },
   nombre: { type: String, required: true },
   bio: String,
@@ -22,30 +22,27 @@ const adiestradorSchemaDetails = {
     {
       idEvento: {
         type: Schema.Types.ObjectId,
-        ref: 'Evento',
-      },
-    },
+        ref: 'Evento'
+      }
+    }
   ],
   rating: [
     {
       idCliente: {
         type: Schema.Types.ObjectId,
         ref: 'Cliente',
-        required: true,
+        required: true
       },
-      score: { type: Number, required: true },
-    },
-  ],
+      score: { type: Number, required: true }
+    }
+  ]
 };
 
 const adiestradorSchema = new Schema(adiestradorSchemaDetails, {
-  strictQuery: false,
+  strictQuery: false
 });
 
-//create model
-const adiestradorModel = mongoose.model(
-  COLLECTION_NAME,
-  adiestradorSchema
-);
+// create model
+const adiestradorModel = mongoose.model(COLLECTION_NAME, adiestradorSchema);
 
 module.exports = adiestradorModel;

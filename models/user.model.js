@@ -1,9 +1,9 @@
-//import 3rd party modules
+// import 3rd party modules
 const mongoose = require('mongoose');
 
-//import internal modules
+// import internal modules
 const { AUTHORITIES } = require('../util/auth.config');
-//create schema
+// create schema
 const Schema = mongoose.Schema;
 
 const COLLECTION_NAME = 'User';
@@ -23,7 +23,7 @@ const userSchema = new Schema(userSchemaDetails, {
   strictQuery: false
 });
 
-//create model
+// create model
 const userModel = mongoose.model(COLLECTION_NAME, userSchema);
 
 module.exports = userModel;

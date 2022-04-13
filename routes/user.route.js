@@ -1,11 +1,11 @@
-//import 3rd party modules
+// import 3rd party modules
 const express = require('express');
 
-//import internal modules
+// import internal modules
 const userController = require('../controllers/user.controller');
 const { isAuthenticated } = require('../middleware/auth');
 
-//initialize router
+// initialize router
 const router = express.Router();
 
 /**
@@ -109,15 +109,7 @@ router.post('', userController.create);
  *                  description: crsf token
  *                  type: string
  *      401:
- *        description: "Authentication failed"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                error:
- *                  description: error
- *                  type: string
+ *        $ref: "#/components/responses/UnauthorizedError"
  */
 router.post('/login', userController.generateToken);
 
@@ -145,16 +137,11 @@ router.post('/login', userController.generateToken);
  *                token:
  *                  description: crsf token
  *                  type: string
+ *                validity:
+ *                  description: validez del token en segundos
+ *                  type: number
  *      401:
- *        description: "Authentication failed"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                error:
- *                  description: error
- *                  type: string
+ *        $ref: "#/components/responses/UnauthorizedError"
  */
 router.post('/login', userController.generateToken);
 

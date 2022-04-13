@@ -1,7 +1,7 @@
-//import 3rd party modules
+// import 3rd party modules
 const mongoose = require('mongoose');
 
-//import internal modules
+// import internal modules
 const Adiestrador = require('../models/adiestrador.model');
 const userService = require('../services/user.service');
 const { AUTHORITIES } = require('../util/auth.config');
@@ -24,7 +24,7 @@ exports.findById = async (idAdiestrador) => {
   if (!mongoose.Types.ObjectId.isValid(idAdiestrador)) return {};
 
   const adiestrador = await Adiestrador.findById(idAdiestrador);
-  return adiestrador ? adiestrador : {};
+  return adiestrador || {};
 };
 
 /**

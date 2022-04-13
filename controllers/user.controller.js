@@ -1,5 +1,4 @@
 // import 3rd party modules
-const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -66,7 +65,7 @@ exports.generateToken = async (req, res, next) => {
         JWT_PASSPHRASE,
         { expiresIn: '1h' }
       );
-      return res.status(200).send({ token: token });
+      return res.status(200).send({ token: token, validity: 3600 });
     }
   }
 

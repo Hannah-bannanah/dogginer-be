@@ -1,9 +1,9 @@
-//import 3rd party modules
+// import 3rd party modules
 const mongoose = require('mongoose');
 
-//import internal modules
+// import internal modules
 
-//create schema
+// create schema
 const Schema = mongoose.Schema;
 
 const COLLECTION_NAME = 'Cliente';
@@ -15,22 +15,22 @@ const clienteSchemaDetails = {
     ref: 'User',
     required: true,
     immutable: true,
-    unique: true,
+    unique: true
   },
   eventos: [
     {
       idEvento: {
         type: Schema.Types.ObjectId,
-        ref: 'Evento',
-      },
-    },
-  ],
+        ref: 'Evento'
+      }
+    }
+  ]
 };
 const clienteSchema = new Schema(clienteSchemaDetails, {
-  strictQuery: false,
+  strictQuery: false
 });
 
-//create model
+// create model
 const clienteModel = mongoose.model(COLLECTION_NAME, clienteSchema);
 
 module.exports = clienteModel;
