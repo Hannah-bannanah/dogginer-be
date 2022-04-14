@@ -29,7 +29,7 @@ exports.findById = async (idAdiestrador) => {
 
 /**
  * Crea un nuevo adiestrador en la bbdd
- * @param {Object} reqData los datos del adiestrador
+ * @param {Object} adiestradorData los datos del adiestrador
  * @returns el objeto adiestrador creado
  * @throws error si el userId no tiene asignado el rol de adiestrador
  */
@@ -85,4 +85,13 @@ exports.removeEvento = async (evento) => {
     { _id: evento.idAdiestrador },
     { $pull: { eventos: { _id: evento._id } } }
   );
+};
+
+/**
+ * Busca un adiestrador por el id de la cuenta de usuario asociada
+ * @param {String} userId
+ * @returns el documento de adiestrador, un objeto vacio si no existe
+ */
+exports.findByUserId = async (userId) => {
+  return await Adiestrador.findOne({ userId: userId });
 };

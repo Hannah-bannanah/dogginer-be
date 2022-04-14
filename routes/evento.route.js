@@ -76,6 +76,8 @@ router.get('', eventoController.findAll);
  * /eventos:
  *  post:
  *    summary: crear un nuevo evento
+ *    security:
+ *      - bearerAuth: []
  *    requestBody:
  *      required: true
  *      content:
@@ -99,7 +101,7 @@ router.get('', eventoController.findAll);
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'
  */
-router.post('', eventoController.create);
+router.post('', isAuthenticated, eventoController.create);
 
 /**
  * @swagger
@@ -133,6 +135,8 @@ router.get('/:idEvento', eventoController.findById);
  * /eventos/{idEvento}:
  *  delete:
  *    summary: eliminar un evento
+ *    security:
+ *      - bearerAuth: []
  *    parameters:
  *      - in: path
  *        name: "idEvento"
@@ -151,6 +155,8 @@ router.delete('/:idEvento', isAuthenticated, eventoController.deleteById);
  * /eventos/{idEvento}:
  *  patch:
  *    summary: actualizar un evento
+ *    security:
+ *      - bearerAuth: []
  *    description: El evento se actualizará con los campos incluidos en el responseBody
  *    parameters:
  *      - in: path

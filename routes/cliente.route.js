@@ -42,6 +42,8 @@ const router = express.Router();
  * /clientes:
  *  get:
  *    summary: obtener lista de clientes
+ *    security:
+ *      - bearerAuth: []
  *    responses:
  *      200:
  *        description: "success"
@@ -90,6 +92,8 @@ router.post('', clienteController.create);
  * /clientes/{idCliente}:
  *  get:
  *    summary: buscar un cliente por id
+ *    security:
+ *      - bearerAuth: []
  *    description: Devuelve el cliente, o un objeto vacio si no se ha encontrado
  *    parameters:
  *      - in: path
@@ -117,6 +121,8 @@ router.get('/:idCliente', isAuthenticated, clienteController.findById);
  * /clientes/{idCliente}:
  *  delete:
  *    summary: eliminar un cliente
+ *    security:
+ *      - bearerAuth: []
  *    parameters:
  *      - in: path
  *        name: "idCliente"
@@ -135,6 +141,8 @@ router.delete('/:idCliente', isAuthenticated, clienteController.deleteById);
  * /clientes/{idCliente}:
  *  patch:
  *    summary: actualizar un cliente
+ *    security:
+ *      - bearerAuth: []
  *    description: El cliente se actualizará con los campos incluidos en el responseBody
  *    parameters:
  *      - in: path

@@ -16,6 +16,9 @@ const router = express.Router();
  *       type: object
  *       description: Un adiestrador
  *       properties:
+ *         _id:
+ *           type: string
+ *           description: el id del adiestrador
  *         userId:
  *          type: string
  *          description: el id de usuario
@@ -121,6 +124,8 @@ router.get('/:idAdiestrador', adiestradorController.findById);
  * /adiestradores/{idAdiestrador}:
  *  delete:
  *    summary: eliminar un adiestrador
+ *    security:
+ *      - bearerAuth: []
  *    parameters:
  *      - in: path
  *        name: "idAdiestrador"
@@ -143,6 +148,8 @@ router.delete(
  * /adiestradores/{idAdiestrador}:
  *  patch:
  *    summary: actualizar un adiestrador
+ *    security:
+ *      - bearerAuth: []
  *    description: El adiestrador se actualizará con los campos incluidos en el responseBody
  *    parameters:
  *      - in: path

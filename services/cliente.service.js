@@ -82,3 +82,12 @@ exports.update = async (idCliente, newData) => {
 exports.removeEvento = async (idEvento) => {
   await Cliente.updateMany({}, { $pull: { eventos: { _id: idEvento } } });
 };
+
+/**
+ * Busca un cliente por el id de la cuenta de usuario asociada
+ * @param {String} userId
+ * @returns el documento de cliente, un objeto vacio si no existe
+ */
+exports.findByUserId = async (userId) => {
+  return await Cliente.findOne({ userId: userId });
+};
