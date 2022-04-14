@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 // import internal modules
 const { JWT_PASSPHRASE, AUTHORITIES } = require('../util/auth.config');
 const adiestradorService = require('../services/adiestrador.service');
+const userService = require('../services/user.service');
 
 const decodeToken = (req) => {
   try {
@@ -46,11 +47,9 @@ const isGod = (req, res, next) => {
 };
 
 const verifyAdiestrador = async (req, res, next) => {
-  console.log('idAdiestrador en params: ', req.params.idAdiestrador);
   const adiestrador = await adiestradorService.findById(
     req.params.idAdiestrador
   );
-  console.log('adiestrador:', adiestrador);
   if (!adiestrador._id) {
     const error = new Error('Adiestrador no existe');
     error.httpStatus = 404;
@@ -58,10 +57,9 @@ const verifyAdiestrador = async (req, res, next) => {
   }
   try {
     const { userId } = decodeToken(req);
-    console.log('token user', userId);
-    console.log('adiestrador.userId', adiestrador.userId);
-    if (userId === adiestrador.userId) {
-      console.log('verified');
+    const user = await userService.findById(userId);
+
+    if (user._id.equals(adiestrador.userId)) {
       req.adiestrador = adiestrador;
       return next();
     }

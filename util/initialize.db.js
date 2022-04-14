@@ -40,7 +40,7 @@ const createUsers = async () => {
     });
     users.push(userCliente);
     const cliente = new Cliente({
-      userId: userCliente._id,
+      userId: userCliente,
       nombre: `cliente${i}`
     });
     clientes.push(cliente);
@@ -51,7 +51,7 @@ const createUsers = async () => {
     });
     users.push(userAdiestrador);
     const adiestrador = new Adiestrador({
-      userId: userAdiestrador._id,
+      userId: userAdiestrador,
       nombre: `adiestrador${i}`,
       bio: `Me gustan los paseos por la playa`
     });

@@ -33,6 +33,5 @@ const router = express.Router({ mergeParams: true });
  *                $ref: "#/components/schemas/Cliente"
  */
 router.get('', adiestradorController.fetchClientes);
-// router.get('', adiestradorController.fetchClientes);
 
 module.exports = router;
