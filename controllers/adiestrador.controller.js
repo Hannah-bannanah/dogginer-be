@@ -2,6 +2,8 @@
 
 // import internal modules
 const adiestradorService = require('../services/adiestrador.service');
+const clienteService = require('../services/cliente.service');
+const eventoService = require('../services/evento.service');
 const { AUTHORITIES } = require('../util/auth.config');
 
 exports.findAll = async (req, res, next) => {
@@ -72,4 +74,22 @@ exports.update = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+exports.fetchClientes = async (req, res, next) => {
+  const clientes = await clienteService.findByAdiestrador(req.adiestrador);
+  res.status(200).send(clientes);
+};
+
+exports.fetchEventos = async (req, res, next) => {
+  const adiestrador = await adiestradorService.findById(
+    req.params.idAdiestrador
+  );
+  if (!adiestrador._id) {
+    const error = new Error('Adiestrador no existe');
+    error.httpStatus = 404;
+    return next(error);
+  }
+  const eventos = await eventoService.findByIdList(adiestrador.eventos);
+  res.status(200).send(eventos);
 };

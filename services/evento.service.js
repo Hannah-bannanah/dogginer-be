@@ -83,3 +83,12 @@ exports.update = async (idEvento, newData) => {
   });
   return await this.findById(idEvento);
 };
+
+/**
+ * Busca una lista de eventos por sus ids
+ * @param {Array} eventos lista de ids de eventos
+ * @returns la lista de eventos encontrados
+ */
+exports.findByIdList = async (eventos) => {
+  return await Evento.find({ _id: { $in: eventos } });
+};

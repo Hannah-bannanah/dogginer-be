@@ -95,3 +95,13 @@ exports.removeEvento = async (idEvento) => {
 exports.findByUserId = async (userId) => {
   return await Cliente.findOne({ userId: userId });
 };
+
+exports.findByAdiestrador = async (adiestrador) => {
+  const eventos = adiestrador.eventos;
+  const clientes = await Cliente.find({
+    eventos: {
+      $in: eventos
+    }
+  });
+  return clientes;
+};

@@ -16,7 +16,7 @@ const eventoSchemaDetails = {
   },
   nombre: { type: String, required: true },
   descripcion: String,
-  fecha: Date,
+  fecha: { type: Date, required: true },
   maxAforo: Number,
   privado: Boolean,
   terminado: Boolean
