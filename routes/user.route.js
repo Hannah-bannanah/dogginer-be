@@ -16,22 +16,18 @@ const router = express.Router();
  *       type: object
  *       description: Un usuario
  *       properties:
+ *         _id:
+ *           type: string
+ *           description: id del user
  *         email:
  *           type: string
  *           description: la direccion de email del user
- *         password:
- *           type: string
- *           description: la password de usuario del user
  *         role:
  *           type: string
  *           description: '"CLIENTE", "ADIESTRADOR", "GOD"'
- *       required:
- *        - email
- *        - password
- *        - role
  *       example:
+ *         _id: "625559613d9f4a9c59441033"
  *         email: "hannah@bannanah.com"
- *         password: "secreta"
  *         role: "GOD"
  */
 
@@ -41,6 +37,8 @@ const router = express.Router();
  * /users:
  *  get:
  *    summary: obtener lista de users
+ *    security:
+ *      - bearerAuth: []
  *    responses:
  *      200:
  *        description: "success"
@@ -65,7 +63,22 @@ router.get('', isAuthenticated, userController.findAll);
  *        application/json:
  *          schema:
  *            type: object
- *            $ref: '#/components/schemas/User'
+ *            properties:
+ *              email:
+ *                type: string
+ *              password:
+ *                type: string
+ *              role:
+ *                type: string
+ *                description: '"CLIENTE", "ADIESTRADOR", "GOD"'
+ *            required:
+ *              - email
+ *              - password
+ *              - role
+ *            example:
+ *              email: "hannah@bannanah.com"
+ *              password: "secreta"
+ *              role: "GOD"
  *    responses:
  *      200:
  *        description: "user creado con exito"
@@ -84,19 +97,35 @@ router.get('', isAuthenticated, userController.findAll);
  */
 router.post('', userController.create);
 
-// create one
+// login
 /**
  * @swagger
  * /users/login:
  *  post:
  *    summary: generar token de login
+ *    security:
+ *      - bearerAuth: []
  *    requestBody:
  *      required: true
  *      content:
  *        application/json:
  *          schema:
  *            type: object
- *            $ref: '#/components/schemas/User'
+ *            properties:
+ *              email:
+ *                type: string
+ *                format: email
+ *                description: el email del usuario
+ *              password:
+ *                type: string
+ *                format: password
+ *                description: la password del usuario
+ *            required:
+ *             - email
+ *             - password
+ *            example:
+ *              email: "hannah@bannanah.com"
+ *              password: "secreta"
  *    responses:
  *      200:
  *        description: "login procesado con exito"
@@ -108,38 +137,6 @@ router.post('', userController.create);
  *                token:
  *                  description: crsf token
  *                  type: string
- *      401:
- *        $ref: "#/components/responses/UnauthorizedError"
- */
-router.post('/login', userController.generateToken);
-
-// create one
-/**
- * @swagger
- * /users/login:
- *  post:
- *    summary: generar token de login
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            type: object
- *            $ref: '#/components/schemas/User'
- *    responses:
- *      200:
- *        description: "login procesado con exito"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                token:
- *                  description: crsf token
- *                  type: string
- *                validity:
- *                  description: validez del token en segundos
- *                  type: number
  *      401:
  *        $ref: "#/components/responses/UnauthorizedError"
  */
@@ -150,6 +147,8 @@ router.post('/login', userController.generateToken);
  * /users/{userId}:
  *  get:
  *    summary: buscar un user por id
+ *    security:
+ *      - bearerAuth: []
  *    description: Devuelve el user, o un objeto vacio si no se ha encontrado
  *    parameters:
  *      - in: path
@@ -199,6 +198,8 @@ router.delete('/:userId', isAuthenticated, userController.deleteById);
  * /users/{userId}:
  *  patch:
  *    summary: actualizar un user
+ *    security:
+ *      - bearerAuth: []
  *    description: El user se actualizará con los campos incluidos en el responseBody
  *    parameters:
  *      - in: path
@@ -213,7 +214,9 @@ router.delete('/:userId', isAuthenticated, userController.deleteById);
  *        application/json:
  *          schema:
  *            type: object
- *            $ref: '#/components/schemas/User'
+ *            properties:
+ *              email:
+ *                type: string
  *    responses:
  *      200:
  *        description: "User actualizado con exito"

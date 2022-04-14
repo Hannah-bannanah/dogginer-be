@@ -3,13 +3,15 @@ const mongoose = require('mongoose');
 
 // import internal modules
 const User = require('../models/user.model');
+const adiestradorService = require('../services/adiestrador.service');
+const clienteService = require('../services/cliente.service');
 
 /**
  * Recoge la lista de todos los users de la bbdd
  * @returns la lista de users
  */
 exports.findAll = async () => {
-  const users = await User.find();
+  const users = await User.find().select({ password: 0, __v: 0 });
   return users;
 };
 
@@ -21,7 +23,7 @@ exports.findAll = async () => {
 exports.findById = async (userId) => {
   let user = {};
   if (mongoose.Types.ObjectId.isValid(userId)) {
-    user = await User.findById(userId);
+    user = await User.findById(userId).select({ password: 0, __v: 0 });
   }
   return user || {};
 };
@@ -50,13 +52,22 @@ exports.create = async (userData) => {
 /**
  * Busca un user por id y lo elimina de la bbdd
  * @param {String} userId
- * @returns un objeto vacio
+ * @returns true si se ha eliminado una fila, false si no
+ * @throws error si existe una cuenta de adiestrador o cliente asociada
  */
 exports.deleteById = async (userId) => {
+  let result = { deletedCount: 0 };
   if (mongoose.Types.ObjectId.isValid(userId)) {
-    await User.deleteOne({ _id: userId });
+    const adiestrador = adiestradorService.findByUserId(userId);
+    const cliente = clienteService.findByUserId(userId);
+    if (adiestrador._id || cliente._id) {
+      const error = new Error('Cuenta de adiestrador o cliente activa');
+      error.httpStatus = 409;
+      throw error;
+    }
+    result = await User.deleteOne({ _id: userId });
   }
-  return {};
+  return result.deletedCount > 0;
 };
 
 /**

@@ -20,6 +20,13 @@ const SWAGGERSPEC = {
     },
     servers: [{ url: 'http://localhost:3000' }],
     components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        }
+      },
       responses: {
         InvalidEntryError: {
           description: 'Informacion invalida',
