@@ -47,14 +47,15 @@ exports.create = async (clienteData) => {
 
 /**
  * Busca un cliente por id y lo elimina de la bbdd
- * @param {Object} idCliente
- * @returns un objeto vacio
+ * @param {String} idCliente
+ * @returns true si se ha eliminado un documento, false si no
  */
 exports.deleteById = async (idCliente) => {
+  let result = { deletedCount: 0 };
   if (mongoose.Types.ObjectId.isValid(idCliente)) {
-    await Cliente.deleteOne({ _id: idCliente });
+    result = await Cliente.deleteOne({ _id: idCliente });
   }
-  return {};
+  return result.deletedCount > 0;
 };
 
 /**
@@ -71,8 +72,11 @@ exports.update = async (idCliente, newData) => {
     error.httpStatus = 404;
     throw error;
   }
-  await Cliente.findByIdAndUpdate(idCliente, newData);
-  return await this.findById(idCliente);
+  const clienteActualizado = await Cliente.findByIdAndUpdate(
+    idCliente,
+    newData
+  );
+  return clienteActualizado;
 };
 
 /**

@@ -48,14 +48,15 @@ exports.create = async (adiestradorData) => {
 
 /**
  * Busca un adiestrador por id y lo elimina de la bbdd
- * @param {Object} idAdiestrador
- * @returns un objeto vacio
+ * @param {String} idAdiestrador
+ * @returns true si se ha eliminado un documento, false si no
  */
 exports.deleteById = async (idAdiestrador) => {
+  let result = { deletedCount: 0 };
   if (mongoose.Types.ObjectId.isValid(idAdiestrador)) {
-    await Adiestrador.deleteOne({ _id: idAdiestrador });
+    result = await Adiestrador.deleteOne({ _id: idAdiestrador });
   }
-  return {};
+  return result.deletedCount > 0;
 };
 
 /**
@@ -72,8 +73,11 @@ exports.update = async (idAdiestrador, newData) => {
     error.httpStatus = 404;
     throw error;
   }
-  await Adiestrador.findByIdAndUpdate(idAdiestrador, newData);
-  return await this.findById(idAdiestrador);
+  const adiestradorActualizado = await Adiestrador.findByIdAndUpdate(
+    idAdiestrador,
+    newData
+  );
+  return adiestradorActualizado;
 };
 
 /**

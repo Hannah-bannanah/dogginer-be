@@ -31,7 +31,9 @@ exports.create = async (req, res, next) => {
 };
 
 exports.deleteById = async (req, res, next) => {
-  const adiestrador = adiestradorService.findById(req.params.idAdiestrador);
+  const adiestrador = await adiestradorService.findById(
+    req.params.idAdiestrador
+  );
   if (
     req.requesterData.userId !== adiestrador.userId &&
     req.requesterData.role !== AUTHORITIES.GOD
@@ -41,8 +43,9 @@ exports.deleteById = async (req, res, next) => {
     return next(error);
   }
   try {
-    await adiestradorService.deleteById(adiestrador.idAdiestrador);
-    res.status(204).send();
+    const result = await adiestradorService.deleteById(adiestrador._id);
+    if (result) res.status(204).send();
+    else res.status(404).send();
   } catch (err) {
     next(err);
   }
