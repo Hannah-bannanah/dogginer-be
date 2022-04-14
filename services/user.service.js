@@ -52,7 +52,7 @@ exports.create = async (userData) => {
 /**
  * Busca un user por id y lo elimina de la bbdd
  * @param {String} userId
- * @returns true si se ha eliminado una fila, false si no
+ * @returns true si se ha eliminado un documento, false si no
  * @throws error si existe una cuenta de adiestrador o cliente asociada
  */
 exports.deleteById = async (userId) => {
@@ -84,6 +84,6 @@ exports.update = async (userId, newData) => {
     error.httpStatus = 404;
     throw error;
   }
-  await User.findByIdAndUpdate(userId, newData);
-  return await this.findById(userId);
+  const userActualizado = await User.findByIdAndUpdate(userId, newData);
+  return { ...userActualizado, password: undefined };
 };

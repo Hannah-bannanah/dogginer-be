@@ -24,7 +24,7 @@ exports.findById = async (req, res, next) => {
   ) {
     const error = new Error('Unauthorized');
     error.httpStatus = 403;
-    next(error);
+    return next(error);
   }
   try {
     const user = await userService.findById(req.params.userId);
