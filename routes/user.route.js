@@ -3,7 +3,7 @@ const express = require('express');
 
 // import internal modules
 const userController = require('../controllers/user.controller');
-const { isAuthenticated } = require('../middleware/auth');
+const { isGod } = require('../middleware/auth');
 
 // initialize router
 const router = express.Router();
@@ -37,6 +37,7 @@ const router = express.Router();
  * /users:
  *  get:
  *    summary: obtener lista de users
+ *    description: ruta reservada para administradores
  *    security:
  *      - bearerAuth: []
  *    responses:
@@ -49,7 +50,7 @@ const router = express.Router();
  *              items:
  *                $ref: "#/components/schemas/User"
  */
-router.get('', isAuthenticated, userController.findAll);
+router.get('', isGod, userController.findAll);
 
 // create one
 /**
@@ -147,9 +148,9 @@ router.post('/login', userController.generateToken);
  * /users/{userId}:
  *  get:
  *    summary: buscar un user por id
+ *    description: ruta reservada para administradores
  *    security:
  *      - bearerAuth: []
- *    description: Devuelve el user, o un objeto vacio si no se ha encontrado
  *    parameters:
  *      - in: path
  *        name: "userId"
@@ -168,7 +169,7 @@ router.post('/login', userController.generateToken);
  *
  */
 // find by id
-router.get('/:userId', isAuthenticated, userController.findById);
+router.get('/:userId', isGod, userController.findById);
 
 // delete by id
 /**
@@ -176,6 +177,7 @@ router.get('/:userId', isAuthenticated, userController.findById);
  * /users/{userId}:
  *  delete:
  *    summary: eliminar un user
+ *    description: ruta reservada para administradores
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -191,16 +193,16 @@ router.get('/:userId', isAuthenticated, userController.findById);
  *      401:
  *        $ref: "#/components/responses/UnauthorizedError"
  */
-router.delete('/:userId', isAuthenticated, userController.deleteById);
+router.delete('/:userId', isGod, userController.deleteById);
 
 /**
  * @swagger
  * /users/{userId}:
  *  patch:
  *    summary: actualizar un user
+ *    description: ruta reservada para administradores
  *    security:
  *      - bearerAuth: []
- *    description: El user se actualizará con los campos incluidos en el responseBody
  *    parameters:
  *      - in: path
  *        name: "userId"
@@ -238,6 +240,6 @@ router.delete('/:userId', isAuthenticated, userController.deleteById);
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'
  */
-router.patch('/:userId', isAuthenticated, userController.update);
+router.patch('/:userId', isGod, userController.update);
 
 module.exports = router;

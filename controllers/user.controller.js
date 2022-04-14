@@ -4,28 +4,14 @@ const jwt = require('jsonwebtoken');
 
 // import internal modules
 const userService = require('../services/user.service');
-const { JWT_PASSPHRASE, AUTHORITIES } = require('../util/auth.config');
+const { JWT_PASSPHRASE } = require('../util/auth.config');
 
 exports.findAll = async (req, res, next) => {
-  if (req.requesterData.role === AUTHORITIES.GOD) {
-    const users = await userService.findAll();
-    res.status(200).send(users);
-  } else {
-    const error = new Error('Unauthorized');
-    error.httpStatus = 403;
-    next(error);
-  }
+  const users = await userService.findAll();
+  res.status(200).send(users);
 };
 
 exports.findById = async (req, res, next) => {
-  if (
-    req.requesterData.userId !== req.params.userId &&
-    req.requesterData.role !== AUTHORITIES.GOD
-  ) {
-    const error = new Error('Unauthorized');
-    error.httpStatus = 403;
-    return next(error);
-  }
   try {
     const user = await userService.findById(req.params.userId);
     res.status(200).send(user);
@@ -46,11 +32,6 @@ exports.create = async (req, res, next) => {
 };
 
 exports.deleteById = async (req, res, next) => {
-  if (req.requesterData.role !== AUTHORITIES.GOD) {
-    const error = new Error('Unauthorized');
-    error.httpStatus = 403;
-    next(error);
-  }
   try {
     const result = await userService.deleteById(req.params.userId);
     if (result) res.status(204).send();
@@ -61,14 +42,6 @@ exports.deleteById = async (req, res, next) => {
 };
 
 exports.update = async (req, res, next) => {
-  if (
-    req.requesterData.userId !== req.params.userId &&
-    req.requesterData.role !== AUTHORITIES.GOD
-  ) {
-    const error = new Error('Unauthorized');
-    error.httpStatus = 403;
-    next(error);
-  }
   try {
     const userActualizado = await userService.update(
       req.params.userId,

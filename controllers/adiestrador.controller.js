@@ -2,6 +2,7 @@
 
 // import internal modules
 const adiestradorService = require('../services/adiestrador.service');
+const clienteService = require('../services/cliente.service');
 const { AUTHORITIES } = require('../util/auth.config');
 
 exports.findAll = async (req, res, next) => {
@@ -72,4 +73,13 @@ exports.update = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+exports.fetchClientes = async (req, res, next) => {
+  // const clientes = await clienteService.findByAdiestrador(req.adiestrador);
+  const adiestrador = await adiestradorService.findById(
+    req.params.idAdiestrador
+  );
+  const clientes = await clienteService.findByAdiestrador(adiestrador);
+  res.status(200).send(clientes);
 };

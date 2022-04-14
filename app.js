@@ -14,6 +14,7 @@ const userRouter = require('./routes/user.route');
 const clienteRouter = require('./routes/cliente.route');
 const adiestradorRouter = require('./routes/adiestrador.route');
 const eventoRouter = require('./routes/evento.route');
+const inicializarRouter = require('./routes/inicializar.route');
 
 const { errorHandler } = require('./middleware/error.handler');
 
@@ -39,6 +40,7 @@ app.use('/users', userRouter);
 app.use('/clientes', clienteRouter);
 app.use('/adiestradores', adiestradorRouter);
 app.use('/eventos', eventoRouter);
+app.use('/inicializar', inicializarRouter);
 
 // error handling
 app.use(errorHandler);

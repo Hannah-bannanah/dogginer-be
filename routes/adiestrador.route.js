@@ -3,11 +3,17 @@ const express = require('express');
 
 // import internal modules
 const adiestradorController = require('../controllers/adiestrador.controller');
-const { isAuthenticated } = require('../middleware/auth');
+const adiestradorClientesRouter = require('../routes/adiestradorCliente.route');
+const { isAuthenticated, verifyAdiestrador } = require('../middleware/auth');
 
 // initialize router
 const router = express.Router();
-
+router.use(
+  '/:idAdiestrador/clientes',
+  verifyAdiestrador,
+  adiestradorClientesRouter
+);
+// router.use('/:idAdiestrador/clientes', adiestradorClientesRouter);
 /**
  * @swagger
  * components:
