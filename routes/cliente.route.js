@@ -3,10 +3,14 @@ const express = require('express');
 
 // import internal modules
 const clienteController = require('../controllers/cliente.controller');
-const { isAuthenticated } = require('../middleware/auth');
+const clienteEventosRouter = require('../routes/clienteEvento.route');
+const { isAuthenticated, verifyCliente, isGod } = require('../middleware/auth');
 
 // initialize router
 const router = express.Router();
+
+// definir subrutas
+router.use('/:idCliente/eventos', verifyCliente, clienteEventosRouter);
 
 /**
  * @swagger
@@ -54,7 +58,7 @@ const router = express.Router();
  *              items:
  *                $ref: "#/components/schemas/Cliente"
  */
-router.get('', isAuthenticated, clienteController.findAll);
+router.get('', isGod, clienteController.findAll);
 
 // create one
 /**

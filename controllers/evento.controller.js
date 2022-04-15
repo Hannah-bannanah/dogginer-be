@@ -28,8 +28,9 @@ exports.create = async (req, res, next) => {
 
 exports.deleteById = async (req, res, next) => {
   try {
-    await eventoService.deleteById(req.params.idEvento);
-    res.status(204).send();
+    const result = await eventoService.deleteById(req.params.idEvento);
+    if (result) res.status(204).send();
+    else res.status(500).send({ error: 'Internal server error' });
   } catch (err) {
     next(err);
   }

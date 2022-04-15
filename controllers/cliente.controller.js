@@ -2,17 +2,12 @@
 
 // import internal modules
 const clienteService = require('../services/cliente.service');
+const eventoService = require('../services/evento.service');
 const { AUTHORITIES } = require('../util/auth.config');
 
 exports.findAll = async (req, res, next) => {
-  if (req.requesterData.role === AUTHORITIES.GOD) {
-    const clientes = await clienteService.findAll();
-    res.status(200).send(clientes);
-  } else {
-    const error = new Error('Unauthorized');
-    error.httpStatus = 403;
-    next(error);
-  }
+  const clientes = await clienteService.findAll();
+  res.status(200).send(clientes);
 };
 
 exports.findById = async (req, res, next) => {
@@ -76,6 +71,53 @@ exports.update = async (req, res, next) => {
       req.body
     );
     res.status(200).send(clienteActualizado);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.fetchEventos = async (req, res, next) => {
+  const cliente = req.cliente;
+  const eventos = await eventoService.findByIdList(cliente.eventos);
+  res.status(200).send(eventos);
+};
+
+exports.getEvento = async (req, res, next) => {
+  try {
+    const evento = await eventoService.findById(req.params.idEvento);
+    res.status(200).send(evento);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.cancelarEvento = async (req, res, next) => {
+  try {
+    await clienteService.cancelarAsistencia(
+      req.params.idEvento,
+      req.cliente._id
+    );
+    const clienteActualizado = await clienteService.findById(req.cliente._id);
+    const eventosCliente = eventoService.findByIdList(
+      clienteActualizado.eventos
+    );
+    res.status(200).send(eventosCliente);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.addEvento = async (req, res, next) => {
+  // TODO!!!
+  // - comprobar que el usuario no esta registrado ya
+  // devolver lista de eventos actualizada
+  try {
+    const resultado = await clienteService.addEvento(
+      req.cliente,
+      req.body.idEvento
+    );
+    if (resultado) res.status(200).send({ resultado: resultado });
+    else res.status(422).send({ error: 'Evento sin capacidad' });
   } catch (err) {
     next(err);
   }
