@@ -91,7 +91,7 @@ router.get('', isGod, userController.findAll);
  *                id:
  *                  description: userId
  *                  type: string
- *      400:
+ *      409:
  *        $ref: "#/components/responses/DuplicateEntryError"
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'

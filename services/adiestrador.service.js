@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 // import internal modules
 const Adiestrador = require('../models/adiestrador.model');
 const userService = require('../services/user.service');
+const clienteService = require('../services/cliente.service');
 const { AUTHORITIES } = require('../util/auth.config');
 
 /**
@@ -98,4 +99,70 @@ exports.removeEvento = async (evento) => {
  */
 exports.findByUserId = async (userId) => {
   return await Adiestrador.findOne({ userId: userId });
+};
+
+/**
+ * Obtiene el rating medio del adiestrador
+ * @param {String} idAdiestrador
+ * @returns el rating medio del adiestrador
+ */
+exports.getRating = async (idAdiestrador) => {
+  const rating = await Adiestrador.aggregate([
+    { $match: { _id: mongoose.Types.ObjectId(idAdiestrador) } },
+    { $unwind: '$rating' },
+    { $group: { _id: '$_id', avgScore: { $avg: '$rating.score' } } }
+  ]);
+  return rating[0].avgScore;
+};
+
+/**
+ * Añade un rating a la lista de ratings del adiestrador
+ * @param {String} idAdiestrador
+ * @param {Object} rating objeto de formato {idCliente: string, rating: numero}
+ * @returns el rating medio del adiestrador
+ * @throws error si el adiestrador no existe, si el cliente no tiene eventos
+ * en comun con el adiestrador o si el rating no esta en el rango [0, 5]
+ */
+exports.rate = async (idAdiestrador, rating) => {
+  // comprobamos el rango del rating
+  if (rating.score > 5 || rating.score < 0) {
+    const error = new Error('Score fuera del rango permitido');
+    error.httpStatus = 422;
+    throw error;
+  }
+
+  // comprobamos que el adiestrador existe
+  const adiestrador = await this.findById(idAdiestrador);
+  if (!adiestrador._id) {
+    const error = new Error('Adiestrador no existe');
+    error.httpStatus = 404;
+    throw error;
+  }
+
+  // comprobamos que el cliente esta registrado en al menos
+  // un evento del adiestrador
+  const clientesAdiestrador = await clienteService.findByAdiestrador(
+    adiestrador
+  );
+  if (
+    clientesAdiestrador
+      .map((c) => c._id)
+      .filter((id) => mongoose.Types.ObjectId(rating.idCliente)).length
+  ) {
+    // si el adiestrador ya tiene un rating del cliente
+    // lo eliminamos antes de añadir el nuevo
+    adiestrador.rating = adiestrador.rating.filter(
+      (r) => !r.idCliente.equals(rating.idCliente)
+    );
+
+    await adiestrador.rating.push(rating);
+    await adiestrador.save();
+  } else {
+    const error = new Error('Cliente no tiene historial con el adiestrador');
+    error.httpStatus = 403;
+    throw error;
+  }
+
+  // devolvemos la nueva media
+  return await this.getRating(idAdiestrador);
 };

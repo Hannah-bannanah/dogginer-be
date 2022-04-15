@@ -135,5 +135,35 @@ exports.deleteEvento = async (req, res, next) => {
 };
 
 exports.sendBroadCast = async (req, res, next) => {
-  res.status(201).send();
+  res.status(200).send(req.body);
+};
+
+exports.getRating = async (req, res, next) => {
+  try {
+    const rating = await adiestradorService.getRating(req.params.idAdiestrador);
+    res.status(200).send({ rating: rating });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.rate = async (req, res, next) => {
+  const rating = {
+    idCliente: req.body.idCliente,
+    score: req.body.score
+  };
+  if (!rating.idCliente || !rating.score) {
+    const error = new Error('Informacion invalida');
+    error.httpStatus = 422;
+    return next(error);
+  }
+  try {
+    const ratingMedio = await adiestradorService.rate(
+      req.params.idAdiestrador,
+      rating
+    );
+    res.status(200).send({ ratingMedio: ratingMedio });
+  } catch (err) {
+    next(err);
+  }
 };

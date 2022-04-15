@@ -108,16 +108,20 @@ exports.cancelarEvento = async (req, res, next) => {
 };
 
 exports.addEvento = async (req, res, next) => {
-  // TODO!!!
-  // - comprobar que el usuario no esta registrado ya
-  // devolver lista de eventos actualizada
   try {
     const resultado = await clienteService.addEvento(
       req.cliente,
       req.body.idEvento
     );
-    if (resultado) res.status(200).send({ resultado: resultado });
-    else res.status(422).send({ error: 'Evento sin capacidad' });
+    if (resultado) {
+      const clienteActualizado = await clienteService.findById(req.cliente._id);
+      const eventos = await eventoService.findByIdList(
+        clienteActualizado.eventos
+      );
+      res.status(200).send(eventos);
+    } else {
+      res.status(422).send({ error: 'Evento sin capacidad' });
+    }
   } catch (err) {
     next(err);
   }

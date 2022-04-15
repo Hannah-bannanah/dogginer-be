@@ -124,7 +124,20 @@ exports.findByAdiestrador = async (adiestrador) => {
   return clientes;
 };
 
+/**
+ * Añade un evento a la lista de eventos del cliente
+ * @param {Object} cliente el cliente
+ * @param {String} idEvento el id del evento
+ * @returns true si la operacion se realiza con exito, false si no
+ * @throws error si el evento no existe o si ya esta en la lista de eventos del cliente
+ */
 exports.addEvento = async (cliente, idEvento) => {
+  if (cliente.eventos.filter((e) => e._id.equals(idEvento)).length) {
+    const error = new Error('Cliente ya registrado');
+    error.httpStatus = 409;
+    throw error;
+  }
+
   const evento = await eventoService.findById(idEvento);
   if (!evento._id) {
     const error = new Error('Evento no existe');

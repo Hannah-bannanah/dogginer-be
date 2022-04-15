@@ -37,7 +37,7 @@ exports.create = async (eventoData) => {
     eventoData.idAdiestrador
   );
   if (!adiestrador._id) {
-    const error = new Error('Informacion invalidad');
+    const error = new Error('Informacion invalida');
     error.httpStatus = 422;
     throw error;
   }

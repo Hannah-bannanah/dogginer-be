@@ -96,7 +96,7 @@ router.get('', adiestradorController.findAll);
  *                id:
  *                  description: idAdiestrador
  *                  type: string
- *      400:
+ *      409:
  *        $ref: "#/components/responses/DuplicateEntryError"
  *      422:
  *        $ref: "#/components/responses/InvalidEntryError"
@@ -185,18 +185,92 @@ router.delete(
  *              type: object
  *              $ref: '#/components/schemas/Adiestrador'
  *      404:
- *        description: "Adiestrador no encontrado"
+ *        $ref: '#/components/responses/ElementNotFoundError'
+ *      422:
+ *        $ref: '#/components/responses/InvalidEntryError'
+ */
+router.patch('/:idAdiestrador', isAuthenticated, adiestradorController.update);
+
+/**
+ * @swagger
+ * /adiestradores/{idAdiestrador}/rating:
+ *  get:
+ *    summary: obtener el rating medio del adiestrador
+ *    security:
+ *      - bearerAuth: []
+ *    parameters:
+ *      - in: path
+ *        name: "idAdiestrador"
+ *        description: el id del adiestrador
+ *        schema:
+ *          type: string
+ *        required: true
+ *    responses:
+ *      200:
+ *        description: "Rating procesado con exito"
  *        content:
  *          application/json:
  *            schema:
  *              type: object
  *              properties:
- *                error:
- *                  description: error
- *                  type: string
+ *                score:
+ *                  type: number
+ *                  description: el rating medio del adiestrador
+ *      404:
+ *        $ref: '#/components/responses/ElementNotFoundError'
+ */
+router.get('/:idAdiestrador/rating', adiestradorController.getRating);
+
+/**
+ * @swagger
+ * /adiestradores/{idAdiestrador}/rating:
+ *  patch:
+ *    summary: evaluar a un adiestrados
+ *    security:
+ *      - bearerAuth: []
+ *    description: El rating se añadira a la lista de ratings del adiestrador
+ *    parameters:
+ *      - in: path
+ *        name: "idAdiestrador"
+ *        description: el id del adiestrador
+ *        schema:
+ *          type: string
+ *        required: true
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              idCliente:
+ *                type: string
+ *                description: el id del cliente que ha realizado el rating
+ *              score:
+ *                type: number
+ *                description: el valor del rating
+ *    responses:
+ *      200:
+ *        description: "Rating procesado con exito"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                score:
+ *                  type: number
+ *                  description: el rating medio del adiestrador
+ *      404:
+ *        $ref: '#/components/responses/ElementNotFoundError'
+ *      409:
+ *        $ref: '#/components/responses/DuplicateEntryError'
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'
  */
-router.patch('/:idAdiestrador', isAuthenticated, adiestradorController.update);
+router.patch(
+  '/:idAdiestrador/rating',
+  isAuthenticated,
+  adiestradorController.rate
+);
 
 module.exports = router;

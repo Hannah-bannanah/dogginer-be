@@ -30,7 +30,7 @@ exports.deleteById = async (req, res, next) => {
   try {
     const result = await eventoService.deleteById(req.params.idEvento);
     if (result) res.status(204).send();
-    else res.status(500).send({ error: 'Internal server error' });
+    else throw new Error();
   } catch (err) {
     next(err);
   }

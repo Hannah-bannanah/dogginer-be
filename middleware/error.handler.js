@@ -5,7 +5,7 @@ exports.errorHandler = async (error, req, res, next) => {
   console.log(error);
   let errorData = {
     httpStatus: error.httpStatus,
-    message: error.message,
+    message: error.message
   };
   if (!errorData.httpStatus) {
     errorData = getResponseError(error);
@@ -13,11 +13,11 @@ exports.errorHandler = async (error, req, res, next) => {
   res.status(errorData.httpStatus).send({ error: errorData.message });
 };
 
-const getResponseError = error => {
+const getResponseError = (error) => {
   let httpStatus;
   let message;
   if (error.code === 11000) {
-    httpStatus = 400;
+    httpStatus = 409;
     message = 'Entrada duplicada';
   } else if (error instanceof mongoose.Error.ValidationError) {
     httpStatus = 422;
