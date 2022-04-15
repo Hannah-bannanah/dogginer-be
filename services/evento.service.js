@@ -54,12 +54,14 @@ exports.create = async (eventoData) => {
  * @returns un objeto vacio
  */
 exports.deleteById = async (idEvento) => {
+  let result = { deletedCount: 0 };
   const evento = await this.findById(idEvento);
-  if (!evento._id) return {};
-  await Evento.deleteOne({ _id: idEvento });
-  await adiestradorService.removeEvento(evento);
-  await clienteService.removeEvento(idEvento);
-  return {};
+  if (evento._id) {
+    await adiestradorService.removeEvento(evento);
+    await clienteService.removeEvento(idEvento);
+    result = await Evento.deleteOne({ _id: idEvento });
+  }
+  return result.deletedCount > 0;
 };
 
 /**

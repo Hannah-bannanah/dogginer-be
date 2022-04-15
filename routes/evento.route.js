@@ -3,7 +3,7 @@ const express = require('express');
 
 // import internal modules
 const eventoController = require('../controllers/evento.controller');
-const { isAuthenticated } = require('../middleware/auth');
+const { isGod } = require('../middleware/auth');
 
 // initialize router
 const router = express.Router();
@@ -101,7 +101,7 @@ router.get('', eventoController.findAll);
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'
  */
-router.post('', isAuthenticated, eventoController.create);
+router.post('', isGod, eventoController.create);
 
 /**
  * @swagger
@@ -126,7 +126,6 @@ router.post('', isAuthenticated, eventoController.create);
  *              $ref: "#/components/schemas/Evento"
  *
  */
-// find by id
 router.get('/:idEvento', eventoController.findById);
 
 // delete by id
@@ -148,7 +147,7 @@ router.get('/:idEvento', eventoController.findById);
  *      204:
  *        description: "evento eliminado con exito"
  */
-router.delete('/:idEvento', isAuthenticated, eventoController.deleteById);
+router.delete('/:idEvento', isGod, eventoController.deleteById);
 
 /**
  * @swagger
@@ -181,18 +180,10 @@ router.delete('/:idEvento', isAuthenticated, eventoController.deleteById);
  *              type: object
  *              $ref: '#/components/schemas/Evento'
  *      404:
- *        description: "Evento no encontrado"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                error:
- *                  description: error
- *                  type: string
+ *        $ref: '#/components/responses/ElementNotFoundError'
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'
  */
-router.patch('/:idEvento', isAuthenticated, eventoController.update);
+router.patch('/:idEvento', isGod, eventoController.update);
 
 module.exports = router;

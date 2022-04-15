@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 // import internal modules
 const Cliente = require('../models/cliente.model');
 const userService = require('../services/user.service');
+const eventoService = require('../services/evento.service');
 const { AUTHORITIES } = require('../util/auth.config');
 
 /**
@@ -88,6 +89,18 @@ exports.removeEvento = async (idEvento) => {
 };
 
 /**
+ * Elimina un evento del la lista de eventos del cliente
+ * @param {String} idEvento
+ * @param {String} idCliente
+ */
+exports.cancelarAsistencia = async (idEvento, idCliente) => {
+  await Cliente.updateOne(
+    { _id: idCliente },
+    { $pull: { eventos: { _id: idEvento } } }
+  );
+};
+
+/**
  * Busca un cliente por el id de la cuenta de usuario asociada
  * @param {String} userId
  * @returns el documento de cliente, un objeto vacio si no existe
@@ -96,6 +109,11 @@ exports.findByUserId = async (userId) => {
   return await Cliente.findOne({ userId: userId });
 };
 
+/**
+ * Busca todos los clientes registrados en eventos de un adiestrador
+ * @param {String} adiestrador
+ * @returns la lista de clientes
+ */
 exports.findByAdiestrador = async (adiestrador) => {
   const eventos = adiestrador.eventos;
   const clientes = await Cliente.find({
@@ -104,4 +122,22 @@ exports.findByAdiestrador = async (adiestrador) => {
     }
   });
   return clientes;
+};
+
+exports.addEvento = async (cliente, idEvento) => {
+  const evento = await eventoService.findById(idEvento);
+  if (!evento._id) {
+    const error = new Error('Evento no existe');
+    error.httpStatus = 404;
+    throw error;
+  }
+  const asistentes = await Cliente.countDocuments({
+    eventos: { $in: { _id: idEvento } }
+  });
+  if (asistentes < evento.maxAforo) {
+    cliente.eventos.push(evento);
+    await cliente.save();
+    return true;
+  }
+  return false;
 };

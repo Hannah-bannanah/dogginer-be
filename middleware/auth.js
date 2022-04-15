@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 // import internal modules
 const { JWT_PASSPHRASE, AUTHORITIES } = require('../util/auth.config');
 const adiestradorService = require('../services/adiestrador.service');
+const clienteService = require('../services/cliente.service');
 const userService = require('../services/user.service');
 
 const decodeToken = (req) => {
@@ -71,4 +72,27 @@ const verifyAdiestrador = async (req, res, next) => {
   }
 };
 
-module.exports = { isAuthenticated, isGod, verifyAdiestrador };
+const verifyCliente = async (req, res, next) => {
+  const cliente = await clienteService.findById(req.params.idCliente);
+  if (!cliente._id) {
+    const error = new Error('Cliente no existe');
+    error.httpStatus = 404;
+    return next(error);
+  }
+  try {
+    const { userId } = decodeToken(req);
+    const user = await userService.findById(userId);
+
+    if (user._id.equals(cliente.userId)) {
+      req.cliente = cliente;
+      return next();
+    }
+    const error = new Error('Usuario no autorizado');
+    error.httpStatus = 403;
+    next(error);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { isAuthenticated, isGod, verifyAdiestrador, verifyCliente };

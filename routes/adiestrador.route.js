@@ -49,6 +49,7 @@ router.use('/:idAdiestrador/eventos', adiestradorEventosRouter);
  *       example:
  *         userId: "6249701119292623c38f0c11"
  *         nombre: "John Doe"
+ *         bio: "El mejor adiestrador de la zona"
  */
 
 // define routes
