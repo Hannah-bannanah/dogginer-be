@@ -96,7 +96,7 @@ router.get('', eventoController.findAll);
  *                id:
  *                  description: idEvento
  *                  type: string
- *      400:
+ *      409:
  *        $ref: "#/components/responses/DuplicateEntryError"
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'

@@ -68,7 +68,7 @@ router.get('', adiestradorController.fetchEventos);
  *                id:
  *                  description: idEvento
  *                  type: string
- *      400:
+ *      409:
  *        $ref: "#/components/responses/DuplicateEntryError"
  *      403:
  *        $ref: "#/components/responses/UnauthorizedError"
