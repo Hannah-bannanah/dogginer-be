@@ -47,7 +47,7 @@ exports.deleteById = async (req, res, next) => {
   try {
     const result = await adiestradorService.deleteById(adiestrador._id);
     if (result) res.status(204).send();
-    else res.status(404).send();
+    else res.status(500).send();
   } catch (err) {
     next(err);
   }

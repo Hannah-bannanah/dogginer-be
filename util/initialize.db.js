@@ -78,7 +78,8 @@ const createEventos = async () => {
       idAdiestrador: adiestrador._id,
       nombre: `Evento${i} duplicado`,
       fecha: `2022-07-${i}`,
-      maxAforo: 10
+      maxAforo: 10,
+      privado: true
     });
     await evento1.save();
     await evento2.save();

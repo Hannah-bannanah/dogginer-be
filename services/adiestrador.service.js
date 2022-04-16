@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const Adiestrador = require('../models/adiestrador.model');
 const userService = require('../services/user.service');
 const clienteService = require('../services/cliente.service');
+const eventoService = require('../services/evento.service');
 const { AUTHORITIES } = require('../util/auth.config');
 
 /**
@@ -54,9 +55,22 @@ exports.create = async (adiestradorData) => {
  */
 exports.deleteById = async (idAdiestrador) => {
   let result = { deletedCount: 0 };
-  if (mongoose.Types.ObjectId.isValid(idAdiestrador)) {
-    result = await Adiestrador.deleteOne({ _id: idAdiestrador });
+  const adiestrador = await this.findById(idAdiestrador);
+  if (!adiestrador._id) {
+    const error = new Error('Adiestrador no existe');
+    error.httpStatus = 404;
+    throw error;
   }
+  if (adiestrador.eventos) {
+    const eventos = await eventoService.findByIdList(adiestrador.eventos);
+    if (eventos.filter((e) => !e.terminado).length) {
+      const error = new Error('Adiestrador tiene eventos activos');
+      error.httpStatus = 422;
+      throw error;
+    }
+  
+  result = await Adiestrador.deleteOne({ _id: idAdiestrador });
+  if (result > 0) result = await userService.deleteById(adiestrador.userId)
   return result.deletedCount > 0;
 };
 

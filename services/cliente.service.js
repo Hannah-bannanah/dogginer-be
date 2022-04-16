@@ -53,9 +53,22 @@ exports.create = async (clienteData) => {
  */
 exports.deleteById = async (idCliente) => {
   let result = { deletedCount: 0 };
-  if (mongoose.Types.ObjectId.isValid(idCliente)) {
-    result = await Cliente.deleteOne({ _id: idCliente });
+  const cliente = await this.findById(idCliente);
+  if (!cliente._id) {
+    const error = new Error('Cliente no existe');
+    error.httpStatus = 404;
+    throw error;
   }
+  if (cliente.eventos) {
+    const eventos = await eventoService.findByIdList(cliente.eventos);
+    if (eventos.filter((e) => !e.terminado).length) {
+      const error = new Error('Cliente tiene eventos activos');
+      error.httpStatus = 422;
+      throw error;
+    }
+  }
+  result = await Cliente.deleteOne({ _id: idCliente });
+  if (result > 0) result = await userService.deleteById(cliente.userId);
   return result.deletedCount > 0;
 };
 
