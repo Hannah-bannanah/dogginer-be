@@ -68,9 +68,9 @@ exports.deleteById = async (idAdiestrador) => {
       error.httpStatus = 422;
       throw error;
     }
-  
+  }
   result = await Adiestrador.deleteOne({ _id: idAdiestrador });
-  if (result > 0) result = await userService.deleteById(adiestrador.userId)
+  if (result > 0) result = await userService.deleteById(adiestrador.userId);
   return result.deletedCount > 0;
 };
 
