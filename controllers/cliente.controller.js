@@ -49,7 +49,7 @@ exports.deleteById = async (req, res, next) => {
   try {
     const result = await clienteService.deleteById(cliente._id);
     if (result) res.status(204).send();
-    else res.status(404).send();
+    else res.status(500).send();
   } catch (err) {
     next(err);
   }
