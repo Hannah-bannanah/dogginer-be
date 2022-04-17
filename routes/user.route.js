@@ -146,8 +146,11 @@ router.post('', userController.create);
  *              type: object
  *              properties:
  *                token:
- *                  description: crsf token
+ *                  description: jwt token
  *                  type: string
+ *                validity:
+ *                  description: validez del token en segundos
+ *                  type: number
  *      401:
  *        $ref: "#/components/responses/UnauthorizedError"
  */
