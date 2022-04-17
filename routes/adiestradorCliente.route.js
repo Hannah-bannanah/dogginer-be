@@ -34,6 +34,8 @@ const router = express.Router({ mergeParams: true });
  * /adiestradores/{idAdiestrador}/clientes:
  *  get:
  *    summary: obtener lista de clientes registrados en eventos del adiestrador
+ *    tags:
+ *      - adiestradores
  *    parameters:
  *      - in: path
  *        name: "idAdiestrador"
@@ -61,6 +63,8 @@ router.get('', adiestradorController.fetchClientes);
  * /adiestradores/{idAdiestrador}/clientes/broadcast:
  *  post:
  *    summary: obtener lista de clientes registrados en eventos del adiestrador
+ *    tags:
+ *      - adiestradores
  *    parameters:
  *      - in: path
  *        name: "idAdiestrador"

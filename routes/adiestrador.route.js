@@ -60,6 +60,8 @@ router.use('/:idAdiestrador/eventos', adiestradorEventosRouter);
  * /adiestradores:
  *  get:
  *    summary: obtener lista de adiestradores
+ *    tags:
+ *      - adiestradores
  *    responses:
  *      200:
  *        description: "success"
@@ -78,6 +80,8 @@ router.get('', adiestradorController.findAll);
  * /adiestradores:
  *  post:
  *    summary: crear un nuevo adiestrador
+ *    tags:
+ *      - adiestradores
  *    requestBody:
  *      required: true
  *      content:
@@ -106,8 +110,10 @@ router.post('', adiestradorController.create);
 /**
  * @swagger
  * /adiestradores/{idAdiestrador}:
- *  get:
+ *   get:
  *    summary: buscar un adiestrador por id
+ *    tags:
+ *      - adiestradores
  *    description: Devuelve el adiestrador, o un objeto vacio si no se ha encontrado
  *    parameters:
  *      - in: path
@@ -135,6 +141,8 @@ router.get('/:idAdiestrador', adiestradorController.findById);
  * /adiestradores/{idAdiestrador}:
  *  delete:
  *    summary: eliminar un adiestrador
+ *    tags:
+ *      - adiestradores
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -159,6 +167,8 @@ router.delete(
  * /adiestradores/{idAdiestrador}:
  *  patch:
  *    summary: actualizar un adiestrador
+ *    tags:
+ *      - adiestradores
  *    security:
  *      - bearerAuth: []
  *    description: El adiestrador se actualizará con los campos incluidos en el responseBody
@@ -194,38 +204,10 @@ router.patch('/:idAdiestrador', isAuthenticated, adiestradorController.update);
 /**
  * @swagger
  * /adiestradores/{idAdiestrador}/rating:
- *  get:
- *    summary: obtener el rating medio del adiestrador
- *    security:
- *      - bearerAuth: []
- *    parameters:
- *      - in: path
- *        name: "idAdiestrador"
- *        description: el id del adiestrador
- *        schema:
- *          type: string
- *        required: true
- *    responses:
- *      200:
- *        description: "Rating procesado con exito"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                score:
- *                  type: number
- *                  description: el rating medio del adiestrador
- *      404:
- *        $ref: '#/components/responses/ElementNotFoundError'
- */
-router.get('/:idAdiestrador/rating', adiestradorController.getRating);
-
-/**
- * @swagger
- * /adiestradores/{idAdiestrador}/rating:
  *  patch:
  *    summary: evaluar a un adiestrados
+ *    tags:
+ *      - adiestradores
  *    security:
  *      - bearerAuth: []
  *    description: El rating se añadira a la lista de ratings del adiestrador
@@ -243,9 +225,6 @@ router.get('/:idAdiestrador/rating', adiestradorController.getRating);
  *          schema:
  *            type: object
  *            properties:
- *              idCliente:
- *                type: string
- *                description: el id del cliente que ha realizado el rating
  *              score:
  *                type: number
  *                description: el valor del rating

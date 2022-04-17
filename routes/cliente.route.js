@@ -46,6 +46,8 @@ router.use('/:idCliente/eventos', verifyCliente, clienteEventosRouter);
  * /clientes:
  *  get:
  *    summary: obtener lista de clientes
+ *    tags:
+ *      - GOD
  *    security:
  *      - bearerAuth: []
  *    responses:
@@ -66,6 +68,8 @@ router.get('', isGod, clienteController.findAll);
  * /clientes:
  *  post:
  *    summary: crear un nuevo cliente
+ *    tags:
+ *      - clientes
  *    requestBody:
  *      required: true
  *      content:
@@ -96,6 +100,8 @@ router.post('', clienteController.create);
  * /clientes/{idCliente}:
  *  get:
  *    summary: buscar un cliente por id
+ *    tags:
+ *      - clientes
  *    security:
  *      - bearerAuth: []
  *    description: Devuelve el cliente, o un objeto vacio si no se ha encontrado
@@ -125,6 +131,8 @@ router.get('/:idCliente', isAuthenticated, clienteController.findById);
  * /clientes/{idCliente}:
  *  delete:
  *    summary: eliminar un cliente
+ *    tags:
+ *      - clientes
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -145,6 +153,8 @@ router.delete('/:idCliente', isAuthenticated, clienteController.deleteById);
  * /clientes/{idCliente}:
  *  patch:
  *    summary: actualizar un cliente
+ *    tags:
+ *      - clientes
  *    security:
  *      - bearerAuth: []
  *    description: El cliente se actualizará con los campos incluidos en el responseBody

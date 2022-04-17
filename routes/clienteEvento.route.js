@@ -13,6 +13,8 @@ const router = express.Router();
  * /clientes/{idCliente}/eventos:
  *  get:
  *    summary: obtener lista de eventos en los que esta registrado un cliente
+ *    tags:
+ *      - clientes
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -44,6 +46,8 @@ router.get('', clienteController.fetchEventos);
  * /clientes/{idCliente}/eventos:
  *  patch:
  *    summary: registrarse para un evento
+ *    tags:
+ *      - clientes
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -87,6 +91,8 @@ router.patch('', clienteController.addEvento);
  * /clientes/{idCliente}/eventos/{idEvento}:
  *  get:
  *    summary: obtener lista de eventos en los que esta registrado un cliente
+ *    tags:
+ *      - clientes
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -119,6 +125,8 @@ router.get('/:idEvento', clienteController.getEvento);
  * /clientes/{idCliente}/eventos/{idEvento}:
  *  delete:
  *    summary: cancelar la asistencia a un evento
+ *    tags:
+ *      - clientes
  *    security:
  *      - bearerAuth: []
  *    parameters:

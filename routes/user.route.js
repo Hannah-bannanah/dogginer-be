@@ -37,6 +37,8 @@ const router = express.Router();
  * /users:
  *  get:
  *    summary: obtener lista de users
+ *    tags:
+ *      - GOD
  *    description: ruta reservada para administradores
  *    security:
  *      - bearerAuth: []
@@ -58,6 +60,8 @@ router.get('', isGod, userController.findAll);
  * /users:
  *  post:
  *    summary: crear un nuevo user
+ *    tags:
+ *      - all users
  *    requestBody:
  *      required: true
  *      content:
@@ -104,6 +108,8 @@ router.post('', userController.create);
  * /users/login:
  *  post:
  *    summary: generar token de login
+ *    tags:
+ *      - all users
  *    security:
  *      - bearerAuth: []
  *    requestBody:
@@ -148,6 +154,8 @@ router.post('/login', userController.generateToken);
  * /users/{userId}:
  *  get:
  *    summary: buscar un user por id
+ *    tags:
+ *      - GOD
  *    description: ruta reservada para administradores
  *    security:
  *      - bearerAuth: []
@@ -177,6 +185,8 @@ router.get('/:userId', isGod, userController.findById);
  * /users/{userId}:
  *  delete:
  *    summary: eliminar un user
+ *    tags:
+ *      - GOD
  *    description: ruta reservada para administradores
  *    security:
  *      - bearerAuth: []
@@ -200,6 +210,8 @@ router.delete('/:userId', isGod, userController.deleteById);
  * /users/{userId}:
  *  patch:
  *    summary: actualizar un user
+ *    tags:
+ *      - GOD
  *    description: ruta reservada para administradores
  *    security:
  *      - bearerAuth: []

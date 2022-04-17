@@ -8,7 +8,11 @@ const { AUTHORITIES } = require('../util/auth.config');
 
 exports.findAll = async (req, res, next) => {
   const adiestradores = await adiestradorService.findAll();
-  res.status(200).send(adiestradores);
+  res.status(200).send(
+    adiestradores.map((a) => {
+      return { ...a._doc, _ratings: undefined };
+    })
+  );
 };
 
 exports.findById = async (req, res, next) => {
@@ -16,7 +20,7 @@ exports.findById = async (req, res, next) => {
     const adiestrador = await adiestradorService.findById(
       req.params.idAdiestrador
     );
-    res.status(200).send(adiestrador);
+    res.status(200).send({ ...adiestrador._doc, _ratings: undefined });
   } catch (err) {
     console.log(err);
     next(err);
@@ -66,11 +70,12 @@ exports.update = async (req, res, next) => {
     next(error);
   }
   try {
+    const updatedData = { ...req.body, _ratings: undefined };
     const adiestradorActualizado = await adiestradorService.update(
       req.params.idAdiestrador,
-      req.body
+      updatedData
     );
-    res.status(200).send(adiestradorActualizado);
+    res.status(200).send({ ...adiestradorActualizado._doc, _ratings: 0 });
   } catch (err) {
     next(err);
   }
@@ -138,31 +143,24 @@ exports.sendBroadCast = async (req, res, next) => {
   res.status(200).send(req.body);
 };
 
-exports.getRating = async (req, res, next) => {
-  try {
-    const rating = await adiestradorService.getRating(req.params.idAdiestrador);
-    res.status(200).send({ rating: rating });
-  } catch (err) {
-    next(err);
-  }
-};
-
 exports.rate = async (req, res, next) => {
+  // comprobamos que el idCliente coincide con el usuario autenticado
+  const cliente = await clienteService.findByUserId(req.requesterData.userId);
   const rating = {
-    idCliente: req.body.idCliente,
+    idCliente: cliente._id,
     score: req.body.score
   };
-  if (!rating.idCliente || !rating.score) {
+  if (!rating.score) {
     const error = new Error('Informacion invalida');
     error.httpStatus = 422;
     return next(error);
   }
   try {
-    const ratingMedio = await adiestradorService.rate(
+    const adiestrador = await adiestradorService.rate(
       req.params.idAdiestrador,
       rating
     );
-    res.status(200).send({ ratingMedio: ratingMedio });
+    res.status(200).send({ ...adiestrador._doc, _ratings: undefined });
   } catch (err) {
     next(err);
   }
