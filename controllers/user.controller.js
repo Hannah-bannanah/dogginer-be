@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 // import internal modules
 const userService = require('../services/user.service');
-const { JWT_PASSPHRASE } = require('../util/auth.config');
+const { JWT_PASSPHRASE, AUTHORITIES } = require('../util/auth.config');
 
 exports.findAll = async (req, res, next) => {
   const users = await userService.findAll();
@@ -22,6 +22,11 @@ exports.findById = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   const userData = { ...req.body };
+  if (userData.role === AUTHORITIES.GOD) {
+    const error = new Error('No puedes crear a Dios');
+    error.httpStatus = 403;
+    next(error);
+  }
   userData.password = await bcrypt.hash(userData.password, 12);
   try {
     const user = await userService.create(userData);

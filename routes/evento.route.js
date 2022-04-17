@@ -59,7 +59,9 @@ const router = express.Router();
  *  get:
  *    summary: obtener lista de eventos
  *    tags:
- *      - eventos
+ *      - adiestradores
+ *      - clientes
+ *      - all users
  *    responses:
  *      200:
  *        description: "success"
@@ -113,7 +115,9 @@ router.post('', isGod, eventoController.create);
  *  get:
  *    summary: buscar un evento por id
  *    tags:
- *      - eventos
+ *      - adiestradores
+ *      - clientes
+ *      - all users
  *    description: Devuelve el evento, o un objeto vacio si no se ha encontrado
  *    parameters:
  *      - in: path

@@ -90,7 +90,7 @@ router.patch('', clienteController.addEvento);
  * @swagger
  * /clientes/{idCliente}/eventos/{idEvento}:
  *  get:
- *    summary: obtener lista de eventos en los que esta registrado un cliente
+ *    summary: obtener los detalles de un evento en el que esta registrado un cliente
  *    tags:
  *      - clientes
  *    security:
