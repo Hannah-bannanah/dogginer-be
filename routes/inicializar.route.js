@@ -14,6 +14,8 @@ const router = express.Router();
  * /inicializar:
  *  post:
  *    summary: inicializar la bbdd con data demo para poder hacer pruebas
+ *    tags:
+ *      - GOD
  *    requestBody:
  *      required: true
  *      content:

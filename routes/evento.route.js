@@ -58,6 +58,8 @@ const router = express.Router();
  * /eventos:
  *  get:
  *    summary: obtener lista de eventos
+ *    tags:
+ *      - eventos
  *    responses:
  *      200:
  *        description: "success"
@@ -76,6 +78,8 @@ router.get('', eventoController.findAll);
  * /eventos:
  *  post:
  *    summary: crear un nuevo evento
+ *    tags:
+ *      - GOD
  *    security:
  *      - bearerAuth: []
  *    requestBody:
@@ -108,6 +112,8 @@ router.post('', isGod, eventoController.create);
  * /eventos/{idEvento}:
  *  get:
  *    summary: buscar un evento por id
+ *    tags:
+ *      - eventos
  *    description: Devuelve el evento, o un objeto vacio si no se ha encontrado
  *    parameters:
  *      - in: path
@@ -134,6 +140,8 @@ router.get('/:idEvento', eventoController.findById);
  * /eventos/{idEvento}:
  *  delete:
  *    summary: eliminar un evento
+ *    tags:
+ *      - GOD
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -154,6 +162,8 @@ router.delete('/:idEvento', isGod, eventoController.deleteById);
  * /eventos/{idEvento}:
  *  patch:
  *    summary: actualizar un evento
+ *    tags:
+ *      - GOD
  *    security:
  *      - bearerAuth: []
  *    description: El evento se actualizará con los campos incluidos en el responseBody

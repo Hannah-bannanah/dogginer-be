@@ -161,15 +161,19 @@ exports.rate = async (idAdiestrador, rating) => {
   if (
     clientesAdiestrador
       .map((c) => c._id)
-      .filter((id) => mongoose.Types.ObjectId(rating.idCliente)).length
+      .filter((id) => id.equals(mongoose.Types.ObjectId(rating.idCliente)))
+      .length
   ) {
     // si el adiestrador ya tiene un rating del cliente
     // lo eliminamos antes de añadir el nuevo
-    adiestrador.rating = adiestrador.rating.filter(
+    adiestrador._ratings = adiestrador._ratings.filter(
       (r) => !r.idCliente.equals(rating.idCliente)
     );
 
-    await adiestrador.rating.push(rating);
+    adiestrador._ratings.push(rating);
+    adiestrador.rating =
+      adiestrador._ratings.map((r) => r.score).reduce((sum, val) => sum + val) /
+      adiestrador._ratings.length;
     await adiestrador.save();
   } else {
     const error = new Error('Cliente no tiene historial con el adiestrador');
@@ -178,5 +182,5 @@ exports.rate = async (idAdiestrador, rating) => {
   }
 
   // devolvemos la nueva media
-  return await this.getRating(idAdiestrador);
+  return adiestrador;
 };
