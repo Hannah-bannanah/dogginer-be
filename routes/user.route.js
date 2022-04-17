@@ -61,6 +61,8 @@ router.get('', isGod, userController.findAll);
  *  post:
  *    summary: crear un nuevo user
  *    tags:
+ *      - adiestradores
+ *      - clientes
  *      - all users
  *    requestBody:
  *      required: true
@@ -109,6 +111,8 @@ router.post('', userController.create);
  *  post:
  *    summary: generar token de login
  *    tags:
+ *      - adiestradores
+ *      - clientes
  *      - all users
  *    security:
  *      - bearerAuth: []

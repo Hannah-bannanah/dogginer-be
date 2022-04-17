@@ -16,6 +16,8 @@ const router = express.Router({ mergeParams: true });
  *    summary: obtener lista de eventos del adiestrador
  *    tags:
  *      - adiestradores
+ *      - clientes
+ *      - all users
  *    parameters:
  *      - in: path
  *        name: "idAdiestrador"
@@ -88,6 +90,8 @@ router.post('', verifyAdiestrador, adiestradorController.createEvento);
  *    summary: buscar un evento por id
  *    tags:
  *      - adiestradores
+ *      - clientes
+ *      - all users
  *    description: Devuelve el evento, o un objeto vacio si no se ha encontrado
  *    parameters:
  *      - in: path

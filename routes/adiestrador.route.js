@@ -62,6 +62,8 @@ router.use('/:idAdiestrador/eventos', adiestradorEventosRouter);
  *    summary: obtener lista de adiestradores
  *    tags:
  *      - adiestradores
+ *      - clientes
+ *      - all users
  *    responses:
  *      200:
  *        description: "success"
@@ -114,6 +116,8 @@ router.post('', adiestradorController.create);
  *    summary: buscar un adiestrador por id
  *    tags:
  *      - adiestradores
+ *      - clientes
+ *      - all users
  *    description: Devuelve el adiestrador, o un objeto vacio si no se ha encontrado
  *    parameters:
  *      - in: path
@@ -207,7 +211,7 @@ router.patch('/:idAdiestrador', isAuthenticated, adiestradorController.update);
  *  patch:
  *    summary: evaluar a un adiestrados
  *    tags:
- *      - adiestradores
+ *      - clientes
  *    security:
  *      - bearerAuth: []
  *    description: El rating se añadira a la lista de ratings del adiestrador
