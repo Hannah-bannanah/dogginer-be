@@ -12,6 +12,7 @@ const router = express.Router();
 // definir subrutas
 router.use('/:idCliente/eventos', verifyCliente, clienteEventosRouter);
 
+// swagger Cliente schema
 /**
  * @swagger
  * components:
@@ -42,7 +43,7 @@ router.use('/:idCliente/eventos', verifyCliente, clienteEventosRouter);
 
 // get all
 /**
- * @swagger
+ * swagger
  * /clientes:
  *  get:
  *    summary: obtener lista de clientes
@@ -60,7 +61,7 @@ router.use('/:idCliente/eventos', verifyCliente, clienteEventosRouter);
  *              items:
  *                $ref: "#/components/schemas/Cliente"
  */
-router.get('', isGod, clienteController.findAll);
+// router.get('', isGod, clienteController.findAll);
 
 // create one
 /**
@@ -95,6 +96,7 @@ router.get('', isGod, clienteController.findAll);
  */
 router.post('', clienteController.create);
 
+// get one
 /**
  * @swagger
  * /clientes/{idCliente}:
@@ -122,7 +124,6 @@ router.post('', clienteController.create);
  *              $ref: "#/components/schemas/Cliente"
  *
  */
-// find by id
 router.get('/:idCliente', isAuthenticated, clienteController.findById);
 
 // delete by id
@@ -148,6 +149,7 @@ router.get('/:idCliente', isAuthenticated, clienteController.findById);
  */
 router.delete('/:idCliente', isAuthenticated, clienteController.deleteById);
 
+// update
 /**
  * @swagger
  * /clientes/{idCliente}:

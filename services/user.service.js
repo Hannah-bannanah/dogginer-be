@@ -35,7 +35,7 @@ exports.findById = async (userId) => {
  * @returns el documento del user buscado o un objeto vacio si no existe
  */
 exports.findByEmail = async (email) => {
-  const user = await User.findOne({ email: email });
+  const user = await User.findOne({ email: email.toLowerCase() });
   return user || {};
 };
 
@@ -45,7 +45,8 @@ exports.findByEmail = async (email) => {
  * @returns el objeto user creado
  */
 exports.create = async (userData) => {
-  const user = new User({ ...userData }); // mongoose valida la estructura del objeto
+  const userInfo = { ...userData, email: userData.email.toLowerCase() };
+  const user = new User(userInfo); // mongoose valida la estructura del objeto
   await user.save();
   return user;
 };

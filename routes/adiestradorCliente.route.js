@@ -7,6 +7,7 @@ const adiestradorController = require('../controllers/adiestrador.controller');
 // initialize router
 const router = express.Router({ mergeParams: true });
 
+// swagger Mensaje schema
 /**
  * @swagger
  * components:

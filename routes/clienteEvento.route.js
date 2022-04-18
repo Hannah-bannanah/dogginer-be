@@ -40,7 +40,7 @@ const router = express.Router();
  */
 router.get('', clienteController.fetchEventos);
 
-// get eventos
+// update eventos
 /**
  * @swagger
  * /clientes/{idCliente}/eventos:

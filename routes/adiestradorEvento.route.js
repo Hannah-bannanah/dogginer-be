@@ -83,6 +83,7 @@ router.get('', adiestradorController.fetchEventos);
  */
 router.post('', verifyAdiestrador, adiestradorController.createEvento);
 
+// get evento
 /**
  * @swagger
  * /adiestradores/{idAdiestrador}/eventos/{idEvento}:
@@ -115,6 +116,7 @@ router.post('', verifyAdiestrador, adiestradorController.createEvento);
  */
 router.get('/:idEvento', adiestradorController.getEvento);
 
+// update evento
 /**
  * @swagger
  * /adiestradores/{idAdiestrador}/eventos/{idEvento}:
