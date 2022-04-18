@@ -185,7 +185,7 @@ router.post('/login', userController.generateLoginToken);
  *
  */
 // find by id
-router.get('/:userId', isAuthenticated, userController.findById);
+// router.get('/:userId', isAuthenticated, userController.findById);
 
 // delete by id
 /**

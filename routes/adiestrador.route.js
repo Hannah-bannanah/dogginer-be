@@ -18,6 +18,7 @@ router.use(
 );
 router.use('/:idAdiestrador/eventos', adiestradorEventosRouter);
 
+// swagger schema Adiestrador
 /**
  * @swagger
  * components:
@@ -109,6 +110,7 @@ router.get('', adiestradorController.findAll);
  */
 router.post('', adiestradorController.create);
 
+// find by id
 /**
  * @swagger
  * /adiestradores/{idAdiestrador}:
@@ -136,7 +138,6 @@ router.post('', adiestradorController.create);
  *              $ref: "#/components/schemas/Adiestrador"
  *
  */
-// find by id
 router.get('/:idAdiestrador', adiestradorController.findById);
 
 // delete by id
@@ -166,6 +167,7 @@ router.delete(
   adiestradorController.deleteById
 );
 
+// update
 /**
  * @swagger
  * /adiestradores/{idAdiestrador}:
@@ -205,6 +207,7 @@ router.delete(
  */
 router.patch('/:idAdiestrador', isAuthenticated, adiestradorController.update);
 
+// rate
 /**
  * @swagger
  * /adiestradores/{idAdiestrador}/rating:
