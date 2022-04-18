@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 
 // import internal modules
 const userService = require('../services/user.service');
+const emailService = require('../services/email.service');
 const { JWT_PASSPHRASE, AUTHORITIES } = require('../util/auth.config');
 
 exports.findAll = async (req, res, next) => {
@@ -12,6 +13,14 @@ exports.findAll = async (req, res, next) => {
 };
 
 exports.findById = async (req, res, next) => {
+  if (
+    req.requesterData.userId !== req.params.userId &&
+    req.requesterData.role !== AUTHORITIES.GOD
+  ) {
+    const error = new Error('Unauthorized');
+    error.httpStatus = 403;
+    return next(error);
+  }
   try {
     const user = await userService.findById(req.params.userId);
     res.status(200).send(user);
@@ -25,7 +34,7 @@ exports.create = async (req, res, next) => {
   if (userData.role === AUTHORITIES.GOD) {
     const error = new Error('No puedes crear a Dios');
     error.httpStatus = 403;
-    next(error);
+    return next(error);
   }
   userData.password = await bcrypt.hash(userData.password, 12);
   try {
@@ -50,7 +59,7 @@ exports.update = async (req, res, next) => {
   try {
     const userActualizado = await userService.update(
       req.params.userId,
-      req.body
+      req.body.email
     );
     res.status(200).send(userActualizado);
   } catch (err) {
@@ -58,7 +67,7 @@ exports.update = async (req, res, next) => {
   }
 };
 
-exports.generateToken = async (req, res, next) => {
+exports.generateLoginToken = async (req, res, next) => {
   const user = await userService.findByEmail(req.body.email);
   if (user._id) {
     const loginValido = await bcrypt.compare(req.body.password, user.password);
@@ -81,4 +90,36 @@ exports.generateToken = async (req, res, next) => {
   const error = new Error('Credenciales no validos');
   error.httpStatus = 401;
   next(error);
+};
+
+exports.generateResetToken = async (req, res, next) => {
+  try {
+    const user = await userService.generateResetToken(req.body.email);
+    emailService.sendPwdResetEmail(user); // no esperamos respuesta
+    res
+      .status(200)
+      .send({ success: true, message: `reset link sent to ${user.email}` });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.resetPassword = async (req, res, next) => {
+  const token = req.params.token;
+  const userId = req.params.userId;
+  const newPassword = await bcrypt.hash(req.body.newPassword, 12);
+  try {
+    const resultado = await userService.updatePassword(
+      userId,
+      token,
+      newPassword
+    );
+    if (resultado) {
+      res
+        .status(200)
+        .send({ success: true, message: 'password actualizada con existo' });
+    } else throw new Error('Error al actualziar la password');
+  } catch (err) {
+    next(err);
+  }
 };

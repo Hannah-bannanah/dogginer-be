@@ -18,7 +18,14 @@ const eventoSchemaDetails = {
   descripcion: String,
   fecha: { type: Date, required: true },
   maxAforo: Number,
-  privado: Boolean,
+  privado: [
+    {
+      idCliente: {
+        type: Schema.Types.ObjectId,
+        ref: 'Cliente'
+      }
+    }
+  ],
   terminado: Boolean
 };
 const eventoSchema = new Schema(eventoSchemaDetails, {

@@ -18,6 +18,12 @@ Backend de la aplicación de dogginer
 <li>Renombrar archivo a 'auth.config.js'</li>
 </ol>
 </li>
+<li>Copiar el archivo email.plantilla.config.js:
+<ol>
+<li>Reemplazar el valor de la constante <code>SENDGRIDAPIKEY</code> por tu clave API</li>
+<li>Renombrar archivo a 'email.config.js'</li>
+</ol>
+</li>
 <li>En la terminal, ejecutar <code>npm install</code></li>
 <li>En la terminal, ejecutar <code>npm run dev</code></li>
 </ol>

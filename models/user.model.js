@@ -17,7 +17,9 @@ const userSchemaDetails = {
     default: AUTHORITIES.CLIENTE,
     required: true,
     immutable: true
-  }
+  },
+  tempResetToken: String,
+  tokenValidity: Number
 };
 const userSchema = new Schema(userSchemaDetails, {
   strictQuery: false

@@ -1,5 +1,6 @@
 // import 3rd party modules
 const mongoose = require('mongoose');
+const crypto = require('crypto');
 
 // import internal modules
 const User = require('../models/user.model');
@@ -11,7 +12,7 @@ const clienteService = require('../services/cliente.service');
  * @returns la lista de users
  */
 exports.findAll = async () => {
-  const users = await User.find().select({ password: 0, __v: 0 });
+  const users = await User.find().select({ email: 1 });
   return users;
 };
 
@@ -21,9 +22,9 @@ exports.findAll = async () => {
  * @returns el documento del user buscado, un objeto vacio si no existe
  */
 exports.findById = async (userId) => {
-  let user = {};
+  let user;
   if (mongoose.Types.ObjectId.isValid(userId)) {
-    user = await User.findById(userId).select({ password: 0, __v: 0 });
+    user = await User.findById(userId).select({ email: 1 });
   }
   return user || {};
 };
@@ -85,5 +86,48 @@ exports.update = async (userId, newData) => {
     throw error;
   }
   const userActualizado = await User.findByIdAndUpdate(userId, newData);
-  return { ...userActualizado, password: undefined };
+  return { _id: userActualizado._id, email: userActualizado.email };
+};
+
+/**
+ * Genera un token aleatorio y se lo añade al documento del usuario
+ * @param {String} email el email del usuario que quiere resetear la password
+ */
+exports.generateResetToken = async (email) => {
+  const buffer = crypto.randomBytes(32);
+  const token = buffer.toString('hex');
+
+  const user = await User.findOne({ email: email });
+  if (!user) {
+    const error = new Error('Usuario no encontrado');
+    error.httpStatus = 404;
+    throw error;
+  }
+  user.tempResetToken = token;
+  user.tokenValidity = Date.now() + 3600000;
+  await user.save();
+  return user;
+};
+
+/**
+ * Actualiza la password de un usuario
+ * @param {String} userId el id del user
+ * @param {String} token el token aleatorio generado para el reseteo
+ * @param {String} newPassword el nuevo valor de la password
+ * @returns true si la operacion se ha completado con exito, false si no;
+ * @throws error si el usuario no existe
+ */
+exports.updatePassword = async (userId, token, newPassword) => {
+  const user = await User.findOne({ _id: userId });
+  if (!user._id) {
+    const error = new Error('Usuario no encontrado');
+    error.httpStatus = 404;
+    throw error;
+  }
+  if (user.tempResetToken === token && user.tokenValidity > Date.now()) {
+    user.password = newPassword;
+    await user.save();
+    return true;
+  }
+  return false;
 };

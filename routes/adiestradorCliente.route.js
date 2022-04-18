@@ -85,6 +85,6 @@ router.get('', adiestradorController.fetchClientes);
  *      201:
  *        description: "success"
  */
-router.get('', adiestradorController.sendBroadCast);
+router.post('/broadcast', adiestradorController.sendBroadCast);
 
 module.exports = router;

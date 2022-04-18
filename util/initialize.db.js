@@ -78,10 +78,11 @@ const createEventos = async () => {
       idAdiestrador: adiestrador._id,
       nombre: `Evento${i} duplicado`,
       fecha: `2022-07-${i}`,
-      maxAforo: 10,
-      privado: true
+      maxAforo: 10
     });
     await evento1.save();
+    await evento2.save();
+    evento2.privado.push(clientes[5 - i]);
     await evento2.save();
     adiestrador.eventos.push(evento1, evento2);
     eventos.push(evento1, evento2);
@@ -93,8 +94,14 @@ const createEventos = async () => {
 const registrarClientes = async () => {
   for (let i = 0; i < clientes.length; i++) {
     const cliente = clientes[i];
-    cliente.eventos.push(eventos[i], eventos[i + 3]);
+    cliente.eventos.push(eventos[i], eventos[i + 1], eventos[i + 3]);
     await cliente.save();
+    const adiestrador1 = adiestradores[i];
+    const adiestrador2 = adiestradores[4 - i];
+    adiestrador1._ratings.push({ idCliente: cliente, score: i });
+    adiestrador2._ratings.push({ idCliente: cliente, score: i });
+    await adiestrador1.save();
+    await adiestrador2.save();
   }
 };
 
