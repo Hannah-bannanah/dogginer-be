@@ -4,6 +4,7 @@
 const adiestradorService = require('../services/adiestrador.service');
 const clienteService = require('../services/cliente.service');
 const eventoService = require('../services/evento.service');
+const emailService = require('../services/email.service');
 const { AUTHORITIES } = require('../util/auth.config');
 
 exports.findAll = async (req, res, next) => {
@@ -140,7 +141,15 @@ exports.deleteEvento = async (req, res, next) => {
 };
 
 exports.sendBroadCast = async (req, res, next) => {
-  res.status(200).send(req.body);
+  const email = {
+    to: 'hannah.fromspain@gmail.com',
+    from: 'hannah.fromspain@gmail.com',
+    subject: 'I know where you train',
+    text: 'You train there!',
+    html: 'You train <a href="maps.google.com" target="_blank">here</a>!'
+  };
+  emailService.sendEmail(email);
+  res.status(200).send(email);
 };
 
 exports.rate = async (req, res, next) => {

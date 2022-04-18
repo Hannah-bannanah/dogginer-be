@@ -3,11 +3,12 @@ const express = require('express');
 
 // import internal modules
 const userController = require('../controllers/user.controller');
-const { isGod } = require('../middleware/auth');
+const { isAuthenticated } = require('../middleware/auth');
 
 // initialize router
 const router = express.Router();
 
+// swagger schema
 /**
  * @swagger
  * components:
@@ -33,7 +34,7 @@ const router = express.Router();
 
 // get all
 /**
- * @swagger
+ * swagger
  * /users:
  *  get:
  *    summary: obtener lista de users
@@ -52,7 +53,7 @@ const router = express.Router();
  *              items:
  *                $ref: "#/components/schemas/User"
  */
-router.get('', isGod, userController.findAll);
+// router.get('', userController.findAll);
 
 // create one
 /**
@@ -154,7 +155,7 @@ router.post('', userController.create);
  *      401:
  *        $ref: "#/components/responses/UnauthorizedError"
  */
-router.post('/login', userController.generateToken);
+router.post('/login', userController.generateLoginToken);
 
 /**
  * @swagger
@@ -184,11 +185,11 @@ router.post('/login', userController.generateToken);
  *
  */
 // find by id
-router.get('/:userId', isGod, userController.findById);
+router.get('/:userId', isAuthenticated, userController.findById);
 
 // delete by id
 /**
- * @swagger
+ * swagger
  * /users/{userId}:
  *  delete:
  *    summary: eliminar un user
@@ -210,10 +211,11 @@ router.get('/:userId', isGod, userController.findById);
  *      401:
  *        $ref: "#/components/responses/UnauthorizedError"
  */
-router.delete('/:userId', isGod, userController.deleteById);
+// router.delete('/:userId', isGod, userController.deleteById);
 
+// update
 /**
- * @swagger
+ * swagger
  * /users/{userId}:
  *  patch:
  *    summary: actualizar un user
@@ -259,6 +261,103 @@ router.delete('/:userId', isGod, userController.deleteById);
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'
  */
-router.patch('/:userId', isGod, userController.update);
+// router.patch('/:userId', isGod, userController.update);
+
+// get password reset token
+/**
+ * @swagger
+ * /users/{userId}/resetPassword:
+ *  patch:
+ *    summary: generar token y enviar email al usuario
+ *    tags:
+ *      - all users
+ *    parameters:
+ *      - in: path
+ *        name: "userId"
+ *        description: el id del user
+ *        schema:
+ *          type: string
+ *        required: true
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              email:
+ *                type: string
+ *          required:
+ *            - email
+ *    responses:
+ *      200:
+ *        description: "User actualizado con exito"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/User'
+ *      404:
+ *        description: "User no encontrado"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                error:
+ *                  description: error
+ *                  type: string
+ */
+router.patch('/:userId/resetPassword', userController.generateResetToken);
+
+// update password
+/**
+ * @swagger
+ * /users/{userId}/resetPassword/{token}:
+ *  patch:
+ *    summary: actualizar la password de un user
+ *    tags:
+ *      - all users
+ *    security:
+ *      - bearerAuth: []
+ *    parameters:
+ *      - in: path
+ *        name: "userId"
+ *        description: el id del user
+ *        schema:
+ *          type: string
+ *        required: true
+ *      - in: path
+ *        name: "token"
+ *        description: el token enviado por email
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              newPassword:
+ *                type: string
+ *    responses:
+ *      200:
+ *        description: "User actualizado con exito"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/User'
+ *      404:
+ *        description: "User no encontrado"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                error:
+ *                  description: error
+ *                  type: string
+ */
+router.patch('/:userId/resetPassword/:token', userController.resetPassword);
 
 module.exports = router;
