@@ -160,7 +160,7 @@ exports.addEvento = async (cliente, idEvento) => {
   const asistentes = await Cliente.countDocuments({
     eventos: { $in: { _id: idEvento } }
   });
-  if (asistentes < evento.maxAforo) {
+  if (evento.maxAforo && asistentes < evento.maxAforo) {
     cliente.eventos.push(evento);
     await cliente.save();
     return true;

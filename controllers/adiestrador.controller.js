@@ -29,6 +29,7 @@ exports.findById = async (req, res, next) => {
 };
 
 exports.create = async (req, res, next) => {
+  console.log('body at controller', req.body);
   try {
     const adiestrador = await adiestradorService.create(req.body);
     res.status(200).send({ _id: adiestrador._id });
