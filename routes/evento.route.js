@@ -54,6 +54,28 @@ const router = express.Router();
 
 // get all
 /**
+ * swagger
+ * /eventos:
+ *  get:
+ *    summary: obtener lista de eventos
+ *    tags:
+ *      - adiestradores
+ *      - clientes
+ *      - all users
+ *    responses:
+ *      200:
+ *        description: "success"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: "#/components/schemas/Evento"
+ */
+// router.get('', eventoController.findAll);
+
+// get all
+/**
  * @swagger
  * /eventos:
  *  get:

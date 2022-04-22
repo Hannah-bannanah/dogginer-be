@@ -76,13 +76,20 @@ const createEventos = async () => {
     });
     const evento2 = new Evento({
       idAdiestrador: adiestrador._id,
-      nombre: `Evento${i} duplicado`,
+      nombre: `Evento${i} privado`,
       fecha: `2022-07-${i}`,
+      maxAforo: 10
+    });
+    const evento3 = new Evento({
+      idAdiestrador: adiestrador._id,
+      nombre: `Evento${i} terminado`,
+      fecha: `2021-07-${i}`,
       maxAforo: 10
     });
     await evento1.save();
     await evento2.save();
-    evento2.privado.push(clientes[5 - i]);
+    await evento3.save();
+    evento2.invitados.push(clientes[5 - i]);
     await evento2.save();
     adiestrador.eventos.push(evento1, evento2);
     eventos.push(evento1, evento2);

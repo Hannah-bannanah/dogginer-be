@@ -1,6 +1,5 @@
 // import 3rd party modules
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 
 // import internal modules
 const { AUTHORITIES } = require('../util/auth.config');
@@ -14,15 +13,15 @@ const userSchemaDetails = {
     type: String,
     unique: true,
     required: true,
-    trim: true
-    // validate: {
-    //   validator: function (v) {
-    //     // regex obtenida de https://regexlib.com/REDetails.aspx?regexp_id=2558
-    //     const regex =
-    //       /^((([!#$%&'*+\-/=?^_`{|}~\w])|([!#$%&'*+\-/=?^_`{|}~\w][!#$%&'*+\-/=?^_`{|}~\.\w]{0,}[!#$%&'*+\-/=?^_`{|}~\w]))[@]\w+([-.]\w+)*\.\w+([-.]\w+)*)$/;
-    //     return regex.test(v);
-    //   }
-    // }
+    trim: true,
+    validate: {
+      validator: function (v) {
+        // regex obtenida de https://regexlib.com/REDetails.aspx?regexp_id=2558
+        const regex =
+          /(([^<>()[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/;
+        return regex.test(v);
+      }
+    }
   },
   password: {
     type: String,

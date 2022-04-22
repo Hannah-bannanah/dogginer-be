@@ -14,6 +14,8 @@ const { AUTHORITIES } = require('../util/auth.config');
  */
 exports.findAll = async () => {
   const adiestradores = await Adiestrador.find();
+  console.log(adiestradores[0]);
+  console.log(adiestradores[1]);
   return adiestradores;
 };
 
@@ -36,9 +38,7 @@ exports.findById = async (idAdiestrador) => {
  * @throws error si el userId no tiene asignado el rol de adiestrador
  */
 exports.create = async (adiestradorData) => {
-  console.log('adiestrador data received in service', adiestradorData);
   const user = await userService.findById(adiestradorData.userId);
-  console.log('user in service', user);
   if (!user || user.role !== AUTHORITIES.ADIESTRADOR) {
     console.log('user is not ADIESTRADOR');
     const error = new Error();
