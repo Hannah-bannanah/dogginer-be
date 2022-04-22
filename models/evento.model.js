@@ -18,19 +18,30 @@ const eventoSchemaDetails = {
   descripcion: String,
   fecha: { type: Date, required: true },
   maxAforo: Number,
-  privado: [
-    {
-      idCliente: {
-        type: Schema.Types.ObjectId,
-        ref: 'Cliente'
+  imageUrl: { type: String, default: 'https://picsum.photos/id/357/300' },
+  invitados: {
+    type: [
+      {
+        idCliente: {
+          type: Schema.Types.ObjectId,
+          ref: 'Cliente'
+        }
       }
-    }
-  ],
-  terminado: Boolean
+    ]
+  }
 };
 const eventoSchema = new Schema(eventoSchemaDetails, {
   strictQuery: false
 });
+
+eventoSchema.virtual('terminado').get(function () {
+  return this.fecha < Date.now();
+});
+eventoSchema.virtual('privado').get(function () {
+  return this.invitados && this.invitados.length > 0;
+});
+
+eventoSchema.set('toObject', { virtuals: true });
 
 // create model
 const eventoModel = mongoose.model(COLLECTION_NAME, eventoSchema);

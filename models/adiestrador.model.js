@@ -18,6 +18,7 @@ const adiestradorSchemaDetails = {
   },
   nombre: { type: String, required: true },
   bio: String,
+  imageUrl: { type: String, default: 'https://picsum.photos/id/237/300' },
   eventos: [
     {
       idEvento: {
@@ -35,16 +36,26 @@ const adiestradorSchemaDetails = {
       },
       score: { type: Number, required: true }
     }
-  ],
-  rating: {
-    type: Number,
-    default: null
-  }
+  ]
+  // rating: {
+  //   type: Number,
+  //   default: null
+  // }
 };
 
 const adiestradorSchema = new Schema(adiestradorSchemaDetails, {
   strictQuery: false
 });
+
+adiestradorSchema.virtual('rating').get(function () {
+  if (!this._ratings.length) return null;
+  return (
+    this._ratings.map((r) => r.score).reduce((sum, val) => sum + val) /
+    this._ratings.length
+  );
+});
+
+adiestradorSchema.set('toObject', { virtuals: true });
 
 // create model
 const adiestradorModel = mongoose.model(COLLECTION_NAME, adiestradorSchema);
