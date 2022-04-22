@@ -24,7 +24,7 @@ exports.findAll = async () => {
 exports.findById = async (userId) => {
   let user;
   if (mongoose.Types.ObjectId.isValid(userId)) {
-    user = await User.findById(userId).select({ email: 1 });
+    user = await User.findById(userId).select({ email: 1, role: 1 });
   }
   return user || {};
 };

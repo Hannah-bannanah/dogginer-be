@@ -31,7 +31,7 @@ const createUsers = async () => {
     role: 'GOD'
   });
   userGod.save();
-  const pwd = await bcrypt.hash('1234', 12);
+  const pwd = await bcrypt.hash('test1234', 12);
   for (let i = 1; i < 6; i++) {
     const userCliente = new User({
       email: `cliente${i}@cliente.com`,
