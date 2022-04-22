@@ -42,6 +42,7 @@ eventoSchema.virtual('privado').get(function () {
 });
 
 eventoSchema.set('toObject', { virtuals: true });
+eventoSchema.set('toJSON', { virtuals: true });
 
 // create model
 const eventoModel = mongoose.model(COLLECTION_NAME, eventoSchema);

@@ -37,10 +37,6 @@ const adiestradorSchemaDetails = {
       score: { type: Number, required: true }
     }
   ]
-  // rating: {
-  //   type: Number,
-  //   default: null
-  // }
 };
 
 const adiestradorSchema = new Schema(adiestradorSchemaDetails, {

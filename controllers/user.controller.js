@@ -31,12 +31,22 @@ exports.findById = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   const userData = { ...req.body };
+
+  // validamos role
   if (userData.role === AUTHORITIES.GOD) {
     const error = new Error('No puedes crear a Dios');
     error.httpStatus = 403;
     return next(error);
   }
+  // validamos password
+  const regex = /^(?=\w\d)(?=\w[A-Z])(?=\w*[a-z])\S{8,16}$/;
+  if (!regex.test(userData.password)) {
+    const error = new Error('Password invalida');
+    error.httpStatus(400);
+    return next(error);
+  }
   userData.password = await bcrypt.hash(userData.password, 12);
+
   try {
     const user = await userService.create(userData);
     res.status(200).send({ _id: user._id });
