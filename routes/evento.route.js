@@ -8,6 +8,7 @@ const eventoController = require('../controllers/evento.controller');
 // initialize router
 const router = express.Router();
 
+// swagger del schema del evento
 /**
  * @swagger
  * components:
@@ -49,30 +50,8 @@ const router = express.Router();
  *         fecha: "2017-07-21T17:32:28Z"
  *         maxAforo: 27
  *         privado: true
- *
+ *         terminado: true
  */
-
-// get all
-/**
- * swagger
- * /eventos:
- *  get:
- *    summary: obtener lista de eventos
- *    tags:
- *      - adiestradores
- *      - clientes
- *      - all users
- *    responses:
- *      200:
- *        description: "success"
- *        content:
- *          application/json:
- *            schema:
- *              type: array
- *              items:
- *                $ref: "#/components/schemas/Evento"
- */
-// router.get('', eventoController.findAll);
 
 // get all
 /**
@@ -80,6 +59,8 @@ const router = express.Router();
  * /eventos:
  *  get:
  *    summary: obtener lista de eventos
+ *    security:
+ *      - bearerAuth: []
  *    tags:
  *      - adiestradores
  *      - clientes
@@ -220,6 +201,6 @@ router.get('/:idEvento', eventoController.findById);
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'
  */
-//router.patch('/:idEvento', isGod, eventoController.update);
+// router.patch('/:idEvento', isGod, eventoController.update);
 
 module.exports = router;

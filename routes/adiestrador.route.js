@@ -39,11 +39,17 @@ router.use('/:idAdiestrador/eventos', adiestradorEventosRouter);
  *         bio:
  *           type: string
  *           description: la bio del adiestrador
+ *         imageUrl:
+ *           type: string
+ *           description: link a la foto del adiestrador
  *         eventos:
  *           type: array
  *           items:
  *            type: object
  *            $ref: '#/components/schemas/Evento'
+ *         rating:
+ *           type: number
+ *           description: la media de los ratings por parte de los clientes (entre 0 y 5)
  *       required:
  *        - userId
  *        - nombre
@@ -51,6 +57,8 @@ router.use('/:idAdiestrador/eventos', adiestradorEventosRouter);
  *         userId: "6249701119292623c38f0c11"
  *         nombre: "John Doe"
  *         bio: "El mejor adiestrador de la zona"
+ *         imageUrl: "https://picsum.photos/id/237/300"
+ *         rating: 3
  */
 
 // define routes

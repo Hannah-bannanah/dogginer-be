@@ -95,4 +95,10 @@ const verifyCliente = async (req, res, next) => {
   }
 };
 
-module.exports = { isAuthenticated, isGod, verifyAdiestrador, verifyCliente };
+module.exports = {
+  isAuthenticated,
+  isGod,
+  verifyAdiestrador,
+  verifyCliente,
+  decodeToken
+};

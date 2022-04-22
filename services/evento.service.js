@@ -5,12 +5,52 @@ const mongoose = require('mongoose');
 const Evento = require('../models/evento.model');
 const adiestradorService = require('../services/adiestrador.service');
 const clienteService = require('../services/cliente.service');
+const { AUTHORITIES } = require('../util/auth.config');
+
 /**
  * Recoge la lista de todos los eventos de la bbdd
  * @returns la lista de eventos
  */
 exports.findAll = async () => {
   const eventos = await Evento.find();
+  return eventos;
+};
+
+/**
+ * Recoge la lista de todos los eventos publicos de la bbdd
+ * @returns la lista de eventos
+ */
+exports.findPublic = async () => {
+  const eventos = await Evento.find({ invitados: { $eq: [] } });
+  return eventos;
+};
+
+/**
+ * Recoge la lista de todos los eventos publicos de la bbdd
+ * @returns la lista de eventos
+ */
+exports.findAccessible = async (userId, role) => {
+  let eventos = [];
+
+  // buscamos los eventos accesibles para el adiestrador
+  if (role === AUTHORITIES.ADIESTRADOR) {
+    const adiestrador = await adiestradorService.findByUserId(userId);
+    if (!adiestrador._id) throw new Error('Adiestrador no existe');
+
+    eventos = await Evento.find({
+      $or: [{ invitados: { $eq: [] } }, { idAdiestrador: adiestrador._id }]
+    });
+  }
+
+  if (role === AUTHORITIES.CLIENTE) {
+    const cliente = await clienteService.findByUserId(userId);
+    if (!cliente._id) throw new Error('Cliente no existe');
+
+    eventos = await Evento.find({
+      $or: [{ invitados: { $eq: [] } }, { invitados: cliente }]
+    });
+  }
+
   return eventos;
 };
 

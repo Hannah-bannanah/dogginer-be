@@ -14,8 +14,6 @@ const { AUTHORITIES } = require('../util/auth.config');
  */
 exports.findAll = async () => {
   const adiestradores = await Adiestrador.find();
-  console.log(adiestradores[0]);
-  console.log(adiestradores[1]);
   return adiestradores;
 };
 
