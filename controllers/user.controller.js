@@ -42,7 +42,7 @@ exports.create = async (req, res, next) => {
   const regex = /^(?=\w\d)(?=\w[A-Z])(?=\w*[a-z])\S{8,16}$/;
   if (!regex.test(userData.password)) {
     const error = new Error('Password invalida');
-    error.httpStatus(400);
+    error.httpStatus = 400;
     return next(error);
   }
   userData.password = await bcrypt.hash(userData.password, 12);
