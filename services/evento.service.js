@@ -145,6 +145,19 @@ exports.update = async (idEvento, newData) => {
  * @param {Array} eventos lista de ids de eventos
  * @returns la lista de eventos encontrados
  */
-exports.findByIdList = async (eventos) => {
-  return await Evento.find({ _id: { $in: eventos } });
+exports.findByAdiestrador = async (adiestrador, userData) => {
+  // si el evento no es publico, comprobamos si el usuario tiene acceso
+
+  if (userData && adiestrador.userId.equals(userData.userId)) {
+    return await Evento.find({ idAdiestrador: adiestrador._id });
+  }
+
+  if (userData && userData.role === AUTHORITIES.CLIENTE) {
+    const cliente = await clienteService.findByUserId(userData.userId);
+    return await Evento.find({
+      idAdiestrador: adiestrador.id,
+      $or: [{ invitados: [] }, { invitados: cliente }]
+    });
+  }
+  return await Evento.find({ idAdiestrador: adiestrador._id, invitados: [] });
 };

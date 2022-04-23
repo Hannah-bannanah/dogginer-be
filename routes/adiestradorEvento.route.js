@@ -17,6 +17,8 @@ const router = express.Router({ mergeParams: true });
  *    tags:
  *      - adiestradores
  *      - eventos
+ *    security:
+ *      - bearerAuth: []
  *    parameters:
  *      - in: path
  *        name: "idAdiestrador"
