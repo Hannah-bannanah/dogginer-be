@@ -19,10 +19,18 @@ exports.findAll = async (req, res, next) => {
 };
 
 exports.findById = async (req, res, next) => {
+  let userData = null;
+  // comprobamos si hemos recibido token
   try {
-    const evento = await eventoService.findById(req.params.idEvento);
+    userData = decodeToken(req);
+  } catch (err) {
+    // ignoramos el error, ya que userData es opcional
+  }
+  try {
+    const evento = await eventoService.findById(req.params.idEvento, userData);
     res.status(200).send(evento);
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };

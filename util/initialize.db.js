@@ -24,14 +24,14 @@ const emptyDb = async () => {
 };
 
 const createUsers = async () => {
-  const godPwd = await bcrypt.hash('GOD', 12);
+  const godPwd = await bcrypt.hash('God12345', 12);
   const userGod = new User({
     email: 'admin@admin.com',
     password: godPwd,
     role: 'GOD'
   });
   userGod.save();
-  const pwd = await bcrypt.hash('test1234', 12);
+  const pwd = await bcrypt.hash('Test1234', 12);
   for (let i = 1; i < 6; i++) {
     const userCliente = new User({
       email: `cliente${i}@cliente.com`,
