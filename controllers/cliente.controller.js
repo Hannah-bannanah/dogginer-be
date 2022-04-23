@@ -78,7 +78,7 @@ exports.update = async (req, res, next) => {
 
 exports.fetchEventos = async (req, res, next) => {
   const cliente = req.cliente;
-  const eventos = await eventoService.findByIdList(cliente.eventos);
+  const eventos = await eventoService.findByCliente(cliente);
   res.status(200).send(eventos);
 };
 

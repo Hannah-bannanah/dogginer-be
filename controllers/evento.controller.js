@@ -3,6 +3,7 @@
 // import internal modules
 const { decodeToken } = require('../middleware/auth');
 const eventoService = require('../services/evento.service');
+const { AUTHORITIES } = require('../util/auth.config');
 
 exports.findAll = async (req, res, next) => {
   let eventos = [];
@@ -10,7 +11,8 @@ exports.findAll = async (req, res, next) => {
   // comprobamos si hemos recibido token
   try {
     const { userId, role } = decodeToken(req);
-    eventos = await eventoService.findAccessible(userId, role);
+    if (role === AUTHORITIES.GOD) eventos = await eventoService.findAll();
+    else eventos = await eventoService.findAccessible(userId, role);
   } catch (err) {
     // si no hay token, devolvemos solo los eventos publicos
     eventos = await eventoService.findPublic();

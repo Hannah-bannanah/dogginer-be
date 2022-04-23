@@ -8,7 +8,7 @@ const clienteService = require('../services/cliente.service');
 const { AUTHORITIES } = require('../util/auth.config');
 
 /**
- * Recoge la lista de todos los eventos de la bbdd
+ * Recoge la lista de todos los eventos de la BD, incluyendo los terminados
  * @returns la lista de eventos
  */
 exports.findAll = async () => {
@@ -17,11 +17,23 @@ exports.findAll = async () => {
 };
 
 /**
+ * Recoge la lista de todos los eventos activos
+ * @returns la lista de eventos
+ */
+exports.findActive = async () => {
+  const eventos = await Evento.find({ fecha: { $lt: Date.now() } });
+  return eventos;
+};
+
+/**
  * Recoge la lista de todos los eventos publicos de la bbdd
  * @returns la lista de eventos
  */
 exports.findPublic = async () => {
-  const eventos = await Evento.find({ invitados: { $eq: [] } });
+  const eventos = await Evento.find({
+    invitados: [],
+    fecha: { $gt: Date.now() }
+  });
   return eventos;
 };
 
@@ -38,20 +50,63 @@ exports.findAccessible = async (userId, role) => {
     if (!adiestrador._id) throw new Error('Adiestrador no existe');
 
     eventos = await Evento.find({
-      $or: [{ invitados: { $eq: [] } }, { idAdiestrador: adiestrador._id }]
+      fecha: { $gt: Date.now() },
+      $or: [{ invitados: [] }, { idAdiestrador: adiestrador._id }]
     });
   }
 
   if (role === AUTHORITIES.CLIENTE) {
     const cliente = await clienteService.findByUserId(userId);
     if (!cliente._id) throw new Error('Cliente no existe');
-
     eventos = await Evento.find({
-      $or: [{ invitados: { $eq: [] } }, { invitados: cliente }]
+      fecha: { $gt: Date.now() },
+      $or: [{ invitados: [] }, { invitados: cliente }]
     });
   }
 
   return eventos;
+};
+
+/**
+ * Busca los eventos asociados a un adiestrador
+ * @param {Array} eventos lista de ids de eventos
+ * @returns la lista de eventos encontrados
+ */
+exports.findByAdiestrador = async (adiestrador, userData) => {
+  // si el evento no es publico, comprobamos si el usuario tiene acceso
+
+  if (userData && adiestrador.userId.equals(userData.userId)) {
+    return await Evento.find({
+      idAdiestrador: adiestrador._id,
+      fecha: { $gt: Date.now() }
+    });
+  }
+
+  if (userData && userData.role === AUTHORITIES.CLIENTE) {
+    const cliente = await clienteService.findByUserId(userData.userId);
+    return await Evento.find({
+      idAdiestrador: adiestrador.id,
+      fecha: { $gt: Date.now() },
+      $or: [{ invitados: [] }, { invitados: cliente }]
+    });
+  }
+  return await Evento.find({
+    idAdiestrador: adiestrador._id,
+    invitados: [],
+    fecha: { $gt: Date.now() }
+  });
+};
+
+/**
+ * Busca los eventos en los que esta registrado un cliente
+ * @param {Object} cliente
+ * @returns la lista de eventos encontrados
+ */
+exports.findByCliente = async (cliente) => {
+  return await Evento.find({
+    _id: { $in: cliente.eventos },
+    fecha: { $gt: Date.now() }
+  });
 };
 
 /**
@@ -73,6 +128,15 @@ exports.findById = async (idEvento, userData) => {
     const error = new Error('Usuario no autorizado');
     error.httpStatus = 403;
     throw error;
+  }
+
+  if (userData.role === AUTHORITIES.GOD) {
+    return evento;
+  }
+
+  if (userData.role === AUTHORITIES.ADIESTRADOR) {
+    const adiestrador = await adiestradorService.findByUserId(userData.userId);
+    return evento.idAdiestrador.equals(adiestrador._id) ? evento : {};
   }
 
   if (userData.role === AUTHORITIES.ADIESTRADOR) {
@@ -138,26 +202,4 @@ exports.update = async (idEvento, newData) => {
     idAdiestrador: undefined // de momento, ignoramos cambios en el adiestrador
   });
   return await this.findById(idEvento);
-};
-
-/**
- * Busca una lista de eventos por sus ids
- * @param {Array} eventos lista de ids de eventos
- * @returns la lista de eventos encontrados
- */
-exports.findByAdiestrador = async (adiestrador, userData) => {
-  // si el evento no es publico, comprobamos si el usuario tiene acceso
-
-  if (userData && adiestrador.userId.equals(userData.userId)) {
-    return await Evento.find({ idAdiestrador: adiestrador._id });
-  }
-
-  if (userData && userData.role === AUTHORITIES.CLIENTE) {
-    const cliente = await clienteService.findByUserId(userData.userId);
-    return await Evento.find({
-      idAdiestrador: adiestrador.id,
-      $or: [{ invitados: [] }, { invitados: cliente }]
-    });
-  }
-  return await Evento.find({ idAdiestrador: adiestrador._id, invitados: [] });
 };
