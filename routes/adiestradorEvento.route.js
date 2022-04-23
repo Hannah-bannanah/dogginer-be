@@ -83,38 +83,6 @@ router.get('', adiestradorController.fetchEventos);
  */
 router.post('', verifyAdiestrador, adiestradorController.createEvento);
 
-// get evento
-/**
- * @swagger
- * /adiestradores/{idAdiestrador}/eventos/{idEvento}:
- *  get:
- *    summary: buscar un evento por id
- *    tags:
- *      - adiestradores
- *      - eventos
- *    description: Devuelve el evento, o un objeto vacio si no se ha encontrado
- *    parameters:
- *      - in: path
- *        name: "idAdiestrador"
- *        description: el id del adiestrador
- *        required: true
- *      - in: path
- *        name: "idEvento"
- *        description: el id del evento
- *        required: true
- *    responses:
- *      200:
- *        description: "success"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              $ref: "#/components/schemas/Evento"
- *      404:
- *        $ref: '#/components/responses/ElementNotFoundError'
- */
-router.get('/:idEvento', adiestradorController.getEvento);
-
 // update evento
 /**
  * @swagger

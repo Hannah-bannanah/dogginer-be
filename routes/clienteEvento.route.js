@@ -85,40 +85,6 @@ router.get('', clienteController.fetchEventos);
  */
 router.patch('', clienteController.addEvento);
 
-// get evento
-/**
- * @swagger
- * /clientes/{idCliente}/eventos/{idEvento}:
- *  get:
- *    summary: obtener los detalles de un evento en el que esta registrado un cliente
- *    tags:
- *      - clientes
- *    security:
- *      - bearerAuth: []
- *    parameters:
- *      - in: path
- *        name: "idAdiestrador"
- *        description: el id del cliente
- *        required: true
- *      - in: path
- *        name: "idEvento"
- *        description: el id del evento
- *        required: true
- *    responses:
- *      200:
- *        description: "success"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              $ref: "#/components/schemas/Evento"
- *      403:
- *        $ref: "#/components/responses/UnauthorizedError"
- *      404:
- *        $ref: '#/components/responses/ElementNotFoundError'
- */
-router.get('/:idEvento', clienteController.getEvento);
-
 // delete evento
 /**
  * @swagger
