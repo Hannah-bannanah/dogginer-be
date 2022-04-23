@@ -16,8 +16,9 @@ const router = express.Router({ mergeParams: true });
  *    summary: obtener lista de eventos del adiestrador
  *    tags:
  *      - adiestradores
- *      - clientes
- *      - all users
+ *      - eventos
+ *    security:
+ *      - bearerAuth: []
  *    parameters:
  *      - in: path
  *        name: "idAdiestrador"
@@ -47,6 +48,7 @@ router.get('', adiestradorController.fetchEventos);
  *    summary: crear un nuevo evento
  *    tags:
  *      - adiestradores
+ *      - eventos
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -83,39 +85,6 @@ router.get('', adiestradorController.fetchEventos);
  */
 router.post('', verifyAdiestrador, adiestradorController.createEvento);
 
-// get evento
-/**
- * @swagger
- * /adiestradores/{idAdiestrador}/eventos/{idEvento}:
- *  get:
- *    summary: buscar un evento por id
- *    tags:
- *      - adiestradores
- *      - clientes
- *      - all users
- *    description: Devuelve el evento, o un objeto vacio si no se ha encontrado
- *    parameters:
- *      - in: path
- *        name: "idAdiestrador"
- *        description: el id del adiestrador
- *        required: true
- *      - in: path
- *        name: "idEvento"
- *        description: el id del evento
- *        required: true
- *    responses:
- *      200:
- *        description: "success"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              $ref: "#/components/schemas/Evento"
- *      404:
- *        $ref: '#/components/responses/ElementNotFoundError'
- */
-router.get('/:idEvento', adiestradorController.getEvento);
-
 // update evento
 /**
  * @swagger
@@ -124,6 +93,7 @@ router.get('/:idEvento', adiestradorController.getEvento);
  *    summary: actualizar un evento
  *    tags:
  *      - adiestradores
+ *      - eventos
  *    security:
  *      - bearerAuth: []
  *    description: El evento se actualizará con los campos incluidos en el responseBody
@@ -173,6 +143,7 @@ router.patch(
  *    summary: eliminar un evento
  *    tags:
  *      - adiestradores
+ *      - eventos
  *    security:
  *      - bearerAuth: []
  *    parameters:

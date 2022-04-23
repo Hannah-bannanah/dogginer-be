@@ -6,6 +6,7 @@ const clienteService = require('../services/cliente.service');
 const eventoService = require('../services/evento.service');
 const emailService = require('../services/email.service');
 const { AUTHORITIES } = require('../util/auth.config');
+const { decodeToken } = require('../middleware/auth');
 
 exports.findAll = async (req, res, next) => {
   const adiestradores = await adiestradorService.findAll();
@@ -30,7 +31,11 @@ exports.findById = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   try {
-    const adiestrador = await adiestradorService.create(req.body);
+    const adiestrador = await adiestradorService.create({
+      ...req.body,
+      _ratings: undefined,
+      eventos: undefined
+    });
     res.status(200).send({ _id: adiestrador._id });
   } catch (err) {
     next(err);
@@ -100,7 +105,15 @@ exports.fetchEventos = async (req, res, next) => {
     error.httpStatus = 404;
     return next(error);
   }
-  const eventos = await eventoService.findByIdList(adiestrador.eventos);
+
+  // comprobamos si hemos recibido token
+  let userData = null;
+  try {
+    userData = decodeToken(req);
+  } catch (err) {
+    // ignoramos el error, ya que userData es opcional
+  }
+  const eventos = await eventoService.findByAdiestrador(adiestrador, userData);
   res.status(200).send(eventos);
 };
 

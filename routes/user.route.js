@@ -29,7 +29,7 @@ const router = express.Router();
  *       example:
  *         _id: "625559613d9f4a9c59441033"
  *         email: "hannah@bannanah.com"
- *         role: "GOD"
+ *         role: "CLIENTE"
  */
 
 // get all
@@ -148,13 +148,16 @@ router.post('', userController.create);
  *                validity:
  *                  description: validez del token en segundos
  *                  type: number
+ *                userId:
+ *                  description: id del usuario
+ *                  type: string
  *      401:
  *        $ref: "#/components/responses/UnauthorizedError"
  */
 router.post('/login', userController.generateLoginToken);
 
 /**
- * @swagger
+ * swagger
  * /users/{userId}:
  *  get:
  *    summary: buscar un user por id

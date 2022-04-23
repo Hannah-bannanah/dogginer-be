@@ -82,7 +82,7 @@ router.get('', eventoController.findAll);
  *  post:
  *    summary: crear un nuevo evento
  *    tags:
- *      - GOD
+ *      - eventos
  *    security:
  *      - bearerAuth: []
  *    requestBody:
@@ -118,9 +118,7 @@ router.get('', eventoController.findAll);
  *    security:
  *      - bearerAuth: []
  *    tags:
- *      - adiestradores
- *      - clientes
- *      - all users
+ *      - eventos
  *    description: Devuelve el evento, o un objeto vacio si no se ha encontrado
  *    parameters:
  *      - in: path
@@ -148,7 +146,7 @@ router.get('/:idEvento', eventoController.findById);
  *  delete:
  *    summary: eliminar un evento
  *    tags:
- *      - GOD
+ *      - eventos
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -170,7 +168,7 @@ router.get('/:idEvento', eventoController.findById);
  *  patch:
  *    summary: actualizar un evento
  *    tags:
- *      - GOD
+ *      - eventos
  *    security:
  *      - bearerAuth: []
  *    description: El evento se actualizará con los campos incluidos en el responseBody
