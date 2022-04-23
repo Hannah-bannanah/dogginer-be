@@ -63,7 +63,7 @@ router.get('', adiestradorController.fetchClientes);
  * @swagger
  * /adiestradores/{idAdiestrador}/clientes/broadcast:
  *  post:
- *    summary: obtener lista de clientes registrados en eventos del adiestrador
+ *    summary: enviar un email a todos los clientes registrados en eventos del adiestrador
  *    tags:
  *      - adiestradores
  *    parameters:

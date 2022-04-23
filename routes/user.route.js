@@ -3,7 +3,7 @@ const express = require('express');
 
 // import internal modules
 const userController = require('../controllers/user.controller');
-const { isAuthenticated } = require('../middleware/auth');
+// const { isAuthenticated } = require('../middleware/auth');
 
 // initialize router
 const router = express.Router();
@@ -62,9 +62,7 @@ const router = express.Router();
  *  post:
  *    summary: crear un nuevo user
  *    tags:
- *      - adiestradores
- *      - clientes
- *      - all users
+ *      - users
  *    requestBody:
  *      required: true
  *      content:
@@ -112,9 +110,7 @@ router.post('', userController.create);
  *  post:
  *    summary: generar token de login
  *    tags:
- *      - adiestradores
- *      - clientes
- *      - all users
+ *      - users
  *    security:
  *      - bearerAuth: []
  *    requestBody:
@@ -269,8 +265,10 @@ router.post('/login', userController.generateLoginToken);
  * /users/{userId}/resetPassword:
  *  patch:
  *    summary: generar token y enviar email al usuario
+ *    description: El usuario recibirá un email con un link que incluirá un
+ *                 token generado aleatoriamente. Accediendo a ese link podrá cambiar la password
  *    tags:
- *      - all users
+ *      - users
  *    parameters:
  *      - in: path
  *        name: "userId"
@@ -317,7 +315,7 @@ router.patch('/:userId/resetPassword', userController.generateResetToken);
  *  patch:
  *    summary: actualizar la password de un user
  *    tags:
- *      - all users
+ *      - users
  *    security:
  *      - bearerAuth: []
  *    parameters:

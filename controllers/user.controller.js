@@ -91,7 +91,9 @@ exports.generateLoginToken = async (req, res, next) => {
         JWT_PASSPHRASE,
         { expiresIn: '1h' }
       );
-      return res.status(200).send({ token: token, validity: 3600 });
+      return res
+        .status(200)
+        .send({ token: token, validity: 3600, userId: user._id });
     }
   }
 

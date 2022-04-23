@@ -59,11 +59,33 @@ exports.findAccessible = async (userId, role) => {
  * @param {String} idEvento el id de evento
  * @returns el documento del evento buscado, un objeto vacio si no existe
  */
-exports.findById = async (idEvento) => {
+exports.findById = async (idEvento, userData) => {
   if (!mongoose.Types.ObjectId.isValid(idEvento)) return {};
 
   const evento = await Evento.findById(idEvento);
-  return evento || {};
+
+  // si el evento existe y es publico, lo devolvemos
+  if (!evento) return {};
+  if (!evento.privado) return evento;
+
+  // si el evento no es publico, comprobamos si el usuario tiene acceso
+  if (!userData) {
+    const error = new Error('Usuario no autorizado');
+    error.httpStatus = 403;
+    throw error;
+  }
+
+  if (userData.role === AUTHORITIES.ADIESTRADOR) {
+    const adiestrador = await adiestradorService.findByUserId(userData.userId);
+    return evento.idAdiestrador.equals(adiestrador._id) ? evento : {};
+  }
+
+  if (userData.role === AUTHORITIES.CLIENTE) {
+    const cliente = await clienteService.findByUserId(userData.userId);
+    return evento.invitados.find((invitado) => invitado.equals(cliente))
+      ? evento
+      : {};
+  }
 };
 
 /**
@@ -72,18 +94,10 @@ exports.findById = async (idEvento) => {
  * @returns el objeto evento creado
  * @throws error si el idAdiestrador no existe
  */
-exports.create = async (eventoData) => {
-  const adiestrador = await adiestradorService.findById(
-    eventoData.idAdiestrador
-  );
-  if (!adiestrador._id) {
-    const error = new Error('Informacion invalida');
-    error.httpStatus = 422;
-    throw error;
-  }
+exports.create = async (eventoData, adiestrador) => {
   const evento = new Evento({ ...eventoData });
   await evento.save();
-  adiestrador.eventos.push(evento._id);
+  adiestrador.eventos.push(evento);
   await adiestrador.save();
   return evento;
 };

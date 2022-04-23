@@ -71,7 +71,11 @@ exports.update = async (req, res, next) => {
     next(error);
   }
   try {
-    const updatedData = { ...req.body, _ratings: undefined };
+    const updatedData = {
+      ...req.body,
+      _ratings: undefined,
+      eventos: undefined
+    };
     const adiestradorActualizado = await adiestradorService.update(
       req.params.idAdiestrador,
       updatedData
@@ -103,7 +107,15 @@ exports.fetchEventos = async (req, res, next) => {
 exports.createEvento = async (req, res, next) => {
   const eventoData = { ...req.body, idAdiestrador: req.params.idAdiestrador };
   try {
-    const evento = await eventoService.create(eventoData);
+    const adiestrador = await adiestradorService.findById(
+      req.params.idAdiestrador
+    );
+    if (!adiestrador._id) {
+      const error = new Error('Informacion invalida');
+      error.httpStatus = 422;
+      throw error;
+    }
+    const evento = await eventoService.create(eventoData, adiestrador);
     res.status(200).send({ id: evento._id });
   } catch (err) {
     next(err);

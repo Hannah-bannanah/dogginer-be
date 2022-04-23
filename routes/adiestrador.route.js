@@ -181,11 +181,12 @@ router.delete(
  * /adiestradores/{idAdiestrador}:
  *  patch:
  *    summary: actualizar un adiestrador
+ *    description: tan solo el adiestrador o un administrador podrán actualizar la información.
+ *                  No se podrán actualizar mediante este end point la lista de eventos ni el rating del adiestrador.
  *    tags:
  *      - adiestradores
  *    security:
  *      - bearerAuth: []
- *    description: El adiestrador se actualizará con los campos incluidos en el responseBody
  *    parameters:
  *      - in: path
  *        name: "idAdiestrador"
@@ -220,12 +221,15 @@ router.patch('/:idAdiestrador', isAuthenticated, adiestradorController.update);
  * @swagger
  * /adiestradores/{idAdiestrador}/rating:
  *  patch:
- *    summary: evaluar a un adiestrados
+ *    summary: evaluar a un adiestrador
+ *    description: Solo clientes registrados en eventos asociados al adieastrador podrán enviar un rating.
+ *                 El rating añadirá a la lista de ratings de adiestrador una entrada para el cliente y el score
+ *                 enviado. En caso de que el cliente ya haya evaluado al adiestrador, se sustituirá el valor
+ *                 previo por el nuevo.
  *    tags:
- *      - clientes
+ *      - adiestradores
  *    security:
  *      - bearerAuth: []
- *    description: El rating se añadira a la lista de ratings del adiestrador
  *    parameters:
  *      - in: path
  *        name: "idAdiestrador"

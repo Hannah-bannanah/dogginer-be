@@ -58,13 +58,11 @@ const router = express.Router();
  * @swagger
  * /eventos:
  *  get:
- *    summary: obtener lista de eventos
+ *    summary: obtener la lista de eventos accesibles para el usuario que la solicita
  *    security:
  *      - bearerAuth: []
  *    tags:
- *      - adiestradores
- *      - clientes
- *      - all users
+ *      - eventos
  *    responses:
  *      200:
  *        description: "success"
@@ -117,6 +115,8 @@ router.get('', eventoController.findAll);
  * /eventos/{idEvento}:
  *  get:
  *    summary: buscar un evento por id
+ *    security:
+ *      - bearerAuth: []
  *    tags:
  *      - adiestradores
  *      - clientes
