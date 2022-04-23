@@ -71,8 +71,6 @@ router.use('/:idAdiestrador/eventos', adiestradorEventosRouter);
  *    summary: obtener lista de adiestradores
  *    tags:
  *      - adiestradores
- *      - clientes
- *      - all users
  *    responses:
  *      200:
  *        description: "success"
@@ -91,6 +89,7 @@ router.get('', adiestradorController.findAll);
  * /adiestradores:
  *  post:
  *    summary: crear un nuevo adiestrador
+ *    description: crea un nuevo adiestrador. No es posible crear la lista de eventos del adiestrador
  *    tags:
  *      - adiestradores
  *    requestBody:
@@ -126,8 +125,6 @@ router.post('', adiestradorController.create);
  *    summary: buscar un adiestrador por id
  *    tags:
  *      - adiestradores
- *      - clientes
- *      - all users
  *    description: Devuelve el adiestrador, o un objeto vacio si no se ha encontrado
  *    parameters:
  *      - in: path
@@ -154,6 +151,9 @@ router.get('/:idAdiestrador', adiestradorController.findById);
  * /adiestradores/{idAdiestrador}:
  *  delete:
  *    summary: eliminar un adiestrador
+ *    description: Elimina un adiestrador de la BD. Esta accion solo esta permitida a
+ *                 administradores y el propio adiestrador. El adiestrador no debe tener
+ *                 eventos activos.
  *    tags:
  *      - adiestradores
  *    security:
@@ -182,7 +182,7 @@ router.delete(
  *  patch:
  *    summary: actualizar un adiestrador
  *    description: tan solo el adiestrador o un administrador podrán actualizar la información.
- *                  No se podrán actualizar mediante este end point la lista de eventos ni el rating del adiestrador.
+ *                 No se podrán actualizar mediante este end point la lista de eventos ni el rating del adiestrador.
  *    tags:
  *      - adiestradores
  *    security:

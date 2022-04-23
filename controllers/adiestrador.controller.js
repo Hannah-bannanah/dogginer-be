@@ -30,7 +30,11 @@ exports.findById = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   try {
-    const adiestrador = await adiestradorService.create(req.body);
+    const adiestrador = await adiestradorService.create({
+      ...req.body,
+      _ratings: undefined,
+      eventos: undefined
+    });
     res.status(200).send({ _id: adiestrador._id });
   } catch (err) {
     next(err);
