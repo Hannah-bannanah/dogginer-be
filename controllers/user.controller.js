@@ -39,7 +39,7 @@ exports.create = async (req, res, next) => {
     return next(error);
   }
   // validamos password
-  const regex = /^(?=\w\d)(?=\w[A-Z])(?=\w*[a-z])\S{8,16}$/;
+  const regex = /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/;
   if (!regex.test(userData.password)) {
     const error = new Error('Password invalida');
     error.httpStatus = 400;
