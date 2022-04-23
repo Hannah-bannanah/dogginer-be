@@ -151,10 +151,21 @@ exports.addEvento = async (cliente, idEvento) => {
     throw error;
   }
 
-  const evento = await eventoService.findById(idEvento);
+  const evento = await eventoService.findById(idEvento, {
+    userId: cliente.userId,
+    role: AUTHORITIES.CLIENTE
+  });
   if (!evento._id) {
     const error = new Error('Evento no existe');
     error.httpStatus = 404;
+    throw error;
+  }
+  if (
+    evento.privado &&
+    !evento.invitados.find((invitado) => invitado.equals(cliente))
+  ) {
+    const error = new Error('Operacion no autorizada');
+    error.httpStatus = 403;
     throw error;
   }
   const asistentes = await Cliente.countDocuments({

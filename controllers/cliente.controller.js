@@ -115,9 +115,7 @@ exports.addEvento = async (req, res, next) => {
     );
     if (resultado) {
       const clienteActualizado = await clienteService.findById(req.cliente._id);
-      const eventos = await eventoService.findByIdList(
-        clienteActualizado.eventos
-      );
+      const eventos = await eventoService.findByCliente(clienteActualizado);
       res.status(200).send(eventos);
     } else {
       res.status(422).send({ error: 'Evento sin capacidad' });
