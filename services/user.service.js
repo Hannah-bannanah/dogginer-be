@@ -132,3 +132,13 @@ exports.updatePassword = async (userId, token, newPassword) => {
   }
   return false;
 };
+
+/**
+ * Busca todos los usuarios de una lista de userIds
+ * @param {Array} userIds
+ * @returns la lista de usuarios
+ */
+exports.findByIdList = async (userIds) => {
+  const users = User.find({ _id: { $in: userIds } }).select({ password: 0 });
+  return users || [];
+};

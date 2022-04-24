@@ -197,4 +197,46 @@ router.delete('/:idCliente', isAuthenticated, clienteController.deleteById);
  */
 router.patch('/:idCliente', isAuthenticated, clienteController.update);
 
+// email cliente
+/**
+ * @swagger
+ * /clientes/{idCliente}/adiestradores/{idAdiestrador}/email:
+ *  post:
+ *    summary: Enviar un email al adiestrador
+ *    tags:
+ *      - clientes
+ *    parameters:
+ *      - in: path
+ *        name: "idAdiestrador"
+ *        description: el id del adiestrador
+ *        schema:
+ *          type: string
+ *        required: true
+ *      - in: path
+ *        name: "idCliente"
+ *        description: el id del cliente
+ *        schema:
+ *          type: string
+ *        required: true
+ *    security:
+ *      - bearerAuth: []
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: "#/components/schemas/Mensaje"
+ *    responses:
+ *      201:
+ *        description: "success"
+ *      422:
+ *        $ref: "#/components/responses/InvalidEntryError"
+ */
+router.post(
+  '/:idCliente/adiestradores/:idAdiestrador/email',
+  verifyCliente,
+  clienteController.emailAdiestrador
+);
+
 module.exports = router;
