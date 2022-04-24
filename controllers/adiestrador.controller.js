@@ -5,6 +5,7 @@ const adiestradorService = require('../services/adiestrador.service');
 const clienteService = require('../services/cliente.service');
 const eventoService = require('../services/evento.service');
 const emailService = require('../services/email.service');
+const userService = require('../services/user.service');
 const { AUTHORITIES } = require('../util/auth.config');
 const { decodeToken } = require('../middleware/auth');
 
@@ -165,16 +166,50 @@ exports.deleteEvento = async (req, res, next) => {
   }
 };
 
+exports.emailClient = async (req, res, next) => {
+  const adiestrador = req.adiestrador;
+  const cliente = await clienteService.findById(req.params.idCliente);
+  if (!cliente) {
+    const error = new Error('Cliente no existe');
+    error.httpStatus = 404;
+    return next(error);
+  }
+
+  try {
+    await emailService.sendPrivateEmail(
+      adiestrador,
+      cliente,
+      req.body.asunto,
+      req.body.mensaje
+    );
+    res.status(201).send();
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.sendBroadCast = async (req, res, next) => {
+  if (!req.body.asunto || !req.body.mensaje) {
+    const error = new Error('El asunto y el mensaje son obligatorios');
+    error.httpStatus = 422;
+    return next(error);
+  }
+  const adiestrador = req.adiestrador;
+  const adiestradorUser = await userService.findById(adiestrador.userId);
+
+  const clientes = await clienteService.findByAdiestrador(adiestrador);
+  const users = await userService.findByIdList(clientes.map((c) => c.userId));
+  const destinatarios = users.map((u) => u.email);
+
   const email = {
-    to: 'hannah.fromspain@gmail.com',
-    from: 'hannah.fromspain@gmail.com',
-    subject: 'I know where you train',
-    text: 'You train there!',
-    html: 'You train <a href="maps.google.com" target="_blank">here</a>!'
+    to: 'hannah.fromspai@gmail.com',
+    bcc: destinatarios,
+    from: adiestradorUser.email,
+    subject: req.body.asunto,
+    html: req.body.mensaje
   };
   emailService.sendEmail(email);
-  res.status(200).send(email);
+  res.status(201).send();
 };
 
 exports.rate = async (req, res, next) => {

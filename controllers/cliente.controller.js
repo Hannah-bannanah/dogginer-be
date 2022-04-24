@@ -2,7 +2,9 @@
 
 // import internal modules
 const clienteService = require('../services/cliente.service');
+const adiestradorService = require('../services/adiestrador.service');
 const eventoService = require('../services/evento.service');
+const emailService = require('../services/email.service');
 const { AUTHORITIES } = require('../util/auth.config');
 
 exports.findAll = async (req, res, next) => {
@@ -122,5 +124,29 @@ exports.addEvento = async (req, res, next) => {
     }
   } catch (err) {
     next(err);
+  }
+};
+
+exports.emailAdiestrador = async (req, res, next) => {
+  const cliente = req.cliente;
+  const adiestrador = await adiestradorService.findById(
+    req.params.idAdiestrador
+  );
+  if (!adiestrador) {
+    const error = new Error('Adiestrador no existe');
+    error.httpStatus = 404;
+    return next(error);
+  }
+
+  try {
+    await emailService.sendPrivateEmail(
+      cliente,
+      adiestrador,
+      req.body.asunto,
+      req.body.mensaje
+    );
+    res.status(201).send();
+  } catch (error) {
+    next(error);
   }
 };

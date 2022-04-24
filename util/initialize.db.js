@@ -26,7 +26,7 @@ const emptyDb = async () => {
 const createUsers = async () => {
   const godPwd = await bcrypt.hash('God12345', 12);
   const userGod = new User({
-    email: 'admin@admin.com',
+    email: 'admin@dogginer.com',
     password: godPwd,
     role: 'GOD'
   });
@@ -34,7 +34,7 @@ const createUsers = async () => {
   const pwd = await bcrypt.hash('Test1234', 12);
   for (let i = 1; i < 6; i++) {
     const userCliente = new User({
-      email: `cliente${i}@cliente.com`,
+      email: `cliente${i}@dogginer.com`,
       password: pwd,
       role: 'CLIENTE'
     });
@@ -45,7 +45,7 @@ const createUsers = async () => {
     });
     clientes.push(cliente);
     const userAdiestrador = new User({
-      email: `adiestrador${i}@adiestrador.com`,
+      email: `adiestrador${i}@dogginer.com`,
       password: pwd,
       role: 'ADIESTRADOR'
     });

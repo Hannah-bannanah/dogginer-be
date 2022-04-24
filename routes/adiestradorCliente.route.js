@@ -24,6 +24,7 @@ const router = express.Router({ mergeParams: true });
  *          description: el contenido del mensaje
  *       required:
  *        - asunto
+ *        - mensaje
  *       example:
  *        asunto: "Descuento"
  *        mensaje: "Usa el cupon HannahRulez para obtener un 99% de descuento en tu proximo evento"
@@ -58,6 +59,44 @@ const router = express.Router({ mergeParams: true });
  */
 router.get('', adiestradorController.fetchClientes);
 
+// email cliente
+/**
+ * @swagger
+ * /adiestradores/{idAdiestrador}/clientes/{idCliente}/email:
+ *  post:
+ *    summary: Enviar un email al cliente
+ *    tags:
+ *      - adiestradores
+ *    parameters:
+ *      - in: path
+ *        name: "idAdiestrador"
+ *        description: el id del adiestrador
+ *        schema:
+ *          type: string
+ *        required: true
+ *      - in: path
+ *        name: "idCliente"
+ *        description: el id del cliente
+ *        schema:
+ *          type: string
+ *        required: true
+ *    security:
+ *      - bearerAuth: []
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: "#/components/schemas/Mensaje"
+ *    responses:
+ *      201:
+ *        description: "success"
+ *      422:
+ *        $ref: "#/components/responses/InvalidEntryError"
+ */
+router.post('/:idCliente/email', adiestradorController.emailClient);
+
 // enviar mensaje a clientes
 /**
  * @swagger
@@ -85,6 +124,8 @@ router.get('', adiestradorController.fetchClientes);
  *    responses:
  *      201:
  *        description: "success"
+ *      422:
+ *        $ref: "#/components/responses/InvalidEntryError"
  */
 router.post('/broadcast', adiestradorController.sendBroadCast);
 

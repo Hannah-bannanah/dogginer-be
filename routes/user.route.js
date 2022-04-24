@@ -269,7 +269,7 @@ router.post('/login', userController.generateLoginToken);
  *  patch:
  *    summary: generar token y enviar email al usuario
  *    description: El usuario recibirá un email con un link que incluirá un
- *                 token generado aleatoriamente. Accediendo a ese link podrá cambiar la password
+ *                 token generado aleatoriamente.
  *    tags:
  *      - users
  *    parameters:

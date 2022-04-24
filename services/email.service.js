@@ -2,7 +2,37 @@
 
 // import internal modules
 const { sgm } = require('../util/email.config');
+const userService = require('../services/user.service');
 
+exports.sendPrivateEmail = async (emisor, destinatario, asunto, mensaje) => {
+  if (!asunto || !mensaje) {
+    const error = new Error('El asunto y el mensaje son obligatorios');
+    error.httpStatus = 422;
+    throw error;
+  }
+  // verificamos que el cliente está relacionado con el adiestrador
+  const interseccion = emisor.eventos.find((eventoCliente) => {
+    const resultado = destinatario.eventos.find((eventoAdiestrador) =>
+      eventoAdiestrador.equals(eventoCliente)
+    );
+    return !!resultado;
+  });
+  if (!interseccion) {
+    const error = new Error('Operacion no autorizada');
+    error.httpStatus = 403;
+    throw error;
+  }
+
+  const to = await userService.findById(destinatario.userId);
+  const from = await userService.findById(emisor.userId);
+  const email = {
+    to: to,
+    from: from,
+    subject: asunto,
+    html: mensaje
+  };
+  this.sendEmail(email);
+};
 exports.sendEmail = (emailData) => {
   sgm.send({
     ...emailData,
