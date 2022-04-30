@@ -70,26 +70,29 @@ const createEventos = async () => {
     const i = adiestradores.indexOf(adiestrador) + 1;
     const evento1 = new Evento({
       idAdiestrador: adiestrador._id,
-      nombre: `Evento${i}`,
+      nombre: `Evento${i} privado`,
+      descripcion: `Este es un evento privado activo`,
       fecha: `2022-06-${i}`,
       maxAforo: 10
     });
     const evento2 = new Evento({
       idAdiestrador: adiestrador._id,
-      nombre: `Evento${i} privado`,
+      nombre: `Evento${i} publico`,
+      descripcion: `Este es un evento publico activo`,
       fecha: `2022-07-${i}`,
       maxAforo: 10
     });
     const evento3 = new Evento({
       idAdiestrador: adiestrador._id,
       nombre: `Evento${i} terminado`,
+      descripcion: `Este es un evento público terminado`,
       fecha: `2021-07-${i}`,
       maxAforo: 10
     });
     await evento1.save();
     await evento2.save();
     await evento3.save();
-    evento2.invitados.push(clientes[5 - i]);
+    evento1.invitados.push(clientes[5 - i]);
     await evento2.save();
     adiestrador.eventos.push(evento1, evento2);
     eventos.push(evento1, evento2);
@@ -98,15 +101,33 @@ const createEventos = async () => {
   console.log('eventos demo cargados con exito');
 };
 
+// const registrarClientes = async () => {
+//   for (let i = 0; i < clientes.length; i++) {
+//     const cliente = clientes[i];
+//     cliente.eventos.push(eventos[i], eventos[i + 1], eventos[i + 3]);
+//     await cliente.save();
+//     const adiestrador1 = adiestradores[i];
+//     const adiestrador2 = adiestradores[4 - i];
+//     adiestrador1._ratings.push({ idCliente: cliente, score: i });
+//     adiestrador2._ratings.push({ idCliente: cliente, score: i });
+//     await adiestrador1.save();
+//     await adiestrador2.save();
+//   }
+// };
+
 const registrarClientes = async () => {
-  for (let i = 0; i < clientes.length; i++) {
-    const cliente = clientes[i];
-    cliente.eventos.push(eventos[i], eventos[i + 1], eventos[i + 3]);
+  for (const cliente of clientes) {
+    const i = clientes.indexOf(cliente);
+    cliente.eventos.push(
+      eventos[(4 - i) * 3],
+      eventos[i * 3 + 1],
+      eventos[i * 3 + 2]
+    );
     await cliente.save();
     const adiestrador1 = adiestradores[i];
     const adiestrador2 = adiestradores[4 - i];
-    adiestrador1._ratings.push({ idCliente: cliente, score: i });
-    adiestrador2._ratings.push({ idCliente: cliente, score: i });
+    adiestrador1._ratings.push({ idCliente: cliente, score: i + 1 });
+    adiestrador2._ratings.push({ idCliente: cliente, score: i + 1 });
     await adiestrador1.save();
     await adiestrador2.save();
   }

@@ -86,7 +86,9 @@ exports.update = async (req, res, next) => {
       req.params.idAdiestrador,
       updatedData
     );
-    res.status(200).send({ ...adiestradorActualizado._doc, _ratings: 0 });
+    res
+      .status(200)
+      .send({ ...adiestradorActualizado._doc, _ratings: undefined });
   } catch (err) {
     next(err);
   }
