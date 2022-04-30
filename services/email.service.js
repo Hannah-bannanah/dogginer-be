@@ -10,27 +10,28 @@ exports.sendPrivateEmail = async (emisor, destinatario, asunto, mensaje) => {
     error.httpStatus = 422;
     throw error;
   }
-  // verificamos que el cliente está relacionado con el adiestrador
-  const interseccion = emisor.eventos.find((eventoCliente) => {
-    const resultado = destinatario.eventos.find((eventoAdiestrador) =>
-      eventoAdiestrador.equals(eventoCliente)
-    );
-    return !!resultado;
-  });
-  if (!interseccion) {
-    const error = new Error('Operacion no autorizada');
-    error.httpStatus = 403;
-    throw error;
-  }
+  // // verificamos que el cliente está relacionado con el adiestrador
+  // const interseccion = emisor.eventos.find((eventoCliente) => {
+  //   const resultado = destinatario.eventos.find((eventoAdiestrador) =>
+  //     eventoAdiestrador.equals(eventoCliente)
+  //   );
+  //   return !!resultado;
+  // });
+  // if (!interseccion) {
+  //   const error = new Error('Operacion no autorizada');
+  //   error.httpStatus = 403;
+  //   throw error;
+  // }
 
   const to = await userService.findById(destinatario.userId);
   const from = await userService.findById(emisor.userId);
   const email = {
-    to: to,
-    from: from,
+    to: to.email,
+    from: from.email,
     subject: asunto,
     html: mensaje
   };
+  console.log('sending email', email);
   this.sendEmail(email);
 };
 exports.sendEmail = (emailData) => {
@@ -38,6 +39,7 @@ exports.sendEmail = (emailData) => {
     ...emailData,
     from: 'hannah.fromspain@gmail.com'
   });
+  console.log('email sent', emailData);
 };
 
 exports.sendPwdResetEmail = (user) => {

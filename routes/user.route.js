@@ -162,6 +162,11 @@ router.post('', userController.create);
  *                idCliente:
  *                  description: el idCliente del usuario en caso de ser cliente
  *                  type: string
+ *              required:
+ *               - token
+ *               - validity
+ *               - userId
+ *               - role
  *      401:
  *        $ref: "#/components/responses/UnauthorizedError"
  */

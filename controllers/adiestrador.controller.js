@@ -178,6 +178,19 @@ exports.emailClient = async (req, res, next) => {
   }
 
   try {
+    // verificamos que el cliente está relacionado con el adiestrador
+    const interseccion = cliente.eventos.find((eventoCliente) => {
+      const resultado = adiestrador.eventos.find((eventoAdiestrador) =>
+        eventoAdiestrador.equals(eventoCliente)
+      );
+      return !!resultado;
+    });
+    if (!interseccion) {
+      const error = new Error('Operacion no autorizada');
+      error.httpStatus = 403;
+      throw error;
+    }
+
     await emailService.sendPrivateEmail(
       adiestrador,
       cliente,
