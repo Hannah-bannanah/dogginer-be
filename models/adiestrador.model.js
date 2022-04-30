@@ -36,22 +36,27 @@ const adiestradorSchemaDetails = {
       },
       score: { type: Number, required: true }
     }
-  ]
+  ],
+  rating: { type: Number, default: calculateRating(this._ratings) }
 };
 
 const adiestradorSchema = new Schema(adiestradorSchemaDetails, {
   strictQuery: false
 });
 
-adiestradorSchema.virtual('rating').get(function () {
-  if (!this._ratings.length) return null;
-  return (
-    this._ratings.map((r) => r.score).reduce((sum, val) => sum + val) /
-    this._ratings.length
-  );
+adiestradorSchema.pre('save', function () {
+  if (this._ratings && this._ratings.length) {
+    this.rating = calculateRating(this._ratings);
+  }
 });
 
-adiestradorSchema.set('toObject', { virtuals: true });
+// eslint-disable-next-line space-before-function-paren
+function calculateRating(ratings) {
+  if (!ratings || !ratings.length) return null;
+  return (
+    ratings.map((r) => r.score).reduce((sum, val) => sum + val) / ratings.length
+  );
+}
 
 // create model
 const adiestradorModel = mongoose.model(COLLECTION_NAME, adiestradorSchema);

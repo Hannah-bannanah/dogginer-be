@@ -140,7 +140,7 @@ exports.getRating = async (idAdiestrador) => {
  */
 exports.rate = async (idAdiestrador, rating) => {
   // comprobamos el rango del rating
-  if (rating.score > 5 || rating.score < 0) {
+  if (rating.score > 5 || rating.score < 1) {
     const error = new Error('Score fuera del rango permitido');
     error.httpStatus = 422;
     throw error;
@@ -172,9 +172,6 @@ exports.rate = async (idAdiestrador, rating) => {
     );
 
     adiestrador._ratings.push(rating);
-    adiestrador.rating =
-      adiestrador._ratings.map((r) => r.score).reduce((sum, val) => sum + val) /
-      adiestrador._ratings.length;
     await adiestrador.save();
   } else {
     const error = new Error('Cliente no tiene historial con el adiestrador');

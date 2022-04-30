@@ -15,7 +15,7 @@ const eventoSchemaDetails = {
     required: true
   },
   nombre: { type: String, required: true },
-  descripcion: String,
+  descriction: String,
   fecha: { type: Date, required: true },
   maxAforo: Number,
   imageUrl: { type: String, default: 'https://picsum.photos/id/357/300' },
