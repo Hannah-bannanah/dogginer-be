@@ -93,9 +93,9 @@ const createEventos = async () => {
     await evento2.save();
     await evento3.save();
     evento1.invitados.push(clientes[5 - i]);
-    await evento2.save();
-    adiestrador.eventos.push(evento1, evento2);
-    eventos.push(evento1, evento2);
+    await evento1.save();
+    adiestrador.eventos.push(evento1, evento2, evento3);
+    eventos.push(evento1, evento2, evento3);
     await adiestrador.save();
   }
   console.log('eventos demo cargados con exito');

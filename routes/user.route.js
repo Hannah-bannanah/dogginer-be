@@ -109,6 +109,8 @@ router.post('', userController.create);
  * /users/login:
  *  post:
  *    summary: generar token de login
+ *    description: al introducir un email y password valido,
+ *      devuelve un token de autenticacion, el tiempo de validez, el id de usuario, su rol y su id de adiestrador o de cliente
  *    tags:
  *      - users
  *    security:
@@ -132,8 +134,8 @@ router.post('', userController.create);
  *             - email
  *             - password
  *            example:
- *              email: "hannah@bannanah.com"
- *              password: "secreta"
+ *              email: "cliente1@dogginer.com"
+ *              password: "Test1234"
  *    responses:
  *      200:
  *        description: "login procesado con exito"
@@ -150,6 +152,15 @@ router.post('', userController.create);
  *                  type: number
  *                userId:
  *                  description: id del usuario
+ *                  type: string
+ *                role:
+ *                  description: rol del usuario
+ *                  type: string
+ *                idAdiestrador:
+ *                  description: el idAdiestrador del usuario en caso de ser adiestrador
+ *                  type: string
+ *                idCliente:
+ *                  description: el idCliente del usuario en caso de ser cliente
  *                  type: string
  *      401:
  *        $ref: "#/components/responses/UnauthorizedError"

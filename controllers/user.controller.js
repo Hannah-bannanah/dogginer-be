@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 
 // import internal modules
 const userService = require('../services/user.service');
+const adiestradorService = require('../services/adiestrador.service');
+const clienteService = require('../services/cliente.service');
 const emailService = require('../services/email.service');
 const { JWT_PASSPHRASE, AUTHORITIES } = require('../util/auth.config');
 
@@ -81,6 +83,7 @@ exports.generateLoginToken = async (req, res, next) => {
   const user = await userService.findByEmail(req.body.email);
   if (user._id) {
     const loginValido = await bcrypt.compare(req.body.password, user.password);
+    const response = {};
     if (loginValido) {
       const token = jwt.sign(
         {
@@ -91,9 +94,19 @@ exports.generateLoginToken = async (req, res, next) => {
         JWT_PASSPHRASE,
         { expiresIn: '1h' }
       );
-      return res
-        .status(200)
-        .send({ token: token, validity: 3600, userId: user._id });
+      response.token = token;
+      response.validity = 3600;
+      response.role = user.role;
+      response.userId = user._id;
+      if (user.role === AUTHORITIES.ADIESTRADOR) {
+        const adiestrador = await adiestradorService.findByUserId(user._id);
+        response.idAdiestrador = adiestrador._id;
+      }
+      if (user.role === AUTHORITIES.CLIENTE) {
+        const cliente = await clienteService.findByUserId(user._id);
+        response.idCliente = cliente._id;
+      }
+      return res.status(200).send(response);
     }
   }
 
