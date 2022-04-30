@@ -207,14 +207,14 @@ router.patch('/:idCliente', isAuthenticated, clienteController.update);
  *      - clientes
  *    parameters:
  *      - in: path
- *        name: "idAdiestrador"
- *        description: el id del adiestrador
+ *        name: "idCliente"
+ *        description: el id del cliente
  *        schema:
  *          type: string
  *        required: true
  *      - in: path
- *        name: "idCliente"
- *        description: el id del cliente
+ *        name: "idAdiestrador"
+ *        description: el id del adiestrador
  *        schema:
  *          type: string
  *        required: true

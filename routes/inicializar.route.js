@@ -46,7 +46,7 @@ router.post('', async (req, res, next) => {
   if (req.body.inicializar && req.body.seguro && req.body.dbname === DBNAME) {
     try {
       await initializeDb();
-      res.status(201).send('bbdd inicializada con exito');
+      res.status(201).send();
     } catch (err) {
       next(err);
     }
