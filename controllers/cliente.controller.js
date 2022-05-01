@@ -16,7 +16,7 @@ exports.findById = async (req, res, next) => {
   try {
     const cliente = await clienteService.findById(req.params.idCliente);
     if (
-      req.requesterData.userId !== cliente.userId &&
+      !cliente.userId.equals(req.requesterData.userId) &&
       req.requesterData.role !== AUTHORITIES.GOD
     ) {
       const error = new Error('Unauthorized');
@@ -100,9 +100,7 @@ exports.cancelarEvento = async (req, res, next) => {
       req.cliente._id
     );
     const clienteActualizado = await clienteService.findById(req.cliente._id);
-    const eventosCliente = eventoService.findByIdList(
-      clienteActualizado.eventos
-    );
+    const eventosCliente = eventoService.findByCliente(clienteActualizado);
     res.status(200).send(eventosCliente);
   } catch (err) {
     next(err);

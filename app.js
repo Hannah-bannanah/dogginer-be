@@ -29,11 +29,14 @@ app.use(
   swaggerUI.serve,
   swaggerUI.setup(swaggerJsDoc(SWAGGERSPEC))
 );
-app.use(
-  cors({
-    origin: '*'
-  })
-);
+
+// const options = {
+//   origin: '*',
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//   preflightContinue: false,
+//   optionsSuccessStatus: 204
+// };
+app.use(cors());
 
 // define routers
 app.use('/users', userRouter);
