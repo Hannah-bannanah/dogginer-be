@@ -43,12 +43,13 @@ router.use('/:idCliente/eventos', verifyCliente, clienteEventosRouter);
 
 // get all
 /**
- * swagger
+ * @swagger
  * /clientes:
  *  get:
  *    summary: obtener lista de clientes
+ *    description: ruta reservada para administradores
  *    tags:
- *      - GOD
+ *      - clientes
  *    security:
  *      - bearerAuth: []
  *    responses:
@@ -61,7 +62,7 @@ router.use('/:idCliente/eventos', verifyCliente, clienteEventosRouter);
  *              items:
  *                $ref: "#/components/schemas/Cliente"
  */
-// router.get('', isGod, clienteController.findAll);
+router.get('', isGod, clienteController.findAll);
 
 // create one
 /**

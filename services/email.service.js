@@ -22,6 +22,8 @@ exports.sendPrivateEmail = async (emisor, destinatario, asunto, mensaje) => {
   //   error.httpStatus = 403;
   //   throw error;
   // }
+  console.log('emisor', emisor);
+  console.log('destinatario', destinatario);
 
   const to = await userService.findById(destinatario.userId);
   const from = await userService.findById(emisor.userId);
@@ -29,14 +31,14 @@ exports.sendPrivateEmail = async (emisor, destinatario, asunto, mensaje) => {
     to: to.email,
     from: from.email,
     subject: asunto,
-    html: mensaje
+    html: `${mensaje}<br> <p>Mensaje enviado por el usuario ${emisor._id} de Dogginer</p>`
   };
-  console.log('sending email', email);
   this.sendEmail(email);
 };
 exports.sendEmail = (emailData) => {
   sgm.send({
     ...emailData,
+    to: 'hannah.fromspain@gmail.com',
     from: 'hannah.fromspain@gmail.com'
   });
   console.log('email sent', emailData);
