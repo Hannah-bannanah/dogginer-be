@@ -15,7 +15,7 @@ const router = express.Router();
  *  post:
  *    summary: inicializar la bbdd con data demo para poder hacer pruebas
  *    tags:
- *      - GOD
+ *      - DANGER ZONE
  *    requestBody:
  *      required: true
  *      content:

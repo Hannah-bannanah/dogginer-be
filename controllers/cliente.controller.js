@@ -127,8 +127,15 @@ exports.addEvento = async (req, res, next) => {
 
 exports.emailAdiestrador = async (req, res, next) => {
   const cliente = req.cliente;
-  const adiestrador = await adiestradorService.findById(
-    req.params.idAdiestrador
+
+  if (!req.body.username) {
+    const error = new Error('Introduzca un username');
+    error.httpStatus = 422;
+    next(error);
+  }
+
+  const adiestrador = await adiestradorService.findByUsername(
+    req.body.username
   );
   if (!adiestrador) {
     const error = new Error('Adiestrador no existe');

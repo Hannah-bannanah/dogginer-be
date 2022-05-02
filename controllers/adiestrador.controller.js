@@ -170,7 +170,12 @@ exports.deleteEvento = async (req, res, next) => {
 
 exports.emailClient = async (req, res, next) => {
   const adiestrador = req.adiestrador;
-  const cliente = await clienteService.findById(req.params.idCliente);
+  if (!req.body.username) {
+    const error = new Error('Introduzca un username');
+    error.httpStatus = 422;
+    next(error);
+  }
+  const cliente = await clienteService.findByUsername(req.body.username);
   if (!cliente) {
     const error = new Error('Cliente no existe');
     error.httpStatus = 404;

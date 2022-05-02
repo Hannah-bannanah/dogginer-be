@@ -22,16 +22,16 @@ exports.sendPrivateEmail = async (emisor, destinatario, asunto, mensaje) => {
   //   error.httpStatus = 403;
   //   throw error;
   // }
-  console.log('emisor', emisor);
-  console.log('destinatario', destinatario);
 
   const to = await userService.findById(destinatario.userId);
   const from = await userService.findById(emisor.userId);
+  console.log('to', to);
+  console.log('from', from);
   const email = {
     to: to.email,
     from: from.email,
     subject: asunto,
-    html: `${mensaje}<br> <p>Mensaje enviado por el usuario ${emisor._id} de Dogginer</p>`
+    html: `${mensaje}<br> <p>Mensaje enviado por el usuario ${to.username} de Dogginer</p>`
   };
   this.sendEmail(email);
 };

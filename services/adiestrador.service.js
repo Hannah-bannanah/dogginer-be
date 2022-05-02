@@ -30,6 +30,25 @@ exports.findById = async (idAdiestrador) => {
 };
 
 /**
+ * Busca un adiestrador por el id de la cuenta de usuario asociada
+ * @param {String} userId
+ * @returns el documento de adiestrador, un objeto vacio si no existe
+ */
+exports.findByUserId = async (userId) => {
+  return await Adiestrador.findOne({ userId: userId });
+};
+
+/**
+ * Busca un adiestrador por el username de la cuenta de usuario asociada
+ * @param {String} username
+ * @returns el objeto cliente si existe, un objeto vacio si no
+ */
+exports.findByUsername = async (username) => {
+  const user = await userService.findByUsername(username);
+  return user._id ? await Adiestrador.findOne({ userId: user._id }) : {};
+};
+
+/**
  * Crea un nuevo adiestrador en la bbdd
  * @param {Object} adiestradorData los datos del adiestrador
  * @returns el objeto adiestrador creado
@@ -105,15 +124,6 @@ exports.removeEvento = async (evento) => {
     { _id: evento.idAdiestrador },
     { $pull: { eventos: { _id: evento._id } } }
   );
-};
-
-/**
- * Busca un adiestrador por el id de la cuenta de usuario asociada
- * @param {String} userId
- * @returns el documento de adiestrador, un objeto vacio si no existe
- */
-exports.findByUserId = async (userId) => {
-  return await Adiestrador.findOne({ userId: userId });
 };
 
 /**

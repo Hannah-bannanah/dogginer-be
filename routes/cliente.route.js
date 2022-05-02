@@ -201,7 +201,7 @@ router.patch('/:idCliente', isAuthenticated, clienteController.update);
 // email cliente
 /**
  * @swagger
- * /clientes/{idCliente}/adiestradores/{idAdiestrador}/email:
+ * /clientes/{idCliente}/adiestradores/email:
  *  post:
  *    summary: Enviar un email al adiestrador
  *    tags:
@@ -210,12 +210,6 @@ router.patch('/:idCliente', isAuthenticated, clienteController.update);
  *      - in: path
  *        name: "idCliente"
  *        description: el id del cliente
- *        schema:
- *          type: string
- *        required: true
- *      - in: path
- *        name: "idAdiestrador"
- *        description: el id del adiestrador
  *        schema:
  *          type: string
  *        required: true
@@ -235,7 +229,7 @@ router.patch('/:idCliente', isAuthenticated, clienteController.update);
  *        $ref: "#/components/responses/InvalidEntryError"
  */
 router.post(
-  '/:idCliente/adiestradores/:idAdiestrador/email',
+  '/:idCliente/adiestradores/email',
   verifyCliente,
   clienteController.emailAdiestrador
 );

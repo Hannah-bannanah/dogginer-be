@@ -9,6 +9,15 @@ const Schema = mongoose.Schema;
 const COLLECTION_NAME = 'User';
 
 const userSchemaDetails = {
+  username: {
+    type: String,
+    unique: true,
+    trim: true,
+    required: true,
+    default: function () {
+      return this.email;
+    }
+  },
   email: {
     type: String,
     unique: true,
