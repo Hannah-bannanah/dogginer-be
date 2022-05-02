@@ -209,7 +209,7 @@ router.get('/:userId', isGod, userController.findById);
  *  delete:
  *    summary: eliminar un user
  *    tags:
- *      - GOD
+ *      - users
  *    description: ruta reservada para administradores
  *    security:
  *      - bearerAuth: []
@@ -235,7 +235,7 @@ router.delete('/:userId', isGod, userController.deleteById);
  *  patch:
  *    summary: actualizar un user
  *    tags:
- *      - GOD
+ *      - users
  *    description: ruta reservada para administradores
  *    security:
  *      - bearerAuth: []

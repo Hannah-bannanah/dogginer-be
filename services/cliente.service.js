@@ -29,6 +29,25 @@ exports.findById = async (idCliente) => {
 };
 
 /**
+ * Busca un cliente por el id de la cuenta de usuario asociada
+ * @param {String} userId
+ * @returns el documento de cliente, un objeto vacio si no existe
+ */
+exports.findByUserId = async (userId) => {
+  return await Cliente.findOne({ userId: userId });
+};
+
+/**
+ * Busca un cliente por el username de la cuenta de usuario asociada
+ * @param {String} username
+ * @returns el objeto cliente si existe, un objeto vacio si no
+ */
+exports.findByUsername = async (username) => {
+  const user = await userService.findByUsername(username);
+  return user._id ? await Cliente.findOne({ userId: user._id }) : {};
+};
+
+/**
  * Crea un nuevo cliente en la bbdd
  * @param {Object} clienteData los datos del cliente
  * @returns el objeto cliente creado
@@ -111,15 +130,6 @@ exports.cancelarAsistencia = async (idEvento, idCliente) => {
     { _id: idCliente },
     { $pull: { eventos: { _id: idEvento } } }
   );
-};
-
-/**
- * Busca un cliente por el id de la cuenta de usuario asociada
- * @param {String} userId
- * @returns el documento de cliente, un objeto vacio si no existe
- */
-exports.findByUserId = async (userId) => {
-  return await Cliente.findOne({ userId: userId });
 };
 
 /**

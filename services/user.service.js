@@ -24,7 +24,7 @@ exports.findAll = async () => {
 exports.findById = async (userId) => {
   let user;
   if (mongoose.Types.ObjectId.isValid(userId)) {
-    user = await User.findById(userId).select({ email: 1, role: 1 });
+    user = await User.findById(userId).select({ password: 0 });
   }
   return user || {};
 };
@@ -37,6 +37,15 @@ exports.findById = async (userId) => {
 exports.findByEmail = async (email) => {
   const user = await User.findOne({ email: email.toLowerCase() });
   return user || {};
+};
+
+/**
+ * Busca por username
+ * @param {String} username
+ * @returns el documento del user buscado o un objeto vacio si no existe
+ */
+exports.findByUsername = async (username) => {
+  return await User.findOne({ username: username }).select({ password: 0 });
 };
 
 /**
