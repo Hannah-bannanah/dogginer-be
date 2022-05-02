@@ -62,7 +62,7 @@ router.use('/:idCliente/eventos', verifyCliente, clienteEventosRouter);
  *              items:
  *                $ref: "#/components/schemas/Cliente"
  */
-router.get('', isGod, clienteController.findAll);
+router.get('', isAuthenticated, clienteController.findAll);
 
 // create one
 /**

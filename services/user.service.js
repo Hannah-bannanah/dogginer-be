@@ -151,3 +151,11 @@ exports.findByIdList = async (userIds) => {
   const users = User.find({ _id: { $in: userIds } }).select({ password: 0 });
   return users || [];
 };
+
+exports.findUsernames = async (userIds) => {
+  const users = User.find({ _id: { $in: userIds } }).select({
+    _id: 0,
+    username: 1
+  });
+  return users || [];
+};
