@@ -12,7 +12,7 @@ exports.findAll = async (req, res, next) => {
     const clientes = await clienteService.findAll();
     res.status(200).send(clientes);
   } else if (req.requesterData.role === AUTHORITIES.ADIESTRADOR) {
-    const usernames = await clienteService.findUsernames();
+    const usernames = await clienteService.getUsernames();
     res.status(200).send(usernames);
   } else {
     const error = new Error('Unauthorized');

@@ -20,11 +20,27 @@ exports.findAll = async () => {
  * Devuelve una lista de todos los usernames de clientes
  * @returns la lista de usernames
  */
-exports.findUsernames = async () => {
-  const clientes = await Cliente.find();
-  const userIds = clientes.map((c) => c.userId);
-  const usernames = await userService.findUsernames(userIds);
-  return usernames;
+exports.getUsernames = async () => {
+  const clientes = await Cliente.aggregate([
+    {
+      $lookup: {
+        from: 'users', // collection name in db
+        localField: 'userId',
+        foreignField: '_id',
+        as: 'username'
+      }
+    },
+    {
+      $set: {
+        username: { $arrayElemAt: ['$username.username', 0] }
+      }
+    },
+    {
+      $project: { username: 1 }
+    }
+  ]);
+
+  return clientes;
 };
 
 /**

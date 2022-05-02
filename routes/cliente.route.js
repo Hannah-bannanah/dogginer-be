@@ -4,7 +4,7 @@ const express = require('express');
 // import internal modules
 const clienteController = require('../controllers/cliente.controller');
 const clienteEventosRouter = require('../routes/clienteEvento.route');
-const { isAuthenticated, verifyCliente, isGod } = require('../middleware/auth');
+const { isAuthenticated, verifyCliente } = require('../middleware/auth');
 
 // initialize router
 const router = express.Router();

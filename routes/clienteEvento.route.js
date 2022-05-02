@@ -83,7 +83,7 @@ router.get('', clienteController.fetchEventos);
  *      422:
  *        $ref: "#/components/responses/InvalidEntryError"
  */
-router.put('', clienteController.addEvento);
+router.patch('', clienteController.addEvento);
 
 // delete evento
 /**

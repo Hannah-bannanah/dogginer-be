@@ -38,7 +38,6 @@ exports.sendPrivateEmail = async (emisor, destinatario, asunto, mensaje) => {
 exports.sendEmail = (emailData) => {
   sgm.send({
     ...emailData,
-    to: 'hannah.fromspain@gmail.com',
     from: 'hannah.fromspain@gmail.com'
   });
   console.log('email sent', emailData);
