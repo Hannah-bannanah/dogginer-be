@@ -16,7 +16,6 @@ const router = express.Router({ mergeParams: true });
  *    summary: obtener lista de eventos del adiestrador
  *    tags:
  *      - adiestradores
- *      - eventos
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -48,7 +47,6 @@ router.get('', adiestradorController.fetchEventos);
  *    summary: crear un nuevo evento
  *    tags:
  *      - adiestradores
- *      - eventos
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -93,7 +91,6 @@ router.post('', verifyAdiestrador, adiestradorController.createEvento);
  *    summary: actualizar un evento
  *    tags:
  *      - adiestradores
- *      - eventos
  *    security:
  *      - bearerAuth: []
  *    description: El evento se actualizará con los campos incluidos en el responseBody
@@ -143,7 +140,6 @@ router.patch(
  *    summary: eliminar un evento
  *    tags:
  *      - adiestradores
- *      - eventos
  *    security:
  *      - bearerAuth: []
  *    parameters:

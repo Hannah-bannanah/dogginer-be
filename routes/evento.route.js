@@ -3,7 +3,7 @@ const express = require('express');
 
 // import internal modules
 const eventoController = require('../controllers/evento.controller');
-// const { isGod } = require('../middleware/auth');
+const { isGod } = require('../middleware/auth');
 
 // initialize router
 const router = express.Router();
@@ -77,10 +77,11 @@ router.get('', eventoController.findAll);
 
 // create one
 /**
- * swagger
+ * @swagger
  * /eventos:
  *  post:
  *    summary: crear un nuevo evento
+ *    descripcion: ruta reservada para administradores
  *    tags:
  *      - eventos
  *    security:
@@ -108,8 +109,9 @@ router.get('', eventoController.findAll);
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'
  */
-// router.post('', isGod, eventoController.create);
+router.post('', isGod, eventoController.create);
 
+// find by id
 /**
  * @swagger
  * /eventos/{idEvento}:
@@ -141,10 +143,11 @@ router.get('/:idEvento', eventoController.findById);
 
 // delete by id
 /**
- * swagger
+ * @swagger
  * /eventos/{idEvento}:
  *  delete:
  *    summary: eliminar un evento
+ *    descripcion: ruta reservada para administradores
  *    tags:
  *      - eventos
  *    security:
@@ -160,13 +163,14 @@ router.get('/:idEvento', eventoController.findById);
  *      204:
  *        description: "evento eliminado con exito"
  */
-// router.delete('/:idEvento', isGod, eventoController.deleteById);
+router.delete('/:idEvento', isGod, eventoController.deleteById);
 
 /**
- * swagger
+ * @swagger
  * /eventos/{idEvento}:
  *  patch:
  *    summary: actualizar un evento
+ *    descripcion: ruta reservada para administradores
  *    tags:
  *      - eventos
  *    security:
@@ -199,6 +203,6 @@ router.get('/:idEvento', eventoController.findById);
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'
  */
-// router.patch('/:idEvento', isGod, eventoController.update);
+router.patch('/:idEvento', isGod, eventoController.update);
 
 module.exports = router;

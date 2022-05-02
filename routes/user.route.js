@@ -3,7 +3,7 @@ const express = require('express');
 
 // import internal modules
 const userController = require('../controllers/user.controller');
-// const { isAuthenticated } = require('../middleware/auth');
+const { isGod } = require('../middleware/auth');
 
 // initialize router
 const router = express.Router();
@@ -28,18 +28,18 @@ const router = express.Router();
  *           description: '"CLIENTE", "ADIESTRADOR", "GOD"'
  *       example:
  *         _id: "625559613d9f4a9c59441033"
- *         email: "hannah@bannanah.com"
+ *         email: "cliente1@dogginer.com"
  *         role: "CLIENTE"
  */
 
 // get all
 /**
- * swagger
+ * @swagger
  * /users:
  *  get:
  *    summary: obtener lista de users
  *    tags:
- *      - GOD
+ *      - users
  *    description: ruta reservada para administradores
  *    security:
  *      - bearerAuth: []
@@ -53,7 +53,7 @@ const router = express.Router();
  *              items:
  *                $ref: "#/components/schemas/User"
  */
-// router.get('', userController.findAll);
+router.get('', isGod, userController.findAll);
 
 // create one
 /**
@@ -172,13 +172,14 @@ router.post('', userController.create);
  */
 router.post('/login', userController.generateLoginToken);
 
+// find by Id
 /**
- * swagger
+ * @swagger
  * /users/{userId}:
  *  get:
  *    summary: buscar un user por id
  *    tags:
- *      - GOD
+ *      - users
  *    description: ruta reservada para administradores
  *    security:
  *      - bearerAuth: []
@@ -199,12 +200,11 @@ router.post('/login', userController.generateLoginToken);
  *              $ref: "#/components/schemas/User"
  *
  */
-// find by id
-// router.get('/:userId', isAuthenticated, userController.findById);
+router.get('/:userId', isGod, userController.findById);
 
 // delete by id
 /**
- * swagger
+ * @swagger
  * /users/{userId}:
  *  delete:
  *    summary: eliminar un user
@@ -226,11 +226,11 @@ router.post('/login', userController.generateLoginToken);
  *      401:
  *        $ref: "#/components/responses/UnauthorizedError"
  */
-// router.delete('/:userId', isGod, userController.deleteById);
+router.delete('/:userId', isGod, userController.deleteById);
 
 // update
 /**
- * swagger
+ * @swagger
  * /users/{userId}:
  *  patch:
  *    summary: actualizar un user
@@ -276,7 +276,7 @@ router.post('/login', userController.generateLoginToken);
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'
  */
-// router.patch('/:userId', isGod, userController.update);
+router.patch('/:userId', isGod, userController.update);
 
 // get password reset token
 /**
