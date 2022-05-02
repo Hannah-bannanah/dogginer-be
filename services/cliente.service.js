@@ -17,6 +17,17 @@ exports.findAll = async () => {
 };
 
 /**
+ * Devuelve una lista de todos los usernames de clientes
+ * @returns la lista de usernames
+ */
+exports.findUsernames = async () => {
+  const clientes = await Cliente.find();
+  const userIds = clientes.map((c) => c.userId);
+  const usernames = await userService.findUsernames(userIds);
+  return usernames;
+};
+
+/**
  * Busca un cliente por id
  * @param {String} idCliente el id de cliente
  * @returns el documento del cliente buscado, un objeto vacio si no existe

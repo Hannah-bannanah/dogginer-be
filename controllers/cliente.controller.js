@@ -8,8 +8,17 @@ const emailService = require('../services/email.service');
 const { AUTHORITIES } = require('../util/auth.config');
 
 exports.findAll = async (req, res, next) => {
-  const clientes = await clienteService.findAll();
-  res.status(200).send(clientes);
+  if (req.requesterData.role === AUTHORITIES.GOD) {
+    const clientes = await clienteService.findAll();
+    res.status(200).send(clientes);
+  } else if (req.requesterData.role === AUTHORITIES.ADIESTRADOR) {
+    const usernames = await clienteService.findUsernames();
+    res.status(200).send(usernames);
+  } else {
+    const error = new Error('Unauthorized');
+    error.httpStatus = 403;
+    return next(error);
+  }
 };
 
 exports.findById = async (req, res, next) => {
@@ -128,14 +137,14 @@ exports.addEvento = async (req, res, next) => {
 exports.emailAdiestrador = async (req, res, next) => {
   const cliente = req.cliente;
 
-  if (!req.body.username) {
-    const error = new Error('Introduzca un username');
+  if (!req.body.destinatario) {
+    const error = new Error('Introduzca un destinatario');
     error.httpStatus = 422;
     next(error);
   }
 
   const adiestrador = await adiestradorService.findByUsername(
-    req.body.username
+    req.body.destinatario
   );
   if (!adiestrador) {
     const error = new Error('Adiestrador no existe');
