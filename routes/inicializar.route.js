@@ -1,5 +1,6 @@
 // import 3rd party modules
 const express = require('express');
+const { isGod } = require('../middleware/auth');
 
 // import internal modules
 const { DBNAME } = require('../util/db.config');
@@ -16,6 +17,8 @@ const router = express.Router();
  *    summary: inicializar la bbdd con data demo para poder hacer pruebas
  *    tags:
  *      - DANGER ZONE
+ *    security:
+ *      - bearerAuth: []
  *    requestBody:
  *      required: true
  *      content:
@@ -42,7 +45,7 @@ const router = express.Router();
  *      201:
  *        description: "bbdd inicializada con exito"
  */
-router.post('', async (req, res, next) => {
+router.post('', isGod, async (req, res, next) => {
   if (req.body.inicializar && req.body.seguro && req.body.dbname === DBNAME) {
     try {
       await initializeDb();
