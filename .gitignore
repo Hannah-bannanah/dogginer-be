@@ -1,7 +1,5 @@
 ### Sensitive files ###
-util/db.config.js
-util/auth.config.js
-util/email.config.js
+nodemon.json
 
 ### Config files and directories
 .prettierrc.json

@@ -32,7 +32,6 @@ exports.findById = async (req, res, next) => {
     const evento = await eventoService.findById(req.params.idEvento, userData);
     res.status(200).send(evento);
   } catch (err) {
-    console.log(err);
     next(err);
   }
 };

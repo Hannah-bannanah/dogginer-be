@@ -1,0 +1,8 @@
+{
+  "env": {
+    "MONGO_PWD": "<password>",
+    "MONGO_USR": "<user>",
+    "JWT_PASSPHRASE": "<passphrase>",
+    "SENDGRIDAPIKEY": "<apikey>"
+  }
+}

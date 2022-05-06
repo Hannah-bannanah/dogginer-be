@@ -2,7 +2,7 @@
 const jwt = require('jsonwebtoken');
 
 // import internal modules
-const { JWT_PASSPHRASE, AUTHORITIES } = require('../util/auth.config');
+const { AUTHORITIES } = require('../util/auth.config');
 const adiestradorService = require('../services/adiestrador.service');
 const clienteService = require('../services/cliente.service');
 const userService = require('../services/user.service');
@@ -10,7 +10,7 @@ const userService = require('../services/user.service');
 const decodeToken = (req) => {
   try {
     const token = req.headers.authorization.split(' ')[1]; // esperamos la keywod "Bearer " antes del token
-    const decodedToken = jwt.verify(token, JWT_PASSPHRASE);
+    const decodedToken = jwt.verify(token, process.env.JWT_PASSPHRASE);
     req.requesterData = {
       userId: decodedToken.userId,
       role: decodedToken.role
