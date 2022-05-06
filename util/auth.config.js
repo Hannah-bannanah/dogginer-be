@@ -4,6 +4,4 @@ const AUTHORITIES = {
   CLIENTE: 'CLIENTE'
 };
 
-const JWT_PASSPHRASE = '<passphrase>';
-
-module.exports = { AUTHORITIES, JWT_PASSPHRASE };
+module.exports = { AUTHORITIES };

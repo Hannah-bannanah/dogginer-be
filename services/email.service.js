@@ -25,8 +25,6 @@ exports.sendPrivateEmail = async (emisor, destinatario, asunto, mensaje) => {
 
   const to = await userService.findById(destinatario.userId);
   const from = await userService.findById(emisor.userId);
-  console.log('to', to);
-  console.log('from', from);
   const email = {
     to: to.email,
     from: from.email,
@@ -40,7 +38,6 @@ exports.sendEmail = (emailData) => {
     ...emailData,
     from: 'hannah.fromspain@gmail.com'
   });
-  console.log('email sent', emailData);
 };
 
 exports.sendPwdResetEmail = (user) => {

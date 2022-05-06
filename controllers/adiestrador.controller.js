@@ -25,7 +25,6 @@ exports.findById = async (req, res, next) => {
     );
     res.status(200).send({ ...adiestrador._doc, _ratings: undefined });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 };

@@ -7,7 +7,7 @@ const userService = require('../services/user.service');
 const adiestradorService = require('../services/adiestrador.service');
 const clienteService = require('../services/cliente.service');
 const emailService = require('../services/email.service');
-const { JWT_PASSPHRASE, AUTHORITIES } = require('../util/auth.config');
+const { AUTHORITIES } = require('../util/auth.config');
 
 exports.findAll = async (req, res, next) => {
   const users = await userService.findAll();
@@ -91,7 +91,7 @@ exports.generateLoginToken = async (req, res, next) => {
           email: user.email,
           role: user.role
         },
-        JWT_PASSPHRASE,
+        process.env.JWT_PASSPHRASE,
         { expiresIn: '1h' }
       );
       response.token = token;
