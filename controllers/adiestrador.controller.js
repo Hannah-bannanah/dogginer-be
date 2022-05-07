@@ -195,7 +195,7 @@ exports.emailClient = async (req, res, next) => {
       throw error;
     }
 
-    await emailService.sendPrivateEmail(
+    await emailService.sendEmail(
       adiestrador,
       cliente,
       req.body.asunto,
@@ -206,7 +206,6 @@ exports.emailClient = async (req, res, next) => {
     next(error);
   }
 };
-
 exports.sendBroadCast = async (req, res, next) => {
   if (!req.body.asunto || !req.body.mensaje) {
     const error = new Error('El asunto y el mensaje son obligatorios');
@@ -214,20 +213,20 @@ exports.sendBroadCast = async (req, res, next) => {
     return next(error);
   }
   const adiestrador = req.adiestrador;
-  const adiestradorUser = await userService.findById(adiestrador.userId);
+  // const adiestradorUser = await userService.findById(adiestrador.userId);
 
   const clientes = await clienteService.findByAdiestrador(adiestrador);
   const users = await userService.findByIdList(clientes.map((c) => c.userId));
   const destinatarios = users.map((u) => u.email);
 
-  const email = {
-    to: 'hannah.fromspai@gmail.com',
-    bcc: destinatarios,
-    from: adiestradorUser.email,
-    subject: req.body.asunto,
-    html: req.body.mensaje
-  };
-  emailService.sendEmail(email);
+  emailService.sendEmail(
+    adiestrador,
+    { email: 'dogginer@mail.com' },
+    req.body.asunto,
+    req.body.mensaje,
+    destinatarios,
+    true
+  );
   res.status(201).send();
 };
 

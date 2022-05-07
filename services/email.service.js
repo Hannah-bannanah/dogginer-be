@@ -4,40 +4,35 @@
 const { sgm } = require('../util/email.config');
 const userService = require('../services/user.service');
 
-exports.sendPrivateEmail = async (emisor, destinatario, asunto, mensaje) => {
-  if (!asunto || !mensaje) {
-    const error = new Error('El asunto y el mensaje son obligatorios');
+exports.sendEmail = async (
+  emisor,
+  destinatario,
+  asunto,
+  mensaje,
+  blindCopies,
+  isBroadcast
+) => {
+  if (!asunto || !mensaje || !destinatario) {
+    const error = new Error(
+      'El asunto, mensaje y destinatario son obligatorios'
+    );
     error.httpStatus = 422;
     throw error;
   }
-  // // verificamos que el cliente está relacionado con el adiestrador
-  // const interseccion = emisor.eventos.find((eventoCliente) => {
-  //   const resultado = destinatario.eventos.find((eventoAdiestrador) =>
-  //     eventoAdiestrador.equals(eventoCliente)
-  //   );
-  //   return !!resultado;
-  // });
-  // if (!interseccion) {
-  //   const error = new Error('Operacion no autorizada');
-  //   error.httpStatus = 403;
-  //   throw error;
-  // }
 
-  const to = await userService.findById(destinatario.userId);
+  const to = isBroadcast
+    ? destinatario
+    : await userService.findById(destinatario.userId);
   const from = await userService.findById(emisor.userId);
+  const bcc = blindCopies || undefined;
   const email = {
     to: to.email,
-    from: from.email,
+    bcc: bcc,
+    from: from.username + '@dogginer.com',
     subject: asunto,
-    html: `${mensaje}<br> <p>Mensaje enviado por el usuario ${to.username} de Dogginer</p>`
+    html: `${mensaje}<br> <p>Mensaje enviado por el usuario ${from.username} de Dogginer</p>`
   };
-  this.sendEmail(email);
-};
-exports.sendEmail = (emailData) => {
-  sgm.send({
-    ...emailData,
-    from: 'hannah.fromspain@gmail.com'
-  });
+  sgm.send(email);
 };
 
 exports.sendPwdResetEmail = (user) => {
