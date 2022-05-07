@@ -18,12 +18,43 @@ router.use(
 );
 router.use('/:idAdiestrador/eventos', adiestradorEventosRouter);
 
-// swagger schema Adiestrador
+// swagger schema AdiestradorBasico
 /**
  * @swagger
  * components:
  *   schemas:
- *     Adiestrador:
+ *     AdiestradorBasico:
+ *       type: object
+ *       description: Un adiestrador
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: el id del adiestrador
+ *         userId:
+ *          type: string
+ *          description: el id de usuario
+ *         nombre:
+ *           type: string
+ *           description: El nombre del adiestrador
+ *         bio:
+ *           type: string
+ *           description: la bio del adiestrador
+ *         imageUrl:
+ *           type: string
+ *           description: link a la foto del adiestrador
+ *       example:
+ *         userId: "6249701119292623c38f0c11"
+ *         nombre: "Xena"
+ *         bio: "La princesa guerrera"
+ *         imageUrl: "https://picsum.photos/id/237/300"
+ */
+
+// swagger schema AdiestradorCompleto
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     AdiestradorCompleto:
  *       type: object
  *       description: Un adiestrador
  *       properties:
@@ -50,14 +81,13 @@ router.use('/:idAdiestrador/eventos', adiestradorEventosRouter);
  *         rating:
  *           type: number
  *           description: la media de los ratings por parte de los clientes (entre 0 y 5)
- *       required:
- *        - userId
- *        - nombre
  *       example:
  *         userId: "6249701119292623c38f0c11"
- *         nombre: "John Doe"
- *         bio: "El mejor adiestrador de la zona"
+ *         nombre: "Xena"
+ *         bio: "La princesa guerrera"
  *         imageUrl: "https://picsum.photos/id/237/300"
+ *         eventos:
+ *           - $ref: '#/components/schemas/Evento'
  *         rating: 3
  */
 
@@ -68,7 +98,7 @@ router.use('/:idAdiestrador/eventos', adiestradorEventosRouter);
  * @swagger
  * /adiestradores:
  *  get:
- *    summary: obtener lista de adiestradores
+ *    summary: Obtener lista de adiestradores
  *    tags:
  *      - adiestradores
  *    responses:
@@ -79,7 +109,7 @@ router.use('/:idAdiestrador/eventos', adiestradorEventosRouter);
  *            schema:
  *              type: array
  *              items:
- *                $ref: "#/components/schemas/Adiestrador"
+ *                $ref: "#/components/schemas/AdiestradorCompleto"
  */
 router.get('', adiestradorController.findAll);
 
@@ -88,8 +118,8 @@ router.get('', adiestradorController.findAll);
  * @swagger
  * /adiestradores:
  *  post:
- *    summary: crear un nuevo adiestrador
- *    description: crea un nuevo adiestrador. No es posible crear la lista de eventos del adiestrador
+ *    summary: Crear un nuevo adiestrador
+ *    description: Crea un nuevo adiestrador. No es posible crear la lista de eventos del adiestrador ni inicializar el rating. Los campos userId y nombre son obligatorios.
  *    tags:
  *      - adiestradores
  *    requestBody:
@@ -98,7 +128,7 @@ router.get('', adiestradorController.findAll);
  *        application/json:
  *          schema:
  *            type: object
- *            $ref: '#/components/schemas/Adiestrador'
+ *            $ref: '#/components/schemas/AdiestradorBasico'
  *    responses:
  *      200:
  *        description: "adiestrador creado con exito"
@@ -122,7 +152,7 @@ router.post('', adiestradorController.create);
  * @swagger
  * /adiestradores/{idAdiestrador}:
  *   get:
- *    summary: buscar un adiestrador por id
+ *    summary: Buscar un adiestrador por id
  *    tags:
  *      - adiestradores
  *    description: Devuelve el adiestrador, o un objeto vacio si no se ha encontrado
@@ -140,7 +170,7 @@ router.post('', adiestradorController.create);
  *          application/json:
  *            schema:
  *              type: object
- *              $ref: "#/components/schemas/Adiestrador"
+ *              $ref: "#/components/schemas/AdiestradorCompleto"
  *
  */
 router.get('/:idAdiestrador', adiestradorController.findById);
@@ -150,7 +180,7 @@ router.get('/:idAdiestrador', adiestradorController.findById);
  * @swagger
  * /adiestradores/{idAdiestrador}:
  *  delete:
- *    summary: eliminar un adiestrador
+ *    summary: Eliminar un adiestrador
  *    description: Elimina un adiestrador de la BD. Esta accion solo esta permitida a
  *                 administradores y el propio adiestrador. El adiestrador no debe tener
  *                 eventos activos.
@@ -180,8 +210,8 @@ router.delete(
  * @swagger
  * /adiestradores/{idAdiestrador}:
  *  patch:
- *    summary: actualizar un adiestrador
- *    description: tan solo el adiestrador o un administrador podrán actualizar la información.
+ *    summary: Actualizar un adiestrador
+ *    description: Tan solo el adiestrador o un administrador podrán actualizar la información.
  *                 No se podrán actualizar mediante este end point la lista de eventos ni el rating del adiestrador.
  *    tags:
  *      - adiestradores
@@ -200,7 +230,13 @@ router.delete(
  *        application/json:
  *          schema:
  *            type: object
- *            $ref: "#/components/schemas/Adiestrador"
+ *            allOf:
+ *             - $ref: '#/components/schemas/AdiestradorBasico'
+ *            required:
+ *            example:
+ *              nombre: "Xena"
+ *              bio: "La princesa guerrera"
+ *              imageUrl: "https://picsum.photos/id/237/300"
  *    responses:
  *      200:
  *        description: "Adiestrador actualizado con exito"
@@ -221,7 +257,7 @@ router.patch('/:idAdiestrador', isAuthenticated, adiestradorController.update);
  * @swagger
  * /adiestradores/{idAdiestrador}/rating:
  *  patch:
- *    summary: evaluar a un adiestrador
+ *    summary: Evaluar a un adiestrador
  *    description: Solo clientes registrados en eventos asociados al adieastrador podrán enviar un rating.
  *                 El rating añadirá a la lista de ratings de adiestrador una entrada para el cliente y el score
  *                 enviado. En caso de que el cliente ya haya evaluado al adiestrador, se sustituirá el valor
@@ -244,6 +280,9 @@ router.patch('/:idAdiestrador', isAuthenticated, adiestradorController.update);
  *          schema:
  *            type: object
  *            properties:
+ *              idCliente:
+ *                type: string
+ *                description: el id del cliente que evalua al adiestrador
  *              score:
  *                type: number
  *                description: el valor del rating

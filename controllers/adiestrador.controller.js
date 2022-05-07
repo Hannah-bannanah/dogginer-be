@@ -95,7 +95,10 @@ exports.update = async (req, res, next) => {
 
 exports.fetchClientes = async (req, res, next) => {
   const clientes = await clienteService.findByAdiestrador(req.adiestrador);
-  res.status(200).send(clientes);
+  const usernames = await clienteService.getUsernames(
+    clientes.map((c) => c._id)
+  );
+  res.status(200).send(usernames);
 };
 
 exports.fetchEventos = async (req, res, next) => {

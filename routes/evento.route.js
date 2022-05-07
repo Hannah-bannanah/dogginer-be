@@ -13,6 +13,39 @@ const router = express.Router();
  * @swagger
  * components:
  *   schemas:
+ *     EventoBasico:
+ *       type: object
+ *       description: Un evento
+ *       properties:
+ *         nombre:
+ *           type: string
+ *           description: el nombre del evento
+ *         descripcion:
+ *           type: string
+ *           description: la descripcion del evento
+ *         fecha:
+ *           type: string
+ *           format: date-time
+ *           description: la fecha en que tiene lugar el evento
+ *         maxAforo:
+ *           type: number
+ *           descripcion: el aforo maximo del evento
+ *       required:
+ *        - nombre
+ *        - idAdiestrador
+ *        - fecha
+ *       example:
+ *         nombre: "Sesion de adiestramiento"
+ *         descripcion: "Adiestramiento basico de cachorros"
+ *         fecha: "2022-07-21T17:32:28Z"
+ *         maxAforo: 10
+ */
+
+// swagger del schema del evento
+/**
+ * @swagger
+ * components:
+ *   schemas:
  *     Evento:
  *       type: object
  *       description: Un evento
@@ -92,7 +125,7 @@ router.get('', eventoController.findAll);
  *        application/json:
  *          schema:
  *            type: object
- *            $ref: '#/components/schemas/Evento'
+ *            $ref: '#/components/schemas/EventoBasico'
  *    responses:
  *      200:
  *        description: "evento creado con exito"
@@ -189,7 +222,7 @@ router.delete('/:idEvento', isGod, eventoController.deleteById);
  *        application/json:
  *          schema:
  *            type: object
- *            $ref: '#/components/schemas/Evento'
+ *            $ref: '#/components/schemas/EventoBasico'
  *    responses:
  *      200:
  *        description: "Evento actualizado con exito"

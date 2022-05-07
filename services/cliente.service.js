@@ -17,11 +17,18 @@ exports.findAll = async () => {
 };
 
 /**
- * Devuelve una lista de todos los usernames de clientes
+ * Busca los usernames de los clientes de una lista de idCliente.
+ * Si no se incluye el parametro listaClientes, devuelve los usernames
+ * de todos los clientes
+ * @param {Array} listaClientes la lista de ids buscados
  * @returns la lista de usernames
  */
-exports.getUsernames = async () => {
-  const clientes = await Cliente.aggregate([
+exports.getUsernames = async (listaClientes) => {
+  let query = listaClientes
+    ? [{ $match: { _id: { $in: listaClientes } } }]
+    : [];
+  query = [
+    ...query,
     {
       $lookup: {
         from: 'users', // collection name in db
@@ -36,10 +43,10 @@ exports.getUsernames = async () => {
       }
     },
     {
-      $project: { username: 1 }
+      $project: { username: 1, _id: 0 }
     }
-  ]);
-
+  ];
+  const clientes = await Cliente.aggregate(query);
   return clientes;
 };
 

@@ -20,6 +20,9 @@ const router = express.Router();
  *         _id:
  *           type: string
  *           description: id del user
+ *         username:
+ *           type: string
+ *           description: username del user
  *         email:
  *           type: string
  *           description: la direccion de email del user
@@ -28,6 +31,7 @@ const router = express.Router();
  *           description: '"CLIENTE", "ADIESTRADOR", "GOD"'
  *       example:
  *         _id: "625559613d9f4a9c59441033"
+ *         username: "Cliente1"
  *         email: "cliente1@dogginer.com"
  *         role: "CLIENTE"
  */
@@ -60,7 +64,8 @@ router.get('', isGod, userController.findAll);
  * @swagger
  * /users:
  *  post:
- *    summary: crear un nuevo user
+ *    summary: Crear un nuevo user
+ *    descripcion: Crea un nuevo usuario en caso de que el email y username no existan en la BD. Si no se especifica el username, cogera por defecto el valor del email
  *    tags:
  *      - users
  *    requestBody:
@@ -70,6 +75,8 @@ router.get('', isGod, userController.findAll);
  *          schema:
  *            type: object
  *            properties:
+ *              username:
+ *                type: string
  *              email:
  *                type: string
  *              password:
