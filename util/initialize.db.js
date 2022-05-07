@@ -11,6 +11,18 @@ const users = [];
 const clientes = [];
 const adiestradores = [];
 const eventos = [];
+const nombres = [
+  'Ned Flanders',
+  'Lisa Simpson',
+  'Milhouse Van Houten',
+  'Edna Krabappel',
+  'Sideshow Bob',
+  'Patty Bouvier',
+  'Kent Brockman',
+  'Helen Lovejoy',
+  'Hans Moleman',
+  'Agner Skinner'
+];
 
 const emptyDb = async () => {
   await Evento.deleteMany({});
@@ -33,10 +45,10 @@ const createUsers = async () => {
   });
   userGod.save();
   const pwd = await bcrypt.hash('Test1234', 12);
-  for (let i = 1; i < 6; i++) {
+  for (let i = 1; i < 11; i++) {
     const userCliente = new User({
       email: `cliente${i}@dogginer.com`,
-      username: `Cliente${i}`,
+      username: `cliente${i}`,
       password: pwd,
       role: 'CLIENTE'
     });
@@ -48,14 +60,14 @@ const createUsers = async () => {
     clientes.push(cliente);
     const userAdiestrador = new User({
       email: `adiestrador${i}@dogginer.com`,
-      username: `Adiestrador${i}`,
+      username: `adiestrador${i}`,
       password: pwd,
       role: 'ADIESTRADOR'
     });
     users.push(userAdiestrador);
     const adiestrador = new Adiestrador({
       userId: userAdiestrador,
-      nombre: `adiestrador${i}`,
+      nombre: nombres[i],
       bio: `Me gustan los paseos por la playa`
     });
     adiestradores.push(adiestrador);
@@ -122,13 +134,13 @@ const registrarClientes = async () => {
   for (const cliente of clientes) {
     const i = clientes.indexOf(cliente);
     cliente.eventos.push(
-      eventos[(4 - i) * 3],
+      eventos[(9 - i) * 3],
       eventos[i * 3 + 1],
       eventos[i * 3 + 2]
     );
     await cliente.save();
     const adiestrador1 = adiestradores[i];
-    const adiestrador2 = adiestradores[4 - i];
+    const adiestrador2 = adiestradores[9 - i];
     adiestrador1._ratings.push({ idCliente: cliente, score: i + 1 });
     adiestrador2._ratings.push({ idCliente: cliente, score: i + 1 });
     await adiestrador1.save();
