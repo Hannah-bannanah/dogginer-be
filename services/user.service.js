@@ -12,7 +12,7 @@ const clienteService = require('../services/cliente.service');
  * @returns la lista de users
  */
 exports.findAll = async () => {
-  const users = await User.find().select({ email: 1 });
+  const users = await User.find().select({ password: 0 });
   return users;
 };
 

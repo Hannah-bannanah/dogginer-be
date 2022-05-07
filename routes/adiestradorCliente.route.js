@@ -22,7 +22,7 @@ const router = express.Router({ mergeParams: true });
  *         asunto:
  *           type: string
  *           description: asunto del mensaje
- *         contenido:
+ *         mensaje:
  *          type: string
  *          description: el contenido del mensaje
  *       required:
@@ -39,7 +39,7 @@ const router = express.Router({ mergeParams: true });
  * @swagger
  * /adiestradores/{idAdiestrador}/clientes:
  *  get:
- *    summary: obtener lista de clientes registrados en eventos del adiestrador
+ *    summary: Obtener lista de clientes registrados en eventos del adiestrador
  *    tags:
  *      - adiestradores
  *    parameters:
@@ -59,7 +59,11 @@ const router = express.Router({ mergeParams: true });
  *            schema:
  *              type: array
  *              items:
- *                $ref: "#/components/schemas/Cliente"
+ *                  type: object
+ *                  properties:
+ *                    username:
+ *                      type: string
+ *                      description: el username del cliente
  */
 router.get('', adiestradorController.fetchClientes);
 
@@ -69,7 +73,7 @@ router.get('', adiestradorController.fetchClientes);
  * /adiestradores/{idAdiestrador}/clientes/email:
  *  post:
  *    summary: Enviar un email al cliente
- *    descripcion: envia un email al cliente siempre y cuando el cliente este registrado en al menos un evento organizado por el adiestrador
+ *    descripcion: Envia un email al cliente siempre y cuando el cliente este registrado en al menos un evento organizado por el adiestrador
  *    tags:
  *      - adiestradores
  *    parameters:
@@ -101,7 +105,7 @@ router.post('/email', adiestradorController.emailClient);
  * @swagger
  * /adiestradores/{idAdiestrador}/clientes/broadcast:
  *  post:
- *    summary: enviar un email a todos los clientes registrados en eventos del adiestrador
+ *    summary: Enviar un email a todos los clientes registrados en eventos del adiestrador
  *    tags:
  *      - adiestradores
  *    parameters:
@@ -120,6 +124,9 @@ router.post('/email', adiestradorController.emailClient);
  *          schema:
  *            type: object
  *            $ref: "#/components/schemas/Mensaje"
+ *          example:
+ *            asunto: "50% de descuento Agility"
+ *            mensaje: "Apuntate esta semana a nuestra sesion grupal de entrenamiento de Agility y obten un 50% de descuento"
  *    responses:
  *      201:
  *        description: "success"

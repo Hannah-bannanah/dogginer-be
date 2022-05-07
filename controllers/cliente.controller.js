@@ -153,7 +153,7 @@ exports.emailAdiestrador = async (req, res, next) => {
   }
 
   try {
-    await emailService.sendPrivateEmail(
+    await emailService.sendEmail(
       cliente,
       adiestrador,
       req.body.asunto,

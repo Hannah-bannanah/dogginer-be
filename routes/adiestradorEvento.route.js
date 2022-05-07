@@ -62,7 +62,7 @@ router.get('', adiestradorController.fetchEventos);
  *        application/json:
  *          schema:
  *            type: object
- *            $ref: '#/components/schemas/Evento'
+ *            $ref: '#/components/schemas/EventoBasico'
  *    responses:
  *      200:
  *        description: "evento creado con exito"
@@ -110,7 +110,7 @@ router.post('', verifyAdiestrador, adiestradorController.createEvento);
  *        application/json:
  *          schema:
  *            type: object
- *            $ref: '#/components/schemas/Evento'
+ *            $ref: '#/components/schemas/EventoBasico'
  *    responses:
  *      200:
  *        description: "Evento actualizado con exito"

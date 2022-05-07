@@ -57,7 +57,6 @@ exports.findByUsername = async (username) => {
 exports.create = async (adiestradorData) => {
   const user = await userService.findById(adiestradorData.userId);
   if (!user || user.role !== AUTHORITIES.ADIESTRADOR) {
-    console.log('user is not ADIESTRADOR');
     const error = new Error();
     error.httpStatus = 422;
     error.message = 'Informacion invalida';
