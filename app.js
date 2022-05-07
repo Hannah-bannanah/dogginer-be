@@ -47,11 +47,11 @@ app.use('/inicializar', inicializarRouter);
 
 // error handling
 app.use(errorHandler);
-
 mongoose
   .connect(DBCONNECTION)
   .then(() => {
     console.log('DB connected!');
     app.listen(3000);
+    // app.listen(80);
   })
   .catch((err) => console.log(err));

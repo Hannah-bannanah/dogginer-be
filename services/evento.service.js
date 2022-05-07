@@ -159,8 +159,16 @@ exports.findById = async (idEvento, userData) => {
  * @throws error si el idAdiestrador no existe
  */
 exports.create = async (eventoData, adiestrador) => {
-  const evento = new Evento({ ...eventoData });
+  const evento = new Evento({ ...eventoData, invitados: undefined });
   await evento.save();
+  if (eventoData.invitados) {
+    for (const invitado of eventoData.invitados) {
+      const cliente = await clienteService.findById(invitado.idCliente || '');
+      if (cliente._id) evento.invitados.push(cliente);
+    }
+
+    evento.save();
+  }
   adiestrador.eventos.push(evento);
   await adiestrador.save();
   return evento;
