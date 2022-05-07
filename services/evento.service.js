@@ -164,7 +164,8 @@ exports.create = async (eventoData, adiestrador) => {
   if (eventoData.invitados) {
     for (const invitado of eventoData.invitados) {
       const cliente = await clienteService.findById(invitado.idCliente || '');
-      if (cliente._id) evento.invitados.push(cliente);
+      if (cliente._id) evento.invitados.push(cliente._id);
+      cliente.save();
     }
 
     evento.save();
