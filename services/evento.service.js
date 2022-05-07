@@ -163,7 +163,7 @@ exports.create = async (eventoData, adiestrador) => {
   await evento.save();
   if (eventoData.invitados) {
     for (const invitado of eventoData.invitados) {
-      const cliente = await clienteService.findById(invitado._id || '');
+      const cliente = await clienteService.findById(invitado.idCliente || '');
       if (cliente._id) evento.invitados.push(cliente);
     }
 
