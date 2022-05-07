@@ -32,6 +32,7 @@ exports.sendEmail = async (
     subject: asunto,
     html: `${mensaje}<br> <p>Mensaje enviado por el usuario ${from.username} de Dogginer</p>`
   };
+  console.log('email', email);
   sgm.send(email);
 };
 

@@ -143,15 +143,17 @@ exports.emailAdiestrador = async (req, res, next) => {
     next(error);
   }
 
-  const adiestrador = await adiestradorService.findByUsername(
-    req.body.destinatario
-  );
-  if (!adiestrador) {
+  let adiestrador = await adiestradorService.findById(req.body.destinatario);
+  if (!adiestrador._id) {
+    adiestrador = await adiestradorService.findByUsername(
+      req.body.destinatario
+    );
+  }
+  if (!adiestrador._id) {
     const error = new Error('Adiestrador no existe');
     error.httpStatus = 404;
     return next(error);
   }
-
   try {
     await emailService.sendEmail(
       cliente,

@@ -43,7 +43,7 @@ exports.getUsernames = async (listaClientes) => {
       }
     },
     {
-      $project: { username: 1, _id: 0 }
+      $project: { username: 1 }
     }
   ];
   const clientes = await Cliente.aggregate(query);
