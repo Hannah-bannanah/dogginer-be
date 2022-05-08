@@ -21,8 +21,9 @@ const nombres = [
   'Kent Brockman',
   'Helen Lovejoy',
   'Hans Moleman',
-  'Agner Skinner'
+  'Agnes Skinner'
 ];
+const TAGS = ['Agility', 'Cachorros', 'Razas grandes', 'Pastoreo'];
 
 const emptyDb = async () => {
   await Evento.deleteMany({});
@@ -67,8 +68,13 @@ const createUsers = async () => {
     users.push(userAdiestrador);
     const adiestrador = new Adiestrador({
       userId: userAdiestrador,
-      nombre: nombres[i],
-      bio: `Me gustan los paseos por la playa`
+      nombre: nombres[i - 1],
+      imageUrl: `https://picsum.photos/id/${i * 10}/300`,
+      bio: `Me gustan los paseos por la playa`,
+      tags: [
+        TAGS[Math.floor(Math.random() * 4)],
+        TAGS[Math.floor(Math.random() * 4)]
+      ]
     });
     adiestradores.push(adiestrador);
   }
@@ -88,6 +94,7 @@ const createEventos = async () => {
       nombre: `Evento${i} privado`,
       descripcion: `Este es un evento privado activo`,
       fecha: `2022-06-${i}`,
+      imageUrl: `https://picsum.photos/id/${i * 12}/300`,
       maxAforo: 10
     });
     const evento2 = new Evento({
@@ -95,12 +102,14 @@ const createEventos = async () => {
       nombre: `Evento${i} publico`,
       descripcion: `Este es un evento publico activo`,
       fecha: `2022-07-${i}`,
+      imageUrl: `https://picsum.photos/id/${i * 13}/300`,
       maxAforo: 10
     });
     const evento3 = new Evento({
       idAdiestrador: adiestrador._id,
       nombre: `Evento${i} terminado`,
       descripcion: `Este es un evento público terminado`,
+      imageUrl: `https://picsum.photos/id/${i * 14}/300`,
       fecha: `2021-07-${i}`,
       maxAforo: 10
     });
@@ -141,8 +150,14 @@ const registrarClientes = async () => {
     await cliente.save();
     const adiestrador1 = adiestradores[i];
     const adiestrador2 = adiestradores[9 - i];
-    adiestrador1._ratings.push({ idCliente: cliente, score: i + 1 });
-    adiestrador2._ratings.push({ idCliente: cliente, score: i + 1 });
+    adiestrador1._ratings.push({
+      idCliente: cliente,
+      score: Math.floor(Math.random() * 5) + 1
+    });
+    adiestrador2._ratings.push({
+      idCliente: cliente,
+      score: Math.floor(Math.random() * 5) + 1
+    });
     await adiestrador1.save();
     await adiestrador2.save();
   }
