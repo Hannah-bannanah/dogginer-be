@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const COLLECTION_NAME = 'Adiestrador';
+const TAGS = ['Agility', 'Cachorros', 'Razas grandes', 'Pastoreo'];
 
 const adiestradorSchemaDetails = {
   userId: {
@@ -27,6 +28,7 @@ const adiestradorSchemaDetails = {
       }
     }
   ],
+  tags: [{ type: String, enum: TAGS }],
   _ratings: [
     {
       idCliente: {

@@ -11,6 +11,19 @@ const users = [];
 const clientes = [];
 const adiestradores = [];
 const eventos = [];
+const nombres = [
+  'Ned Flanders',
+  'Lisa Simpson',
+  'Milhouse Van Houten',
+  'Edna Krabappel',
+  'Sideshow Bob',
+  'Patty Bouvier',
+  'Kent Brockman',
+  'Helen Lovejoy',
+  'Hans Moleman',
+  'Agnes Skinner'
+];
+const TAGS = ['Agility', 'Cachorros', 'Razas grandes', 'Pastoreo'];
 
 const emptyDb = async () => {
   await Evento.deleteMany({});
@@ -33,10 +46,10 @@ const createUsers = async () => {
   });
   userGod.save();
   const pwd = await bcrypt.hash('Test1234', 12);
-  for (let i = 1; i < 6; i++) {
+  for (let i = 1; i < 11; i++) {
     const userCliente = new User({
       email: `cliente${i}@dogginer.com`,
-      username: `Cliente${i}`,
+      username: `cliente${i}`,
       password: pwd,
       role: 'CLIENTE'
     });
@@ -48,15 +61,20 @@ const createUsers = async () => {
     clientes.push(cliente);
     const userAdiestrador = new User({
       email: `adiestrador${i}@dogginer.com`,
-      username: `Adiestrador${i}`,
+      username: `adiestrador${i}`,
       password: pwd,
       role: 'ADIESTRADOR'
     });
     users.push(userAdiestrador);
     const adiestrador = new Adiestrador({
       userId: userAdiestrador,
-      nombre: `adiestrador${i}`,
-      bio: `Me gustan los paseos por la playa`
+      nombre: nombres[i - 1],
+      imageUrl: `https://picsum.photos/id/${i * 10}/300`,
+      bio: `Me gustan los paseos por la playa`,
+      tags: [
+        TAGS[Math.floor(Math.random() * 4)],
+        TAGS[Math.floor(Math.random() * 4)]
+      ]
     });
     adiestradores.push(adiestrador);
   }
@@ -76,6 +94,7 @@ const createEventos = async () => {
       nombre: `Evento${i} privado`,
       descripcion: `Este es un evento privado activo`,
       fecha: `2022-06-${i}`,
+      imageUrl: `https://picsum.photos/id/${i * 12}/300`,
       maxAforo: 10
     });
     const evento2 = new Evento({
@@ -83,12 +102,14 @@ const createEventos = async () => {
       nombre: `Evento${i} publico`,
       descripcion: `Este es un evento publico activo`,
       fecha: `2022-07-${i}`,
+      imageUrl: `https://picsum.photos/id/${i * 13}/300`,
       maxAforo: 10
     });
     const evento3 = new Evento({
       idAdiestrador: adiestrador._id,
       nombre: `Evento${i} terminado`,
       descripcion: `Este es un evento público terminado`,
+      imageUrl: `https://picsum.photos/id/${i * 14}/300`,
       fecha: `2021-07-${i}`,
       maxAforo: 10
     });
@@ -122,15 +143,21 @@ const registrarClientes = async () => {
   for (const cliente of clientes) {
     const i = clientes.indexOf(cliente);
     cliente.eventos.push(
-      eventos[(4 - i) * 3],
+      eventos[(9 - i) * 3],
       eventos[i * 3 + 1],
       eventos[i * 3 + 2]
     );
     await cliente.save();
     const adiestrador1 = adiestradores[i];
-    const adiestrador2 = adiestradores[4 - i];
-    adiestrador1._ratings.push({ idCliente: cliente, score: i + 1 });
-    adiestrador2._ratings.push({ idCliente: cliente, score: i + 1 });
+    const adiestrador2 = adiestradores[9 - i];
+    adiestrador1._ratings.push({
+      idCliente: cliente,
+      score: Math.floor(Math.random() * 5) + 1
+    });
+    adiestrador2._ratings.push({
+      idCliente: cliente,
+      score: Math.floor(Math.random() * 5) + 1
+    });
     await adiestrador1.save();
     await adiestrador2.save();
   }
