@@ -46,8 +46,8 @@ router.use('/:idCliente/eventos', verifyCliente, clienteEventosRouter);
  * @swagger
  * /clientes:
  *  get:
- *    summary: obtener lista de clientes
- *    description: ruta reservada para administradores
+ *    summary: Obtener lista de clientes
+ *    description: Ruta reservada para administradores y Adiestradores
  *    tags:
  *      - clientes
  *    security:

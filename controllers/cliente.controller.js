@@ -6,6 +6,7 @@ const adiestradorService = require('../services/adiestrador.service');
 const eventoService = require('../services/evento.service');
 const emailService = require('../services/email.service');
 const { AUTHORITIES } = require('../util/auth.config');
+const { HttpError } = require('../util/error.class');
 
 exports.findAll = async (req, res, next) => {
   if (req.requesterData.role === AUTHORITIES.GOD) {
@@ -15,9 +16,9 @@ exports.findAll = async (req, res, next) => {
     const usernames = await clienteService.getUsernames();
     res.status(200).send(usernames);
   } else {
-    const error = new Error('Unauthorized');
-    error.httpStatus = 403;
-    return next(error);
+    // const error = new Error('Unauthorized');
+    // error.httpStatus = 403;
+    return next(new HttpError('Unauthorized', 403));
   }
 };
 
@@ -25,12 +26,13 @@ exports.findById = async (req, res, next) => {
   try {
     const cliente = await clienteService.findById(req.params.idCliente);
     if (
-      !cliente.userId.equals(req.requesterData.userId) &&
-      req.requesterData.role !== AUTHORITIES.GOD
+      !cliente.userId ||
+      (!cliente.userId.equals(req.requesterData.userId) &&
+        req.requesterData.role !== AUTHORITIES.GOD)
     ) {
-      const error = new Error('Unauthorized');
-      error.httpStatus = 403;
-      return next(error);
+      // const error = new Error('Unauthorized');
+      // error.httpStatus = 403;
+      return next(new HttpError('Unauthorized', 403));
     }
     res.status(200).send(cliente);
   } catch (err) {
@@ -50,17 +52,18 @@ exports.create = async (req, res, next) => {
 exports.deleteById = async (req, res, next) => {
   const cliente = await clienteService.findById(req.params.idCliente);
   if (
-    req.requesterData.userId !== cliente.userId &&
-    req.requesterData.role !== AUTHORITIES.GOD
+    !cliente.userId ||
+    (req.requesterData.userId !== cliente.userId &&
+      req.requesterData.role !== AUTHORITIES.GOD)
   ) {
-    const error = new Error('Unauthorized');
-    error.httpStatus = 403;
-    return next(error);
+    // const error = new Error('Unauthorized');
+    // error.httpStatus = 403;
+    return next(new HttpError('Unauthorized', 403));
   }
   try {
     const result = await clienteService.deleteById(cliente._id);
     if (result) res.status(204).send();
-    else res.status(500).send();
+    else throw new HttpError('Error al eliminar el cliente', 500);
   } catch (err) {
     next(err);
   }
@@ -69,12 +72,13 @@ exports.deleteById = async (req, res, next) => {
 exports.update = async (req, res, next) => {
   const clienteExistente = clienteService.findById(req.params.idCliente);
   if (
-    req.requesterData.userId !== clienteExistente.userId &&
-    req.requesterData.role !== AUTHORITIES.GOD
+    !clienteExistente.userId ||
+    (req.requesterData.userId !== clienteExistente.userId &&
+      req.requesterData.role !== AUTHORITIES.GOD)
   ) {
-    const error = new Error('Unauthorized');
-    error.httpStatus = 403;
-    return next(error);
+    // const error = new Error('Unauthorized');
+    // error.httpStatus = 403;
+    return next(new HttpError('Unauthorized', 403));
   }
   try {
     const clienteActualizado = await clienteService.update(
@@ -138,9 +142,9 @@ exports.emailAdiestrador = async (req, res, next) => {
   const cliente = req.cliente;
 
   if (!req.body.destinatario) {
-    const error = new Error('Introduzca un destinatario');
-    error.httpStatus = 422;
-    next(error);
+    // const error = new Error('Introduzca un destinatario');
+    // error.httpStatus = 422;
+    return next(new HttpError('Introduzca un destinatario', 422));
   }
 
   let adiestrador = await adiestradorService.findById(req.body.destinatario);
@@ -150,9 +154,9 @@ exports.emailAdiestrador = async (req, res, next) => {
     );
   }
   if (!adiestrador._id) {
-    const error = new Error('Adiestrador no existe');
-    error.httpStatus = 404;
-    return next(error);
+    // const error = new Error('Adiestrador no existe');
+    // error.httpStatus = 404;
+    return next(new HttpError('Adiestrador no existe', 404));
   }
   try {
     await emailService.sendEmail(

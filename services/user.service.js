@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const User = require('../models/user.model');
 const adiestradorService = require('../services/adiestrador.service');
 const clienteService = require('../services/cliente.service');
+const { HttpError } = require('../util/error.class');
 
 /**
  * Recoge la lista de todos los users de la bbdd
@@ -45,7 +46,9 @@ exports.findByEmail = async (email) => {
  * @returns el documento del user buscado o un objeto vacio si no existe
  */
 exports.findByUsername = async (username) => {
-  return await User.findOne({ username: username }).select({ password: 0 });
+  return await User.findOne({ username: username.toLowerCase() }).select({
+    password: 0
+  });
 };
 
 /**
@@ -54,7 +57,11 @@ exports.findByUsername = async (username) => {
  * @returns el objeto user creado
  */
 exports.create = async (userData) => {
-  const userInfo = { ...userData, email: userData.email.toLowerCase() };
+  const userInfo = {
+    ...userData,
+    username: userData.username.toLowerCase(),
+    email: userData.email.toLowerCase()
+  };
   const user = new User(userInfo); // mongoose valida la estructura del objeto
   await user.save();
   return user;
@@ -72,9 +79,9 @@ exports.deleteById = async (userId) => {
     const adiestrador = adiestradorService.findByUserId(userId);
     const cliente = clienteService.findByUserId(userId);
     if (adiestrador._id || cliente._id) {
-      const error = new Error('Cuenta de adiestrador o cliente activa');
-      error.httpStatus = 409;
-      throw error;
+      // const error = new Error('Cuenta de adiestrador o cliente activa');
+      // error.httpStatus = 409;
+      throw new HttpError('Cuenta de adiestrador o cliente activa', 400);
     }
     result = await User.deleteOne({ _id: userId });
   }
@@ -91,12 +98,17 @@ exports.deleteById = async (userId) => {
 exports.update = async (userId, newData) => {
   const userExistente = await this.findById(userId);
   if (!userExistente._id) {
-    const error = new Error('User no encontrado');
-    error.httpStatus = 404;
-    throw error;
+    // const error = new Error('User no encontrado');
+    // error.httpStatus = 404;
+    throw new HttpError('User no existe', 404);
   }
-  const userActualizado = await User.findByIdAndUpdate(userId, newData);
-  return { _id: userActualizado._id, email: userActualizado.email };
+  const userActualizado = await User.findByIdAndUpdate(userId, {
+    ...newData,
+    username: newData.username ? newData.username.toLowerCase() : undefined,
+    email: newData.email ? newData.email.toLowerCase() : undefined,
+    password: undefined
+  });
+  return { ...userActualizado, password: undefined };
 };
 
 /**
@@ -109,9 +121,9 @@ exports.generateResetToken = async (email) => {
 
   const user = await User.findOne({ email: email.toLowerCase() });
   if (!user) {
-    const error = new Error('Usuario no encontrado');
-    error.httpStatus = 404;
-    throw error;
+    // const error = new Error('Usuario no encontrado');
+    // error.httpStatus = 404;
+    throw new HttpError('User no existe', 404);
   }
   user.tempResetToken = token;
   user.tokenValidity = Date.now() + 3600000;
@@ -130,9 +142,9 @@ exports.generateResetToken = async (email) => {
 exports.updatePassword = async (userId, token, newPassword) => {
   const user = await User.findOne({ _id: userId });
   if (!user._id) {
-    const error = new Error('Usuario no encontrado');
-    error.httpStatus = 404;
-    throw error;
+    // const error = new Error('Usuario no encontrado');
+    // error.httpStatus = 404;
+    throw new HttpError('User no existe', 404);
   }
   if (user.tempResetToken === token && user.tokenValidity > Date.now()) {
     user.password = newPassword;

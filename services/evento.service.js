@@ -6,6 +6,7 @@ const Evento = require('../models/evento.model');
 const adiestradorService = require('../services/adiestrador.service');
 const clienteService = require('../services/cliente.service');
 const { AUTHORITIES } = require('../util/auth.config');
+const { HttpError } = require('../util/error.class');
 
 /**
  * Recoge la lista de todos los eventos de la BD, incluyendo los terminados
@@ -13,15 +14,6 @@ const { AUTHORITIES } = require('../util/auth.config');
  */
 exports.findAll = async () => {
   const eventos = await Evento.find();
-  return eventos;
-};
-
-/**
- * Recoge la lista de todos los eventos activos
- * @returns la lista de eventos
- */
-exports.findActive = async () => {
-  const eventos = await Evento.find({ fecha: { $lt: Date.now() } });
   return eventos;
 };
 
@@ -47,7 +39,7 @@ exports.findAccessible = async (userId, role) => {
   // buscamos los eventos accesibles para el adiestrador
   if (role === AUTHORITIES.ADIESTRADOR) {
     const adiestrador = await adiestradorService.findByUserId(userId);
-    if (!adiestrador._id) throw new Error('Adiestrador no existe');
+    if (!adiestrador._id) throw new HttpError('Adiestrador no existe', 404);
 
     eventos = await Evento.find({
       fecha: { $gt: Date.now() },
@@ -57,7 +49,7 @@ exports.findAccessible = async (userId, role) => {
 
   if (role === AUTHORITIES.CLIENTE) {
     const cliente = await clienteService.findByUserId(userId);
-    if (!cliente._id) throw new Error('Cliente no existe');
+    if (!cliente._id) throw new HttpError('Cliente no existe', 404);
     eventos = await Evento.find({
       fecha: { $gt: Date.now() },
       $or: [{ invitados: [] }, { invitados: cliente }]
@@ -125,18 +117,13 @@ exports.findById = async (idEvento, userData) => {
 
   // si el evento no es publico, comprobamos si el usuario tiene acceso
   if (!userData) {
-    const error = new Error('Usuario no autorizado');
-    error.httpStatus = 403;
-    throw error;
+    // const error = new Error('Usuario no autorizado');
+    // error.httpStatus = 403;
+    throw new HttpError('Unauthorized', 403);
   }
 
   if (userData.role === AUTHORITIES.GOD) {
     return evento;
-  }
-
-  if (userData.role === AUTHORITIES.ADIESTRADOR) {
-    const adiestrador = await adiestradorService.findByUserId(userData.userId);
-    return evento.idAdiestrador.equals(adiestrador._id) ? evento : {};
   }
 
   if (userData.role === AUTHORITIES.ADIESTRADOR) {
