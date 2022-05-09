@@ -3,6 +3,7 @@
 // import internal modules
 const { sgm } = require('../util/email.config');
 const userService = require('../services/user.service');
+const { HttpError } = require('../util/error.class');
 
 exports.sendEmail = async (
   emisor,
@@ -13,11 +14,11 @@ exports.sendEmail = async (
   isBroadcast
 ) => {
   if (!asunto || !mensaje || !destinatario) {
-    const error = new Error(
-      'El asunto, mensaje y destinatario son obligatorios'
-    );
-    error.httpStatus = 422;
-    throw error;
+    // const error = new Error(
+    //   'El asunto, mensaje y destinatario son obligatorios'
+    // );
+    // error.httpStatus = 422;
+    throw new HttpError('Informacion invalida', 422);
   }
 
   const to = isBroadcast
@@ -32,7 +33,6 @@ exports.sendEmail = async (
     subject: asunto,
     html: `${mensaje}<br> <p>Mensaje enviado por el usuario ${from.username} de Dogginer</p>`
   };
-  console.log('email', email);
   sgm.send(email);
 };
 
@@ -46,6 +46,6 @@ exports.sendPwdResetEmail = (user) => {
   };
   sgm.send({
     ...email,
-    from: 'hannah.fromSpain@gmail.com'
+    from: 'passwordRest@doggienr.com'
   });
 };

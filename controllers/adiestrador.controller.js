@@ -8,14 +8,15 @@ const emailService = require('../services/email.service');
 const userService = require('../services/user.service');
 const { AUTHORITIES } = require('../util/auth.config');
 const { decodeToken } = require('../middleware/auth');
+const HttpError = require('../util/error.class');
 
 exports.findAll = async (req, res, next) => {
-  const adiestradores = await adiestradorService.findAll();
-  res.status(200).send(
-    adiestradores.map((a) => {
-      return { ...a._doc, _ratings: undefined };
-    })
-  );
+  try {
+    const adiestradores = await adiestradorService.findAll();
+    res.status(200).send(adiestradores);
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.findById = async (req, res, next) => {
@@ -47,17 +48,19 @@ exports.deleteById = async (req, res, next) => {
     req.params.idAdiestrador
   );
   if (
-    req.requesterData.userId !== adiestrador.userId &&
-    req.requesterData.role !== AUTHORITIES.GOD
+    !adiestrador.userId ||
+    (req.requesterData.userId !== adiestrador.userId &&
+      req.requesterData.role !== AUTHORITIES.GOD)
   ) {
-    const error = new Error('Unauthorized');
-    error.httpStatus = 403;
-    return next(error);
+    // const error = new Error('Unauthorized');
+    // error.httpStatus = 403;
+    return next(new HttpError('Unauthorized', 403));
   }
   try {
     const result = await adiestradorService.deleteById(adiestrador._id);
     if (result) res.status(204).send();
-    else res.status(500).send();
+    // else res.status(500).send();
+    else throw new HttpError('Error al eliminar', 500);
   } catch (err) {
     next(err);
   }
@@ -68,12 +71,13 @@ exports.update = async (req, res, next) => {
     req.params.idAdiestrador
   );
   if (
-    req.requesterData.userId !== adiestradorExistente.userId &&
-    req.requesterData.role !== AUTHORITIES.GOD
+    !adiestradorExistente.userId ||
+    (req.requesterData.userId !== adiestradorExistente.userId &&
+      req.requesterData.role !== AUTHORITIES.GOD)
   ) {
-    const error = new Error('Unauthorized');
-    error.httpStatus = 403;
-    next(error);
+    // const error = new Error('Unauthorized');
+    // error.httpStatus = 403;
+    next(new HttpError('Unauthorized', 403));
   }
   try {
     const updatedData = {
@@ -106,9 +110,9 @@ exports.fetchEventos = async (req, res, next) => {
     req.params.idAdiestrador
   );
   if (!adiestrador._id) {
-    const error = new Error('Adiestrador no existe');
-    error.httpStatus = 404;
-    return next(error);
+    // const error = new Error('Adiestrador no existe');
+    // error.httpStatus = 404;
+    return next(new HttpError('Adiestrador no existe', 404));
   }
 
   // comprobamos si hemos recibido token
@@ -129,9 +133,9 @@ exports.createEvento = async (req, res, next) => {
       req.params.idAdiestrador
     );
     if (!adiestrador._id) {
-      const error = new Error('Informacion invalida');
-      error.httpStatus = 422;
-      throw error;
+      // const error = new Error('Informacion invalida');
+      // error.httpStatus = 422;
+      throw new HttpError('Informacion invalida', 422);
     }
     const evento = await eventoService.create(eventoData, adiestrador);
     res.status(200).send({ id: evento._id });
@@ -173,15 +177,15 @@ exports.deleteEvento = async (req, res, next) => {
 exports.emailClient = async (req, res, next) => {
   const adiestrador = req.adiestrador;
   if (!req.body.destinatario) {
-    const error = new Error('Introduzca un destinatario');
-    error.httpStatus = 422;
-    next(error);
+    // const error = new Error('Introduzca un destinatario');
+    // error.httpStatus = 422;
+    next(new HttpError('Introduzca un destinatario', 422));
   }
   const cliente = await clienteService.findByUsername(req.body.destinatario);
   if (!cliente) {
-    const error = new Error('Cliente no existe');
-    error.httpStatus = 404;
-    return next(error);
+    // const error = new Error('Cliente no existe');
+    // error.httpStatus = 404;
+    return next(new HttpError('Cliente no existe', 404));
   }
 
   try {
@@ -193,9 +197,9 @@ exports.emailClient = async (req, res, next) => {
       return !!resultado;
     });
     if (!interseccion) {
-      const error = new Error('Operacion no autorizada');
-      error.httpStatus = 403;
-      throw error;
+      // const error = new Error('Operacion no autorizada');
+      // error.httpStatus = 403;
+      throw new HttpError('Unauthorized', 403);
     }
 
     await emailService.sendEmail(
@@ -211,9 +215,9 @@ exports.emailClient = async (req, res, next) => {
 };
 exports.sendBroadCast = async (req, res, next) => {
   if (!req.body.asunto || !req.body.mensaje) {
-    const error = new Error('El asunto y el mensaje son obligatorios');
-    error.httpStatus = 422;
-    return next(error);
+    // const error = new Error('El asunto y el mensaje son obligatorios');
+    // error.httpStatus = 422;
+    return next(new HttpError('El asunto y el mensaje son obligatorios', 422));
   }
   const adiestrador = req.adiestrador;
   // const adiestradorUser = await userService.findById(adiestrador.userId);
@@ -222,15 +226,19 @@ exports.sendBroadCast = async (req, res, next) => {
   const users = await userService.findByIdList(clientes.map((c) => c.userId));
   const destinatarios = users.map((u) => u.email);
 
-  emailService.sendEmail(
-    adiestrador,
-    { email: 'dogginer@mail.com' },
-    req.body.asunto,
-    req.body.mensaje,
-    destinatarios,
-    true
-  );
-  res.status(201).send();
+  try {
+    emailService.sendEmail(
+      adiestrador,
+      { email: 'dogginer@mail.com' },
+      req.body.asunto,
+      req.body.mensaje,
+      destinatarios,
+      true
+    );
+    res.status(201).send();
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.rate = async (req, res, next) => {
@@ -241,9 +249,9 @@ exports.rate = async (req, res, next) => {
     score: req.body.score
   };
   if (!rating.score) {
-    const error = new Error('Informacion invalida');
-    error.httpStatus = 422;
-    return next(error);
+    // const error = new Error('Informacion invalida');
+    // error.httpStatus = 422;
+    return next(new HttpError('Informacion invalida', 422));
   }
   try {
     const adiestrador = await adiestradorService.rate(

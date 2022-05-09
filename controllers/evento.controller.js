@@ -4,6 +4,7 @@
 const { decodeToken } = require('../middleware/auth');
 const eventoService = require('../services/evento.service');
 const { AUTHORITIES } = require('../util/auth.config');
+const { HttpError } = require('../util/error.class');
 
 exports.findAll = async (req, res, next) => {
   let eventos = [];
@@ -49,7 +50,7 @@ exports.deleteById = async (req, res, next) => {
   try {
     const result = await eventoService.deleteById(req.params.idEvento);
     if (result) res.status(204).send();
-    else throw new Error();
+    else throw new HttpError('Error al cancelar el evento', 500);
   } catch (err) {
     next(err);
   }

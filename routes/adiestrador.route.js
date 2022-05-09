@@ -113,6 +113,34 @@ router.use('/:idAdiestrador/eventos', adiestradorEventosRouter);
  */
 router.get('', adiestradorController.findAll);
 
+// find by id
+/**
+ * @swagger
+ * /adiestradores/{idAdiestrador}:
+ *   get:
+ *    summary: Buscar un adiestrador por id
+ *    tags:
+ *      - adiestradores
+ *    description: Devuelve el adiestrador, o un objeto vacio si no se ha encontrado
+ *    parameters:
+ *      - in: path
+ *        name: "idAdiestrador"
+ *        description: el id del adiestrador
+ *        schema:
+ *          type: string
+ *        required: true
+ *    responses:
+ *      200:
+ *        description: "success"
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: "#/components/schemas/AdiestradorCompleto"
+ *
+ */
+router.get('/:idAdiestrador', adiestradorController.findById);
+
 // create one
 /**
  * @swagger
@@ -146,34 +174,6 @@ router.get('', adiestradorController.findAll);
  *        $ref: "#/components/responses/InvalidEntryError"
  */
 router.post('', adiestradorController.create);
-
-// find by id
-/**
- * @swagger
- * /adiestradores/{idAdiestrador}:
- *   get:
- *    summary: Buscar un adiestrador por id
- *    tags:
- *      - adiestradores
- *    description: Devuelve el adiestrador, o un objeto vacio si no se ha encontrado
- *    parameters:
- *      - in: path
- *        name: "idAdiestrador"
- *        description: el id del adiestrador
- *        schema:
- *          type: string
- *        required: true
- *    responses:
- *      200:
- *        description: "success"
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              $ref: "#/components/schemas/AdiestradorCompleto"
- *
- */
-router.get('/:idAdiestrador', adiestradorController.findById);
 
 // delete by id
 /**
