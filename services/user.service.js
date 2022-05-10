@@ -59,8 +59,8 @@ exports.findByUsername = async (username) => {
 exports.create = async (userData) => {
   const userInfo = {
     ...userData,
-    username: userData.username.toLowerCase(),
-    email: userData.email.toLowerCase()
+    username: userData.username ? userData.username.toLowerCase() : undefined,
+    email: userData.email ? userData.email.toLowerCase() : undefined
   };
   const user = new User(userInfo); // mongoose valida la estructura del objeto
   await user.save();
