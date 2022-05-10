@@ -41,10 +41,10 @@ const router = express.Router();
  * @swagger
  * /users:
  *  get:
- *    summary: obtener lista de users
+ *    summary: Obtener lista de users
  *    tags:
  *      - users
- *    description: ruta reservada para administradores
+ *    description: Ruta reservada para administradores
  *    security:
  *      - bearerAuth: []
  *    responses:
@@ -115,8 +115,8 @@ router.post('', userController.create);
  * @swagger
  * /users/login:
  *  post:
- *    summary: generar token de login
- *    description: al introducir un email y password valido,
+ *    summary: Generar token de login
+ *    description: Al introducir un email y password valido,
  *      devuelve un token de autenticacion, el tiempo de validez, el id de usuario, su rol y su id de adiestrador o de cliente
  *    tags:
  *      - users
@@ -184,10 +184,10 @@ router.post('/login', userController.generateLoginToken);
  * @swagger
  * /users/{userId}:
  *  get:
- *    summary: buscar un user por id
+ *    summary: Buscar un user por id
  *    tags:
  *      - users
- *    description: ruta reservada para administradores
+ *    description: Ruta reservada para administradores
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -214,10 +214,10 @@ router.get('/:userId', isGod, userController.findById);
  * @swagger
  * /users/{userId}:
  *  delete:
- *    summary: eliminar un user
+ *    summary: Eliminar un user
  *    tags:
  *      - users
- *    description: ruta reservada para administradores
+ *    description: Ruta reservada para administradores
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -240,10 +240,10 @@ router.delete('/:userId', isGod, userController.deleteById);
  * @swagger
  * /users/{userId}:
  *  patch:
- *    summary: actualizar un user
+ *    summary: Actualizar un user
  *    tags:
  *      - users
- *    description: ruta reservada para administradores
+ *    description: Ruta reservada para administradores. Los unicos campos actualizables por este endpoint son el email y el username
  *    security:
  *      - bearerAuth: []
  *    parameters:
@@ -261,6 +261,8 @@ router.delete('/:userId', isGod, userController.deleteById);
  *            type: object
  *            properties:
  *              email:
+ *                type: string
+ *              username:
  *                type: string
  *    responses:
  *      200:
@@ -290,7 +292,7 @@ router.patch('/:userId', isGod, userController.update);
  * @swagger
  * /users/{userId}/resetPassword:
  *  patch:
- *    summary: generar token y enviar email al usuario
+ *    summary: Generar token y enviar email al usuario
  *    description: El usuario recibirá un email con un link que incluirá un
  *                 token generado aleatoriamente.
  *    tags:
@@ -339,7 +341,7 @@ router.patch('/:userId/resetPassword', userController.generateResetToken);
  * @swagger
  * /users/{userId}/resetPassword/{token}:
  *  patch:
- *    summary: actualizar la password de un user
+ *    summary: Actualizar la password de un user
  *    tags:
  *      - users
  *    security:

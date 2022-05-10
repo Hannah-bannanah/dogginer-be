@@ -70,7 +70,7 @@ exports.findById = async (idCliente) => {
  * @returns el documento de cliente, un objeto vacio si no existe
  */
 exports.findByUserId = async (userId) => {
-  return await Cliente.findOne({ userId: userId });
+  return await Cliente.findOne({ userId: userId }) || {};
 };
 
 /**
