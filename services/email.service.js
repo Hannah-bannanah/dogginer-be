@@ -14,10 +14,6 @@ exports.sendEmail = async (
   isBroadcast
 ) => {
   if (!asunto || !mensaje || !destinatario) {
-    // const error = new Error(
-    //   'El asunto, mensaje y destinatario son obligatorios'
-    // );
-    // error.httpStatus = 422;
     throw new HttpError('Informacion invalida', 422);
   }
 

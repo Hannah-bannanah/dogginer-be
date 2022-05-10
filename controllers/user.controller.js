@@ -37,15 +37,11 @@ exports.create = async (req, res, next) => {
 
   // validamos role
   if (userData.role === AUTHORITIES.GOD) {
-    // const error = new Error('Unauthorized');
-    // error.httpStatus = 403;
     return next(new HttpError('No puedes crear a Dios', 403));
   }
   // validamos password
   const regex = /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/;
   if (!regex.test(userData.password)) {
-    // const error = new Error('Unauthorized');
-    // error.httpStatus = 403;
     return next(new HttpError('Password invalida', 400));
   }
   userData.password = await bcrypt.hash(userData.password, 12);

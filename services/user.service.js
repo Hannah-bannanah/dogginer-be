@@ -22,7 +22,7 @@ exports.findAll = async () => {
  * @param {String} userId el id de user
  * @returns el documento del user buscado, un objeto vacio si no existe
  */
-exports.findById = async (userId) => {
+exports.findById = async userId => {
   let user;
   if (mongoose.Types.ObjectId.isValid(userId)) {
     user = await User.findById(userId).select({ password: 0 });
@@ -35,8 +35,10 @@ exports.findById = async (userId) => {
  * @param {String} email el email del user
  * @returns el documento del user buscado o un objeto vacio si no existe
  */
-exports.findByEmail = async (email) => {
-  const user = await User.findOne({ email: email.toLowerCase() });
+exports.findByEmail = async email => {
+  const user = email
+    ? await User.findOne({ email: email.toLowerCase() })
+    : {};
   return user || {};
 };
 
@@ -45,10 +47,12 @@ exports.findByEmail = async (email) => {
  * @param {String} username
  * @returns el documento del user buscado o un objeto vacio si no existe
  */
-exports.findByUsername = async (username) => {
-  return await User.findOne({ username: username.toLowerCase() }).select({
-    password: 0
-  });
+exports.findByUsername = async username => {
+  const user = username
+    ? await User.findOne({ username: username.toLowerCase() }).select({ password: 0 }
+    )
+    : {};
+  return user || {};
 };
 
 /**
@@ -56,13 +60,8 @@ exports.findByUsername = async (username) => {
  * @param {Object} userData los datos del user
  * @returns el objeto user creado
  */
-exports.create = async (userData) => {
-  const userInfo = {
-    ...userData,
-    username: userData.username ? userData.username.toLowerCase() : undefined,
-    email: userData.email ? userData.email.toLowerCase() : undefined
-  };
-  const user = new User(userInfo); // mongoose valida la estructura del objeto
+exports.create = async userData => {
+  const user = new User(userDataParser(userData)); // mongoose valida la estructura del objeto
   await user.save();
   return user;
 };
@@ -73,14 +72,13 @@ exports.create = async (userData) => {
  * @returns true si se ha eliminado un documento, false si no
  * @throws error si existe una cuenta de adiestrador o cliente asociada
  */
-exports.deleteById = async (userId) => {
+exports.deleteById = async userId => {
   let result = { deletedCount: 0 };
   if (mongoose.Types.ObjectId.isValid(userId)) {
-    const adiestrador = adiestradorService.findByUserId(userId);
-    const cliente = clienteService.findByUserId(userId);
+    const adiestrador = await adiestradorService.findByUserId(userId);
+    const cliente = await clienteService.findByUserId(userId);
+
     if (adiestrador._id || cliente._id) {
-      // const error = new Error('Cuenta de adiestrador o cliente activa');
-      // error.httpStatus = 409;
       throw new HttpError('Cuenta de adiestrador o cliente activa', 400);
     }
     result = await User.deleteOne({ _id: userId });
@@ -96,37 +94,29 @@ exports.deleteById = async (userId) => {
  * @throws error si el userId no existe
  */
 exports.update = async (userId, newData) => {
-  const userExistente = await this.findById(userId);
-  if (!userExistente._id) {
-    // const error = new Error('User no encontrado');
-    // error.httpStatus = 404;
-    throw new HttpError('User no existe', 404);
-  }
-  const userActualizado = await User.findByIdAndUpdate(userId, {
-    ...newData,
-    username: newData.username ? newData.username.toLowerCase() : undefined,
-    email: newData.email ? newData.email.toLowerCase() : undefined,
-    password: undefined
-  });
-  return { ...userActualizado, password: undefined };
+  const userExistente = await User.findByIdAndUpdate(userId,
+    { ...userDataParser(newData), password: undefined }
+  );
+  const userActualizado = userExistente
+    ? await User.findById(userExistente._id).select({ password: 0 })
+    : {};
+  return userActualizado;
 };
 
 /**
  * Genera un token aleatorio y se lo añade al documento del usuario
  * @param {String} email el email del usuario que quiere resetear la password
  */
-exports.generateResetToken = async (email) => {
+exports.generateResetToken = async email => {
   const buffer = crypto.randomBytes(32);
   const token = buffer.toString('hex');
 
-  const user = await User.findOne({ email: email.toLowerCase() });
-  if (!user) {
-    // const error = new Error('Usuario no encontrado');
-    // error.httpStatus = 404;
-    throw new HttpError('User no existe', 404);
-  }
+  const user = await User.findOne({ email: email.toLowerCase() }) || {};
+  if (!user._id) throw new HttpError('User no existe', 404);
+
   user.tempResetToken = token;
   user.tokenValidity = Date.now() + 3600000;
+
   await user.save();
   return user;
 };
@@ -140,13 +130,12 @@ exports.generateResetToken = async (email) => {
  * @throws error si el usuario no existe
  */
 exports.updatePassword = async (userId, token, newPassword) => {
-  const user = await User.findOne({ _id: userId });
-  if (!user._id) {
-    // const error = new Error('Usuario no encontrado');
-    // error.httpStatus = 404;
-    throw new HttpError('User no existe', 404);
-  }
-  if (user.tempResetToken === token && user.tokenValidity > Date.now()) {
+  const user = await User.findOne({ _id: userId }) || {};
+  if (!user._id) throw new HttpError('User no existe', 404);
+  if (
+    user.tempResetToken === token &&
+    user.tokenValidity > Date.now()
+  ) {
     user.password = newPassword;
     await user.save();
     return true;
@@ -159,7 +148,25 @@ exports.updatePassword = async (userId, token, newPassword) => {
  * @param {Array} userIds
  * @returns la lista de usuarios
  */
-exports.findByIdList = async (userIds) => {
-  const users = User.find({ _id: { $in: userIds } }).select({ password: 0 });
+exports.findByIdList = async userIds => {
+  const users = User.find({ _id: { $in: userIds } }).select({
+    password: 0
+  });
   return users || [];
+};
+
+/**
+ * Parseador de datos del user
+ * @param {Object} userData
+ * @returns un objeto de usuario valido
+ */
+const userDataParser = userData => {
+  const output = {
+    ...userData,
+    username: userData.username
+      ? userData.username.toLowerCase()
+      : undefined,
+    email: userData.email ? userData.email.toLowerCase() : undefined
+  };
+  return output;
 };

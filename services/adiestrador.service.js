@@ -14,7 +14,7 @@ const { HttpError } = require('../util/error.class');
  * @returns la lista de adiestradores
  */
 exports.findAll = async () => {
-  return await Adiestrador.find().select({ _ratings: 0 });
+  return await Adiestrador.find().select({ _ratings: 0 }) || [];
 };
 
 /**
@@ -36,7 +36,7 @@ exports.findById = async (idAdiestrador) => {
  * @returns el documento de adiestrador, un objeto vacio si no existe
  */
 exports.findByUserId = async (userId) => {
-  return await Adiestrador.findOne({ userId: userId }).select({ _ratings: 0 });
+  return await Adiestrador.findOne({ userId: userId }).select({ _ratings: 0 }) || {};
 };
 
 /**
@@ -101,16 +101,10 @@ exports.deleteById = async (idAdiestrador) => {
  */
 exports.update = async (idAdiestrador, newData) => {
   const adiestradorExistente = await this.findById(idAdiestrador);
-  if (!adiestradorExistente._id) {
-    // const error = new Error('Adiestrador no encontrado');
-    // error.httpStatus = 404;
-    throw new HttpError('Adiestrador no existe', 404);
-  }
-  const adiestradorActualizado = await Adiestrador.findByIdAndUpdate(
-    idAdiestrador,
-    newData
-  );
-  return adiestradorActualizado;
+  if (!adiestradorExistente._id) throw new HttpError('Adiestrador no existe', 404);
+
+  await Adiestrador.findByIdAndUpdate(idAdiestrador, newData);
+  return await this.findById(adiestradorExistente._id) || {};
 };
 
 /**
@@ -143,7 +137,7 @@ exports.rate = async (idAdiestrador, rating) => {
   // comprobamos que el adiestrador existe
   let adiestrador;
   if (mongoose.Types.ObjectId.isValid(idAdiestrador)) {
-    adiestrador = await Adiestrador.findById(idAdiestrador); //necesitamos recibir _ratings
+    adiestrador = await Adiestrador.findById(idAdiestrador); // necesitamos recibir _ratings
   }
   if (!adiestrador._id) {
     // const error = new Error('Adiestrador no existe');

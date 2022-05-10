@@ -8,7 +8,7 @@ const emailService = require('../services/email.service');
 const userService = require('../services/user.service');
 const { AUTHORITIES } = require('../util/auth.config');
 const { decodeToken } = require('../middleware/auth');
-const HttpError = require('../util/error.class');
+const { HttpError } = require('../util/error.class');
 
 exports.findAll = async (req, res, next) => {
   try {
@@ -67,7 +67,7 @@ exports.deleteById = async (req, res, next) => {
 };
 
 exports.update = async (req, res, next) => {
-  const adiestradorExistente = adiestradorService.findById(
+  const adiestradorExistente = await adiestradorService.findById(
     req.params.idAdiestrador
   );
   if (
@@ -75,9 +75,7 @@ exports.update = async (req, res, next) => {
     (req.requesterData.userId !== adiestradorExistente.userId &&
       req.requesterData.role !== AUTHORITIES.GOD)
   ) {
-    // const error = new Error('Unauthorized');
-    // error.httpStatus = 403;
-    next(new HttpError('Unauthorized', 403));
+    return next(new HttpError('Unauthorized', 403));
   }
   try {
     const updatedData = {
@@ -176,17 +174,10 @@ exports.deleteEvento = async (req, res, next) => {
 
 exports.emailClient = async (req, res, next) => {
   const adiestrador = req.adiestrador;
-  if (!req.body.destinatario) {
-    // const error = new Error('Introduzca un destinatario');
-    // error.httpStatus = 422;
-    next(new HttpError('Introduzca un destinatario', 422));
-  }
+  if (!req.body.destinatario) return next(new HttpError('Introduzca un destinatario', 422));
+
   const cliente = await clienteService.findByUsername(req.body.destinatario);
-  if (!cliente) {
-    // const error = new Error('Cliente no existe');
-    // error.httpStatus = 404;
-    return next(new HttpError('Cliente no existe', 404));
-  }
+  if (!cliente) return next(new HttpError('Cliente no existe', 404));
 
   try {
     // verificamos que el cliente está relacionado con el adiestrador
@@ -196,11 +187,7 @@ exports.emailClient = async (req, res, next) => {
       );
       return !!resultado;
     });
-    if (!interseccion) {
-      // const error = new Error('Operacion no autorizada');
-      // error.httpStatus = 403;
-      throw new HttpError('Unauthorized', 403);
-    }
+    if (!interseccion) throw new HttpError('Unauthorized', 403);
 
     await emailService.sendEmail(
       adiestrador,
