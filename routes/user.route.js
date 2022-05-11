@@ -285,25 +285,18 @@ router.delete('/:userId', isGod, userController.deleteById);
  *      422:
  *        $ref: '#/components/responses/InvalidEntryError'
  */
-router.patch('/:userId', isGod, userController.update);
+router.post('/:userId', isGod, userController.update);
 
 // get password reset token
 /**
  * @swagger
- * /users/{userId}/resetPassword:
+ * /users/resetPassword:
  *  patch:
  *    summary: Generar token y enviar email al usuario
  *    description: El usuario recibirá un email con un link que incluirá un
  *                 token generado aleatoriamente.
  *    tags:
  *      - users
- *    parameters:
- *      - in: path
- *        name: "userId"
- *        description: el id del user
- *        schema:
- *          type: string
- *        required: true
  *    requestBody:
  *      required: true
  *      content:
@@ -313,16 +306,21 @@ router.patch('/:userId', isGod, userController.update);
  *            properties:
  *              email:
  *                type: string
- *          required:
- *            - email
  *    responses:
- *      200:
+ *      202:
  *        description: "User actualizado con exito"
  *        content:
  *          application/json:
  *            schema:
  *              type: object
- *              $ref: '#/components/schemas/User'
+ *              properties:
+ *                success:
+ *                  type: boolean
+ *                message:
+ *                  type: string
+ *            example:
+ *              success: true
+ *              message: "link para el reseteo enviado a cliente1@dogginer.com"
  *      404:
  *        description: "User no encontrado"
  *        content:
@@ -334,7 +332,7 @@ router.patch('/:userId', isGod, userController.update);
  *                  description: error
  *                  type: string
  */
-router.patch('/:userId/resetPassword', userController.generateResetToken);
+router.patch('/resetPassword', userController.generateResetToken);
 
 // update password
 /**

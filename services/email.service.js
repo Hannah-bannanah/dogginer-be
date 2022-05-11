@@ -42,6 +42,6 @@ exports.sendPwdResetEmail = (user) => {
   };
   sgm.send({
     ...email,
-    from: 'passwordRest@doggienr.com'
+    from: 'passwordReset@dogginer.com'
   });
 };

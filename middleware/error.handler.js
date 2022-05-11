@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 exports.errorHandler = async (error, req, res, next) => {
-  console.log(error);
+  // console.log(error);
   let errorData = {
     httpStatus: error.httpStatus,
     message: error.message

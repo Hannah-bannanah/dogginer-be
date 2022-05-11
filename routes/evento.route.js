@@ -46,7 +46,7 @@ const router = express.Router();
  * @swagger
  * components:
  *   schemas:
- *     Evento:
+ *     EventoCompleto:
  *       type: object
  *       description: Un evento
  *       properties:
@@ -104,7 +104,7 @@ const router = express.Router();
  *            schema:
  *              type: array
  *              items:
- *                $ref: "#/components/schemas/Evento"
+ *                $ref: "#/components/schemas/EventoCompleto"
  */
 router.get('', eventoController.findAll);
 
@@ -169,7 +169,7 @@ router.post('', isGod, eventoController.create);
  *          application/json:
  *            schema:
  *              type: object
- *              $ref: "#/components/schemas/Evento"
+ *              $ref: "#/components/schemas/EventoCompleto"
  *
  */
 router.get('/:idEvento', eventoController.findById);
@@ -230,7 +230,7 @@ router.delete('/:idEvento', isGod, eventoController.deleteById);
  *          application/json:
  *            schema:
  *              type: object
- *              $ref: '#/components/schemas/Evento'
+ *              $ref: '#/components/schemas/EventoCompleto'
  *      404:
  *        $ref: '#/components/responses/ElementNotFoundError'
  *      422:

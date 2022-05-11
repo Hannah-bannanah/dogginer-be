@@ -113,9 +113,7 @@ exports.generateLoginToken = async (req, res, next) => {
 
     // si el usuario no existe o la contraseña no coincide
     // generamos un error de autenticacion
-    // const error = new Error('Credenciales no validos');
-    // error.httpStatus = 401;
-    next(new HttpError('Credenciales no validos', 401));
+    throw new HttpError('Credenciales no validos', 401);
   } catch (err) {
     next(err);
   }
@@ -126,8 +124,8 @@ exports.generateResetToken = async (req, res, next) => {
     const user = await userService.generateResetToken(req.body.email);
     emailService.sendPwdResetEmail(user); // no esperamos respuesta
     res
-      .status(200)
-      .send({ success: true, message: `reset link sent to ${user.email}` });
+      .status(202)
+      .send({ success: true, message: `email de reseteo enviado a ${user.email}` });
   } catch (err) {
     next(err);
   }

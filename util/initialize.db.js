@@ -125,20 +125,6 @@ const createEventos = async () => {
   console.log('eventos demo cargados con exito');
 };
 
-// const registrarClientes = async () => {
-//   for (let i = 0; i < clientes.length; i++) {
-//     const cliente = clientes[i];
-//     cliente.eventos.push(eventos[i], eventos[i + 1], eventos[i + 3]);
-//     await cliente.save();
-//     const adiestrador1 = adiestradores[i];
-//     const adiestrador2 = adiestradores[4 - i];
-//     adiestrador1._ratings.push({ idCliente: cliente, score: i });
-//     adiestrador2._ratings.push({ idCliente: cliente, score: i });
-//     await adiestrador1.save();
-//     await adiestrador2.save();
-//   }
-// };
-
 const registrarClientes = async () => {
   for (const cliente of clientes) {
     const i = clientes.indexOf(cliente);

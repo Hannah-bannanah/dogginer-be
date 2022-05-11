@@ -32,7 +32,7 @@ const router = express.Router();
  *            schema:
  *              type: array
  *              items:
- *                $ref: "#/components/schemas/Evento"
+ *                $ref: "#/components/schemas/EventoCompleto"
  *      403:
  *        $ref: "#/components/responses/UnauthorizedError"
  *      404:
@@ -75,7 +75,7 @@ router.get('', clienteController.fetchEventos);
  *            schema:
  *              type: array
  *              items:
- *                $ref: "#/components/schemas/Evento"
+ *                $ref: "#/components/schemas/EventoCompleto"
  *      403:
  *        $ref: "#/components/responses/UnauthorizedError"
  *      404:
@@ -113,7 +113,7 @@ router.patch('', clienteController.addEvento);
  *            schema:
  *              type: array
  *              items:
- *                $ref: "#/components/schemas/Evento"
+ *                $ref: "#/components/schemas/EventoCompleto"
  *      403:
  *        $ref: "#/components/responses/UnauthorizedError"
  *      404:

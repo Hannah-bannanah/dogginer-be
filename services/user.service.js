@@ -96,11 +96,11 @@ exports.deleteById = async userId => {
 exports.update = async (userId, newData) => {
   const userExistente = await User.findByIdAndUpdate(userId,
     { ...userDataParser(newData), password: undefined }
-  );
-  const userActualizado = userExistente
+  ) || {};
+  const userActualizado = userExistente._id
     ? await User.findById(userExistente._id).select({ password: 0 })
     : {};
-  return userActualizado;
+  return userActualizado || {};
 };
 
 /**
@@ -137,6 +137,7 @@ exports.updatePassword = async (userId, token, newPassword) => {
     user.tokenValidity > Date.now()
   ) {
     user.password = newPassword;
+
     await user.save();
     return true;
   }

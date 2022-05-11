@@ -116,15 +116,9 @@ exports.findById = async (idEvento, userData) => {
   if (!evento.privado) return evento;
 
   // si el evento no es publico, comprobamos si el usuario tiene acceso
-  if (!userData) {
-    // const error = new Error('Usuario no autorizado');
-    // error.httpStatus = 403;
-    throw new HttpError('Unauthorized', 403);
-  }
+  if (!userData) throw new HttpError('Unauthorized', 403);
 
-  if (userData.role === AUTHORITIES.GOD) {
-    return evento;
-  }
+  if (userData.role === AUTHORITIES.GOD) return evento;
 
   if (userData.role === AUTHORITIES.ADIESTRADOR) {
     const adiestrador = await adiestradorService.findByUserId(userData.userId);
@@ -169,7 +163,7 @@ exports.create = async (eventoData, adiestrador) => {
  */
 exports.deleteById = async (idEvento) => {
   let result = { deletedCount: 0 };
-  const evento = await this.findById(idEvento);
+  const evento = await this.findById(idEvento) || {};
   if (evento._id) {
     await adiestradorService.removeEvento(evento);
     await clienteService.removeEvento(idEvento);
