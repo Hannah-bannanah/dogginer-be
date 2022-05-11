@@ -57,13 +57,9 @@ exports.findByUserId = async (userId) => {
  */
 exports.create = async (adiestradorData) => {
   const user = await userService.findById(adiestradorData.userId);
-  if (!user || user.role !== AUTHORITIES.ADIESTRADOR) {
-    // const error = new Error();
-    // error.httpStatus = 422;
-    // error.message = 'Informacion invalida';
-    throw new HttpError('Informacion invalida', 422);
-  }
-  const adiestrador = new Adiestrador({ ...adiestradorData }); // mongoose valida la estructura del objeto
+  if (!user || user.role !== AUTHORITIES.ADIESTRADOR) throw new HttpError('Informacion invalida', 422);
+
+  const adiestrador = new Adiestrador({ ...adiestradorData, ratings: undefined }); // mongoose valida la estructura del objeto
   await adiestrador.save();
   return adiestrador;
 };
@@ -75,15 +71,13 @@ exports.create = async (adiestradorData) => {
  */
 exports.deleteById = async (idAdiestrador) => {
   let result = { deletedCount: 0 };
-  const adiestrador = await this.findById(idAdiestrador);
+  const adiestrador = await this.findById(idAdiestrador) || {};
   if (!adiestrador._id) {
     throw new HttpError('Adiestrador no existe', 404);
   }
   if (adiestrador.eventos) {
     const eventos = await eventoService.findByIdList(adiestrador.eventos);
     if (eventos.filter((e) => !e.terminado).length) {
-      // const error = new Error('Adiestrador tiene eventos activos');
-      // error.httpStatus = 422;
       throw new HttpError('Adiestrador tiene eventos activos', 422);
     }
   }
@@ -100,11 +94,12 @@ exports.deleteById = async (idAdiestrador) => {
  * @throws error si el idAdiestrador no existe
  */
 exports.update = async (idAdiestrador, newData) => {
-  const adiestradorExistente = await this.findById(idAdiestrador);
-  if (!adiestradorExistente._id) throw new HttpError('Adiestrador no existe', 404);
-
-  await Adiestrador.findByIdAndUpdate(idAdiestrador, newData);
-  return await this.findById(adiestradorExistente._id) || {};
+  const adiestradorExistente =
+    await this.findByIdAndUpdate(idAdiestrador, newData) || {};
+  const adiestradorActualizado = adiestradorExistente._id
+    ? await Adiestrador.findById(adiestradorExistente._id)
+    : {};
+  return adiestradorActualizado || {};
 };
 
 /**
@@ -129,19 +124,15 @@ exports.removeEvento = async (evento) => {
 exports.rate = async (idAdiestrador, rating) => {
   // comprobamos el rango del rating
   if (rating.score > 5 || rating.score < 1) {
-    // const error = new Error('Score fuera del rango permitido');
-    // error.httpStatus = 422;
     throw new HttpError('Score fuera del rango permitido', 422);
   }
 
   // comprobamos que el adiestrador existe
   let adiestrador;
   if (mongoose.Types.ObjectId.isValid(idAdiestrador)) {
-    adiestrador = await Adiestrador.findById(idAdiestrador); // necesitamos recibir _ratings
+    adiestrador = await Adiestrador.findById(idAdiestrador) || {}; // necesitamos recibir _ratings
   }
   if (!adiestrador._id) {
-    // const error = new Error('Adiestrador no existe');
-    // error.httpStatus = 404;
     throw new HttpError('Adiestrador no existe', 404);
   }
 
@@ -165,8 +156,6 @@ exports.rate = async (idAdiestrador, rating) => {
     adiestrador._ratings.push(rating);
     await adiestrador.save();
   } else {
-    // const error = new Error('Cliente no tiene historial con el adiestrador');
-    // error.httpStatus = 403;
     throw new HttpError('Unauthorized', 403);
   }
 

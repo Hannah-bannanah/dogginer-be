@@ -91,9 +91,6 @@ exports.findByUsername = async (username) => {
 exports.create = async (clienteData) => {
   const user = await userService.findById(clienteData.userId);
   if (!user || user.role !== AUTHORITIES.CLIENTE) {
-    // const error = new Error();
-    // error.httpStatus = 422;
-    // error.message = 'Informacion invalida';
     throw new HttpError('Informacion invalida', 422);
   }
   const cliente = new Cliente({ ...clienteData }); // mongoose valida la estructura del objeto
@@ -110,15 +107,11 @@ exports.deleteById = async (idCliente) => {
   let result = { deletedCount: 0 };
   const cliente = await this.findById(idCliente);
   if (!cliente._id) {
-    // const error = new Error('Cliente no existe');
-    // error.httpStatus = 404;
     throw new HttpError('Cliente no existe', 404);
   }
   if (cliente.eventos) {
     const eventos = await eventoService.findByIdList(cliente.eventos);
     if (eventos.filter((e) => !e.terminado).length) {
-      // const error = new Error('Cliente tiene eventos activos');
-      // error.httpStatus = 422;
       throw new HttpError('Cliente tiene eventos activos', 422);
     }
   }
@@ -137,8 +130,6 @@ exports.deleteById = async (idCliente) => {
 exports.update = async (idCliente, newData) => {
   const clienteExistente = await this.findById(idCliente);
   if (!clienteExistente._id) {
-    // const error = new Error('Cliente no encontrado');
-    // error.httpStatus = 404;
     throw new HttpError('Cliente no existe', 404);
   }
   const clienteActualizado = await Cliente.findByIdAndUpdate(
@@ -192,8 +183,6 @@ exports.findByAdiestrador = async (adiestrador) => {
  */
 exports.addEvento = async (cliente, idEvento) => {
   if (cliente.eventos.filter((e) => e._id.equals(idEvento)).length) {
-    // const error = new Error('Cliente ya registrado');
-    // error.httpStatus = 409;
     throw new HttpError('Cliente ya existe', 409);
   }
 
@@ -201,22 +190,18 @@ exports.addEvento = async (cliente, idEvento) => {
     userId: cliente.userId,
     role: AUTHORITIES.CLIENTE
   });
-  if (!evento._id) {
-    // const error = new Error('Evento no existe');
-    // error.httpStatus = 404;
-    throw new HttpError('Evento no existe', 404);
-  }
+  if (!evento._id) throw new HttpError('Evento no existe', 404);
+
   if (
     evento.privado &&
     !evento.invitados.find((invitado) => invitado.equals(cliente))
   ) {
-    // const error = new Error('Operacion no autorizada');
-    // error.httpStatus = 403;
     throw new HttpError('Unauthorized', 403);
   }
   const asistentes = await Cliente.countDocuments({
     eventos: { $in: { _id: idEvento } }
   });
+
   if (evento.maxAforo && asistentes < evento.maxAforo) {
     cliente.eventos.push(evento);
     await cliente.save();
