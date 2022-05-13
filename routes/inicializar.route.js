@@ -46,6 +46,7 @@ const router = express.Router();
  *        description: "bbdd inicializada con exito"
  */
 router.post('', isGod, async (req, res, next) => {
+  console.log('recibido peticion');
   if (req.body.inicializar && req.body.seguro && req.body.dbname === DBNAME) {
     try {
       await initializeDb();

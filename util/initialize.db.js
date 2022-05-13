@@ -116,7 +116,7 @@ const createEventos = async () => {
     await evento1.save();
     await evento2.save();
     await evento3.save();
-    evento1.invitados.push(clientes[5 - i]);
+    evento1.invitados.push(clientes[11 - i]);
     await evento1.save();
     adiestrador.eventos.push(evento1, evento2, evento3);
     eventos.push(evento1, evento2, evento3);

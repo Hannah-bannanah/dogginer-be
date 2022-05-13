@@ -120,8 +120,6 @@ router.post('', userController.create);
  *      devuelve un token de autenticacion, el tiempo de validez, el id de usuario, su rol y su id de adiestrador o de cliente
  *    tags:
  *      - users
- *    security:
- *      - bearerAuth: []
  *    requestBody:
  *      required: true
  *      content:

@@ -18,7 +18,7 @@ const SWAGGERSPEC = {
       title: 'Dogginer API',
       version: '1.0.0'
     },
-    servers: [{ url: 'http://localhost:3000' }],
+    servers: [{ url: process.env.SERVER_URL }],
     components: {
       securitySchemes: {
         bearerAuth: {
