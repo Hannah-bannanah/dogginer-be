@@ -20,8 +20,6 @@ exports.findById = async (req, res, next) => {
     req.requesterData.userId !== req.params.userId &&
     req.requesterData.role !== AUTHORITIES.GOD
   ) {
-    // const error = new Error('Unauthorized');
-    // error.httpStatus = 403;
     return next(new HttpError('Unauthorized', 403));
   }
   try {

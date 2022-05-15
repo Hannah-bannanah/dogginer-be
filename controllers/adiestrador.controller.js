@@ -52,14 +52,11 @@ exports.deleteById = async (req, res, next) => {
     (req.requesterData.userId !== adiestrador.userId &&
       req.requesterData.role !== AUTHORITIES.GOD)
   ) {
-    // const error = new Error('Unauthorized');
-    // error.httpStatus = 403;
     return next(new HttpError('Unauthorized', 403));
   }
   try {
     const result = await adiestradorService.deleteById(adiestrador._id);
     if (result) res.status(204).send();
-    // else res.status(500).send();
     else throw new HttpError('Error al eliminar', 500);
   } catch (err) {
     next(err);
@@ -108,8 +105,6 @@ exports.fetchEventos = async (req, res, next) => {
     req.params.idAdiestrador
   );
   if (!adiestrador._id) {
-    // const error = new Error('Adiestrador no existe');
-    // error.httpStatus = 404;
     return next(new HttpError('Adiestrador no existe', 404));
   }
 
@@ -131,8 +126,6 @@ exports.createEvento = async (req, res, next) => {
       req.params.idAdiestrador
     );
     if (!adiestrador._id) {
-      // const error = new Error('Informacion invalida');
-      // error.httpStatus = 422;
       throw new HttpError('Informacion invalida', 422);
     }
     const evento = await eventoService.create(eventoData, adiestrador);
@@ -202,8 +195,6 @@ exports.emailClient = async (req, res, next) => {
 };
 exports.sendBroadCast = async (req, res, next) => {
   if (!req.body.asunto || !req.body.mensaje) {
-    // const error = new Error('El asunto y el mensaje son obligatorios');
-    // error.httpStatus = 422;
     return next(new HttpError('El asunto y el mensaje son obligatorios', 422));
   }
   const adiestrador = req.adiestrador;
@@ -236,8 +227,6 @@ exports.rate = async (req, res, next) => {
     score: req.body.score
   };
   if (!rating.score) {
-    // const error = new Error('Informacion invalida');
-    // error.httpStatus = 422;
     return next(new HttpError('Informacion invalida', 422));
   }
   try {

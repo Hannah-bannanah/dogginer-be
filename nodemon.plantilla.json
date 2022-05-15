@@ -3,6 +3,7 @@
     "MONGO_PWD": "<password>",
     "MONGO_USR": "<user>",
     "JWT_PASSPHRASE": "<passphrase>",
-    "SENDGRIDAPIKEY": "<apikey>"
+    "SENDGRIDAPIKEY": "<apikey>",
+    "SERVER_URL": "<url>"
   }
 }

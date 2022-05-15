@@ -16,8 +16,6 @@ exports.findAll = async (req, res, next) => {
     const usernames = await clienteService.getUsernames();
     res.status(200).send(usernames);
   } else {
-    // const error = new Error('Unauthorized');
-    // error.httpStatus = 403;
     return next(new HttpError('Unauthorized', 403));
   }
 };
@@ -30,8 +28,6 @@ exports.findById = async (req, res, next) => {
       (!cliente.userId.equals(req.requesterData.userId) &&
         req.requesterData.role !== AUTHORITIES.GOD)
     ) {
-      // const error = new Error('Unauthorized');
-      // error.httpStatus = 403;
       return next(new HttpError('Unauthorized', 403));
     }
     res.status(200).send(cliente);
@@ -56,8 +52,6 @@ exports.deleteById = async (req, res, next) => {
     (req.requesterData.userId !== cliente.userId &&
       req.requesterData.role !== AUTHORITIES.GOD)
   ) {
-    // const error = new Error('Unauthorized');
-    // error.httpStatus = 403;
     return next(new HttpError('Unauthorized', 403));
   }
   try {
@@ -76,8 +70,6 @@ exports.update = async (req, res, next) => {
     (req.requesterData.userId !== clienteExistente.userId &&
       req.requesterData.role !== AUTHORITIES.GOD)
   ) {
-    // const error = new Error('Unauthorized');
-    // error.httpStatus = 403;
     return next(new HttpError('Unauthorized', 403));
   }
   try {
@@ -142,8 +134,6 @@ exports.emailAdiestrador = async (req, res, next) => {
   const cliente = req.cliente;
 
   if (!req.body.destinatario) {
-    // const error = new Error('Introduzca un destinatario');
-    // error.httpStatus = 422;
     return next(new HttpError('Introduzca un destinatario', 422));
   }
 
@@ -154,8 +144,6 @@ exports.emailAdiestrador = async (req, res, next) => {
     );
   }
   if (!adiestrador._id) {
-    // const error = new Error('Adiestrador no existe');
-    // error.httpStatus = 404;
     return next(new HttpError('Adiestrador no existe', 404));
   }
   try {
