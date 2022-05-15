@@ -121,7 +121,7 @@ exports.fetchEventos = async (req, res, next) => {
 };
 
 exports.createEvento = async (req, res, next) => {
-  const eventoData = { ...req.body, idAdiestrador: req.params.idAdiestrador };
+  const eventoData = { ...req.body, imageUrl: req.body.imageUrl || undefined, idAdiestrador: req.params.idAdiestrador };
   try {
     const adiestrador = await adiestradorService.findById(
       req.params.idAdiestrador
