@@ -39,7 +39,7 @@ exports.findById = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   try {
-    const evento = await eventoService.create(req.body);
+    const evento = await eventoService.create({ ...req.body, imageUrl: req.body.imageUrl || undefined });
     res.status(200).send({ id: evento._id });
   } catch (err) {
     next(err);

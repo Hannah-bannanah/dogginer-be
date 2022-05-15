@@ -35,7 +35,8 @@ exports.create = async (req, res, next) => {
     const adiestrador = await adiestradorService.create({
       ...req.body,
       _ratings: undefined,
-      eventos: undefined
+      eventos: undefined,
+      imageUrl: req.body.imageUrl || undefined
     });
     res.status(200).send({ _id: adiestrador._id });
   } catch (err) {
